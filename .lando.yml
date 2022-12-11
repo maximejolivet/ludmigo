@@ -1,0 +1,48 @@
+name: ludmigo
+recipe: laravel
+config:
+  php: '8.0'
+  webroot: public
+  composer_version: '1.10.10'
+
+#excludes:
+#  - vendor
+#  - node_modules
+
+# Access
+proxy:
+  appserver:
+  - ludmigo.lndo.site
+  mailhog:
+  - mail.ludmigo.lndo.site
+  pma:
+  - pma.ludmigo.lndo.site
+
+
+
+# Add in phpmyadmin
+services:
+  # Add a phpmyadmin db frontend
+  pma:
+
+    # Use the latest version of phpmyadmin
+    type: phpmyadmin
+
+    # The databases you want to look at, this will default to a service called
+    # "database"
+    #
+    # You might want to run `lando info` on your app to see what databases you
+    # have available
+    hosts:
+      - database
+  mailhog:
+      type: mailhog
+      hogfrom:
+        - appserver
+  node:
+    type: node:16
+tooling:
+  npm:
+    service: node
+
+
