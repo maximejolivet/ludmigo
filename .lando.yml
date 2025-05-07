@@ -1,9 +1,11 @@
 name: ludmigo
 recipe: laravel
 config:
-  php: '8.0'
+  php: '8.4'
   webroot: public
-  composer_version: '1.10.10'
+  composer_version: 2-latest
+  env_file:
+    - .env
 
 #excludes:
 #  - vendor
@@ -18,13 +20,10 @@ proxy:
   pma:
   - pma.ludmigo.lndo.site
 
-
-
 # Add in phpmyadmin
 services:
   # Add a phpmyadmin db frontend
   pma:
-
     # Use the latest version of phpmyadmin
     type: phpmyadmin
 
@@ -40,9 +39,13 @@ services:
       hogfrom:
         - appserver
   node:
-    type: node:16
+    type: node:22
+    ports:
+      - 5173:5173
 tooling:
   npm:
+    service: node
+  node:
     service: node
 
 
