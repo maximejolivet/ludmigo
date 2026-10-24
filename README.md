@@ -19,6 +19,11 @@ With Ludmigo, let's democratize board games!
 ![Vite 6](https://img.shields.io/badge/Vite-6-yellow)
 ![Tailwind CSS 4.1](https://img.shields.io/badge/Tailwind%20CSS-4.1-00BCFF)
 
+## Tech stack
+
+- **Backend:** [Symfony](https://symfony.com)
+- **Frontend:** [React](https://react.dev)
+
 # Laravel + Vue Starter Kit
 
 ## Introduction
