@@ -1,0 +1,18 @@
+# Proxy de développement : un seul domaine local, comme en production.
+# Local development proxy: a single local domain, as in production.
+# Nécessite une entrée dans /etc/hosts : `make hosts`.
+# Requires an entry in /etc/hosts: `make hosts`.
+# Les applications tournent sur la machine hôte, joignables via host.docker.internal.
+# The apps run on the host machine, reachable through host.docker.internal.
+#   http://ludmigo.test       -> web React (Vite, port 5173) / React web (Vite, port 5173)
+#   http://ludmigo.test/api   -> API Symfony (port 8000) / Symfony API (port 8000)
+
+http://ludmigo.test {
+	handle /api/* {
+		reverse_proxy host.docker.internal:8000
+	}
+
+	handle {
+		reverse_proxy host.docker.internal:5173
+	}
+}

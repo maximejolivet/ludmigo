@@ -1,0 +1,10 @@
+# API Platform : JSON uniquement, toutes les routes sous /api (cohérent avec Caddy et l'Ingress)
+# API Platform: JSON only, all routes under /api (matches the Caddy/Ingress routing)
+api_platform:
+    title: Ludmigo API
+    version: 0.1.0
+    route_prefix: /api
+    formats:
+        json: ['application/json']
+    defaults:
+        stateless: true

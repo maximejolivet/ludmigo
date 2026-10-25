@@ -1,0 +1,55 @@
+# Application React (web) servie par nginx.
+# React web app served by nginx.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: ludmigo
+  labels:
+    app: web
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          # Remplacer par l'image publiée par la CI, avec un tag de version
+          # Replace with the image published by CI, with a version tag
+          image: ghcr.io/ORG/ludmigo-web:0.1.0
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: ludmigo
+  labels:
+    app: web
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

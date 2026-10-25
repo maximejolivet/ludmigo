@@ -1,0 +1,41 @@
+# Services locaux de développement. Pour l'instant : MariaDB uniquement.
+# Local development services. For now: MariaDB only.
+# L'API, le web et le mobile tournent sur la machine hôte (voir le Makefile).
+# The API, web and mobile apps run on the host machine (see the Makefile).
+services:
+  db:
+    image: mariadb:10.11
+    container_name: ludmigo-db
+    restart: unless-stopped
+    environment:
+      # Identifiants de développement uniquement, jamais en production
+      # Development credentials only, never use them in production
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: ludmigo
+      MARIADB_USER: ludmigo
+      MARIADB_PASSWORD: ludmigo
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  proxy:
+    image: caddy:2-alpine
+    container_name: ludmigo-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    extra_hosts:
+      # Permet au conteneur d'atteindre l'API et le web lancés sur la machine hôte
+      # Lets the container reach the API and the web app running on the host machine
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./docker/local/Caddyfile:/etc/caddy/Caddyfile:ro
+
+volumes:
+  db-data:
