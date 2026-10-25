@@ -1,0 +1,11 @@
+# Configuration par défaut : chaque classe de src/ est un service
+# Default service configuration: every class in src/ is a service
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'

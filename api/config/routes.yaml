@@ -1,0 +1,13 @@
+# Routes par attributs depuis src/Controller
+# Attribute routes from src/Controller
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# Ressources API Platform (routes préfixées par /api, voir config/packages/api_platform.yaml)
+# API Platform resources (routes prefixed by /api, see config/packages/api_platform.yaml)
+api_platform:
+    resource: .
+    type: api_platform

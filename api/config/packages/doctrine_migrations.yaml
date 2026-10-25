@@ -1,0 +1,7 @@
+# Les migrations sont dans migrations/ (php bin/console doctrine:migrations:migrate)
+# Migrations live in migrations/ (php bin/console doctrine:migrations:migrate)
+doctrine_migrations:
+    migrations_paths:
+        'App\Migrations': '%kernel.project_dir%/migrations'
+    transactional: true
+    check_database_platform: true

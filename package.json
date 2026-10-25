@@ -1,0 +1,16 @@
+{
+  "name": "ludmigo",
+  "private": true,
+  "workspaces": [
+    "web",
+    "mobile",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  }
+}

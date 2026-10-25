@@ -1,0 +1,6 @@
+# Analyse statique PHPStan / PHPStan static analysis
+parameters:
+    level: 6
+    paths:
+        - src
+        - tests
