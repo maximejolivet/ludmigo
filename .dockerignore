@@ -1,0 +1,9 @@
+.git
+**/node_modules
+**/vendor
+**/var
+**/.env.local
+**/.env.*.local
+docs
+k8s
+*.md
