@@ -1,0 +1,27 @@
+# Dépendances
+# Dependencies
+node_modules/
+api/vendor/
+
+# Sorties de build et caches
+# Build output and caches
+dist/
+web/dist/
+.expo/
+web-build/
+*.tsbuildinfo
+
+# Symfony
+api/var/
+
+# Environnement local (ne jamais committer de secrets)
+# Local environment (never commit secrets)
+.env.local
+.env.*.local
+
+# Paramètres Claude Code locaux (personnels, jamais committés)
+# Claude Code local settings (personal, never committed)
+.claude/settings.local.json
+
+# Documentation
+docs/

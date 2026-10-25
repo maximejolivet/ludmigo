@@ -1,0 +1,7 @@
+# Paramètres du framework Symfony (le secret vient de APP_SECRET)
+# Symfony framework settings (secret comes from APP_SECRET)
+framework:
+    secret: '%env(APP_SECRET)%'
+    http_method_override: false
+    php_errors:
+        log: true

@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ludmigo
+
+resources:
+  - namespace.yaml
+  - mariadb.yaml
+  - api.yaml
+  - web.yaml
+  - ingress.yaml
+
+# Les Secrets ne sont PAS versionnés : les créer avec kubectl (voir secrets.example.yaml).
+# Secrets are NOT versioned: create them with kubectl (see secrets.example.yaml).

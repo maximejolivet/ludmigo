@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    // TypeScript 7 ne charge plus tous les @types par défaut : on déclare explicitement les types de test
+    // TypeScript 7 no longer loads all @types by default: list the test types explicitly
+    "types": ["jest"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

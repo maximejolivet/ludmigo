@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Ludmigo",
+    "slug": "ludmigo",
+    "version": "0.1.0",
+    "scheme": "ludmigo",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "fr.ludmigo.app"
+    },
+    "android": {
+      "package": "fr.ludmigo.app"
+    }
+  }
+}

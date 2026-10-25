@@ -1,0 +1,28 @@
+# Migrations Doctrine, à lancer AVANT chaque déploiement de l'API.
+# Doctrine migrations, to run BEFORE each API deployment.
+# Ce Job n'est pas dans kustomization.yaml : il a un nom fixe et les Jobs sont immuables.
+# This Job is not in kustomization.yaml: it has a fixed name and Jobs are immutable.
+#
+#   kubectl delete job api-migrate -n ludmigo --ignore-not-found
+#   kubectl apply -f k8s/migrate-job.yaml
+#   kubectl wait --for=condition=complete job/api-migrate -n ludmigo --timeout=300s
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: api-migrate
+  namespace: ludmigo
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          # Même tag que le Deployment "api" (api.yaml)
+          # Same tag as the "api" Deployment (api.yaml)
+          image: ghcr.io/ORG/ludmigo-api:0.1.0
+          command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--env=prod"]
+          envFrom:
+            - secretRef:
+                name: ludmigo-api
