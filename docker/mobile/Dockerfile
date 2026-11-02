@@ -6,7 +6,7 @@
 # Build depuis la racine du dépôt : docker build -f docker/mobile/Dockerfile -t ludmigo-mobile .
 # Build from the repository root: docker build -f docker/mobile/Dockerfile -t ludmigo-mobile .
 
-FROM node:24-alpine
+FROM node:24.22.2-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
