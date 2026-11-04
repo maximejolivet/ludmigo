@@ -10,6 +10,20 @@
 
 ---
 
+<div align="center">
+
+<img src=".github/assets/logo-baseline-ludmigo-couleur-noir.svg" alt="Ludmigo" height="80" align="middle">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src=".github/assets/logo-ludmigo-people-noir.svg" alt="Ludmigo, les joueurs" height="80" align="middle">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://www.maxime.bzh/maxime-black.svg" alt="Maxime" height="80" align="middle">
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://github.com/maximejolivet"><img src="https://wsrv.nl/?url=github.com/maximejolivet.png&w=160&h=160&fit=cover&mask=circle" alt="maximejolivet" width="80" height="80" align="middle"></a>
+
+<br>
+
+</div>
+
 # Ludmigo | Démocratisons le jeu !
 
 Ludmigo est une plateforme communautaire pour partager et découvrir les jeux de société,
@@ -28,7 +42,7 @@ dans une ville, ou dans des bars que nous accompagnons pour développer ce servi
 
 ## Documentation
 
-Les documents de conception sont dans [`docs/`](docs/) : brief projet, PRD, architecture, TRD, schéma backend, parcours, UI/UX, epics, plan d'implémentation et Kanban. Ils sont écrits en français, suivis de leur traduction anglaise.
+Les documents de conception sont dans [`docs/`](docs/), avec un sommaire dans [`docs/00_INDEX.md`](docs/00_INDEX.md) : brief projet, PRD, architecture, TRD, schéma backend, parcours, UI/UX, epics, plan d'implémentation et Kanban. Ils sont écrits en français, suivis de leur traduction anglaise.
 
 ## Stack technique
 
@@ -181,7 +195,7 @@ Beginner or experienced player, it doesn't matter: what counts is the wish to sh
 
 ## Documentation
 
-The design documents are in [`docs/`](docs/): project brief, PRD, architecture, TRD, backend schema, app flow, UI/UX design, epics, implementation plan and Kanban. They are written in French, followed by their English translation.
+The design documents are in [`docs/`](docs/), with a table of contents in [`docs/00_INDEX.md`](docs/00_INDEX.md): project brief, PRD, architecture, TRD, backend schema, app flow, UI/UX design, epics, implementation plan and Kanban. They are written in French, followed by their English translation.
 
 ## Tech stack
 
