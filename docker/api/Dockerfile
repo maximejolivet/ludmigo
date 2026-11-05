@@ -13,7 +13,7 @@ RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --opt
 # 2. Runtime: FrankenPHP (HTTP server and PHP in a single container)
 FROM dunglas/frankenphp:1-php8.5-alpine AS runtime
 
-RUN install-php-extensions pdo_mysql intl zip opcache
+RUN install-php-extensions pdo_mysql pdo_pgsql intl zip opcache
 
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
