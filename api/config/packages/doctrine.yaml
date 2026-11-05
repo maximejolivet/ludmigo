@@ -1,5 +1,5 @@
-# Doctrine ORM sur MariaDB (connexion depuis DATABASE_URL)
-# Doctrine ORM on MariaDB (connection from DATABASE_URL)
+# Doctrine ORM sur MariaDB ou PostgreSQL (le moteur se choisit dans DATABASE_URL)
+# Doctrine ORM on MariaDB or PostgreSQL (the engine is picked in DATABASE_URL)
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'

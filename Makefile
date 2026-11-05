@@ -11,13 +11,30 @@ COMPOSE := docker compose
 API_DIR := api
 WEB_DIR := web
 MOBILE_DIR := mobile
+
+# Moteur de base de données : mariadb (défaut) ou postgres. Exemple : make db-up DB=postgres
+# Database engine: mariadb (default) or postgres. Example: make db-up DB=postgres
+DB ?= mariadb
+ifeq ($(DB),postgres)
+DB_SERVICE := postgres
+DB_LABEL := PostgreSQL
+DB_PORT := 5432
+DB_URL := postgresql://ludmigo:ludmigo@127.0.0.1:5432/ludmigo?serverVersion=17&charset=utf8
+else ifeq ($(DB),mariadb)
+DB_SERVICE := db
+DB_LABEL := MariaDB
+DB_PORT := 3306
 DB_URL := mysql://ludmigo:ludmigo@127.0.0.1:3306/ludmigo?serverVersion=mariadb-10.11.0&charset=utf8mb4
+else
+$(error DB must be mariadb or postgres, got "$(DB)")
+endif
 
 # Versions cibles (à garder synchronisées avec les Dockerfiles et le README)
 # Target versions (keep in sync with the Dockerfiles and README)
 PHP_VERSION := 8.5
 NODE_VERSION := 24
 MARIADB_VERSION := 10.11
+POSTGRES_VERSION := 17
 SYMFONY_VERSION := 7
 REACT_VERSION := 19
 
@@ -43,7 +60,7 @@ dev: hosts db-up proxy-up api-env migrate ## Start the database and proxy, then 
 	@$(MAKE) -j2 api-serve web-dev
 
 stop: ## Stop all containers (data is kept)
-	$(COMPOSE) stop
+	$(COMPOSE) --profile postgres stop
 
 urls: ## Show the development URLs
 	@echo ""
@@ -51,7 +68,7 @@ urls: ## Show the development URLs
 	@echo "  API               http://ludmigo.test/api"
 	@echo "  API (direct)      http://127.0.0.1:8000"
 	@echo "  Vite (direct)     http://localhost:5173"
-	@echo "  MariaDB           127.0.0.1:3306  (ludmigo / ludmigo)"
+	@echo "  $(DB_LABEL)       127.0.0.1:$(DB_PORT)  (ludmigo / ludmigo)"
 	@echo "  Expo (mobile)     run 'make mobile-start'"
 	@echo ""
 
@@ -67,7 +84,7 @@ info: ## Show domains, last commit and versions
 	@echo "  Last commit       $$(git log -1 --format='%h %s (%ar)' 2>/dev/null || echo n/a)"
 	@echo ""
 	@echo "  Target versions"
-	@echo "    PHP $(PHP_VERSION) · Node.js $(NODE_VERSION) · MariaDB $(MARIADB_VERSION) · Symfony $(SYMFONY_VERSION) · React $(REACT_VERSION)"
+	@echo "    PHP $(PHP_VERSION) · Node.js $(NODE_VERSION) · MariaDB $(MARIADB_VERSION) / PostgreSQL $(POSTGRES_VERSION) · Symfony $(SYMFONY_VERSION) · React $(REACT_VERSION)"
 	@echo ""
 	@echo "  Installed"
 	@echo "    $$(php -v 2>/dev/null | head -1 || echo 'php: missing')"
@@ -100,29 +117,33 @@ proxy-up: ## Start the local proxy on http://ludmigo.test
 # --- Base de données ---
 # --- Database ---
 
-db-up: ## Start MariaDB and wait until it is ready
-	$(COMPOSE) up -d --wait db
+db-up: ## Start the database and wait until it is ready (DB=mariadb|postgres, default mariadb)
+	$(COMPOSE) --profile $(DB) up -d --wait $(DB_SERVICE)
 
-db-down: ## Stop MariaDB (data is kept)
-	$(COMPOSE) stop db
+db-down: ## Stop the database (data is kept)
+	$(COMPOSE) --profile $(DB) stop $(DB_SERVICE)
 
-db-logs: ## Show MariaDB logs
-	$(COMPOSE) logs -f db
+db-logs: ## Show the database logs
+	$(COMPOSE) --profile $(DB) logs -f $(DB_SERVICE)
 
 db-shell: ## Open a SQL client on the ludmigo database
+ifeq ($(DB),postgres)
+	$(COMPOSE) --profile postgres exec postgres psql -U ludmigo ludmigo
+else
 	$(COMPOSE) exec db mariadb -uludmigo -pludmigo ludmigo
+endif
 
-db-reset: ## DESTROY local data, then recreate an empty database
-	$(COMPOSE) down -v
+db-reset: ## DESTROY local data (both engines), then recreate an empty database
+	$(COMPOSE) --profile mariadb --profile postgres down -v
 	$(MAKE) db-up
 
 # --- API Symfony ---
 # --- Symfony API ---
 
-api-env: ## Create api/.env.local with the local MariaDB connection (does not overwrite an existing file)
+api-env: ## Create api/.env.local with the local database connection (DB=mariadb|postgres) (does not overwrite an existing file)
 	@test -d $(API_DIR) || (echo "The $(API_DIR)/ folder does not exist yet." && exit 1)
 	@test -f $(API_DIR)/.env.local || printf 'DATABASE_URL="%s"\n' '$(DB_URL)' > $(API_DIR)/.env.local
-	@echo "api/.env.local OK"
+	@echo "api/.env.local OK (to switch engine, delete it and run 'make api-env DB=<mariadb|postgres>')"
 
 # Vérifie que les dépendances Composer sont installées (non listé dans make help)
 # Check that Composer dependencies are installed (not listed in make help)
