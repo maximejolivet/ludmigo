@@ -1,0 +1,79 @@
+# PostgreSQL 17 avec stockage persistant. Alternative à mariadb.yaml : en choisir un seul dans kustomization.yaml.
+# PostgreSQL 17 with persistent storage. Alternative to mariadb.yaml: pick only one in kustomization.yaml.
+# Les identifiants viennent du Secret "ludmigo-db" (voir secrets.example.yaml).
+# Credentials come from the "ludmigo-db" Secret (see secrets.example.yaml).
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  namespace: ludmigo
+  labels:
+    app: postgresql
+spec:
+  clusterIP: None
+  selector:
+    app: postgresql
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+  namespace: ludmigo
+  labels:
+    app: postgresql
+spec:
+  serviceName: postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: postgres:17-alpine
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: ludmigo-db
+          env:
+            # Sous-dossier : le volume monté contient un dossier lost+found
+            # Sub-folder: the mounted volume contains a lost+found folder
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: postgresql
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              memory: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

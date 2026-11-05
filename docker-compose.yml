@@ -1,5 +1,5 @@
-# Services locaux de développement. Pour l'instant : MariaDB uniquement.
-# Local development services. For now: MariaDB only.
+# Services locaux de développement : MariaDB par défaut, PostgreSQL en option (profil "postgres").
+# Local development services: MariaDB by default, PostgreSQL as an option ("postgres" profile).
 # L'API, le web et le mobile tournent sur la machine hôte (voir le Makefile).
 # The API, web and mobile apps run on the host machine (see the Makefile).
 services:
@@ -24,6 +24,29 @@ services:
       timeout: 5s
       retries: 20
 
+  # PostgreSQL, au choix à la place de MariaDB : `make db-up DB=postgres`
+  # PostgreSQL, as an alternative to MariaDB: `make db-up DB=postgres`
+  postgres:
+    image: postgres:17-alpine
+    container_name: ludmigo-postgres
+    profiles: ["postgres"]
+    restart: unless-stopped
+    environment:
+      # Identifiants de développement uniquement, jamais en production
+      # Development credentials only, never use them in production
+      POSTGRES_DB: ludmigo
+      POSTGRES_USER: ludmigo
+      POSTGRES_PASSWORD: ludmigo
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ludmigo -d ludmigo"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   proxy:
     image: caddy:2-alpine
     container_name: ludmigo-proxy
@@ -39,3 +62,4 @@ services:
 
 volumes:
   db-data:
+  postgres-data:
