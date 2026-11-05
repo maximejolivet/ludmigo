@@ -5,6 +5,8 @@ namespace: ludmigo
 
 resources:
   - namespace.yaml
+  # Base de données : garder une seule ligne, mariadb.yaml ou postgresql.yaml
+  # Database: keep only one line, mariadb.yaml or postgresql.yaml
   - mariadb.yaml
   - api.yaml
   - web.yaml
