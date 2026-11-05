@@ -1,0 +1,301 @@
+/* Charte : fond et texte issus de docs/07_UI_UX_DESIGN.md */
+/* Brand: background and text from docs/07_UI_UX_DESIGN.md */
+:root {
+  --color-background: #f4f4f4;
+  --color-text: #3e3e3e;
+  --color-text-secondary: #5a5a5a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.logo-page {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 16px;
+  /* Dégradé pastel tiré des couleurs du logo, qui se déplace lentement */
+  /* Pastel gradient from the logo colours, slowly shifting */
+  background: linear-gradient(
+    135deg,
+    #f4f4f4 0%,
+    #fdeccc 28%,
+    #d8f0e6 55%,
+    #d3e7f3 80%,
+    #f4f4f4 100%
+  );
+  background-size: 300% 300%;
+  animation: gradient-shift 18s ease-in-out infinite alternate;
+}
+
+@keyframes gradient-shift {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+.logo-page__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 560px);
+}
+
+.logo-page__logo {
+  display: block;
+  width: 100%;
+}
+
+.logo-page__logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Lettres : elles montent en fondu, de gauche à droite */
+/* Letters: they rise and fade in, left to right */
+.logo-page__logo .cls-1 {
+  animation: letter-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+/* Pion : il tombe sur le plateau, s'écrase, puis rebondit */
+/* Pawn: it drops onto the board, squashes, then bounces */
+.logo-page__logo .cls-2 {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pawn-drop 900ms 700ms cubic-bezier(0.3, 0, 0.5, 1) backwards;
+  transition: transform 300ms cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+
+.logo-page__logo:hover .cls-2 {
+  transform: translateY(-14px) scaleY(1.05);
+}
+
+.logo-page__baseline {
+  margin: 0;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
+  font-size: clamp(1.125rem, 4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--color-text-secondary);
+  animation: rise-in 700ms 1300ms ease-out backwards;
+}
+
+/* Lien GitHub : logo des personnages en bas à droite */
+/* GitHub link: people logo at the bottom right */
+.logo-page__github {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  padding: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px var(--color-text);
+  transition:
+    transform 250ms cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 250ms ease-out;
+  animation: pop-in 600ms 1700ms cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
+}
+
+/* Anneau jaune qui pulse trois fois pour attirer l'œil, puis s'arrête */
+/* Yellow ring that pulses three times to catch the eye, then stops */
+.logo-page__github::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid #f8a00d;
+  pointer-events: none;
+  animation: ring-pulse 1600ms 2400ms ease-out 3 backwards;
+}
+
+.logo-page__github img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 350ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.logo-page__github:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px var(--color-text), 0 8px 0 -2px var(--color-text);
+}
+
+.logo-page__github:hover img {
+  transform: rotate(-10deg) scale(1.08);
+}
+
+.logo-page__github:active {
+  transform: scale(0.95);
+}
+
+.logo-page__github:focus-visible {
+  outline: 2px solid #155767;
+  outline-offset: 2px;
+}
+
+/* Titre présent pour les lecteurs d'écran et le référencement, masqué à l'écran */
+/* Heading kept for screen readers and SEO, hidden on screen */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+@keyframes pawn-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-220px);
+  }
+  15% {
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(0) scale(1.1, 0.8);
+  }
+  75% {
+    transform: translateY(-22px) scale(0.96, 1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes ring-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+/* Fond : quatre halos aux couleurs des pions qui dérivent lentement */
+/* Background: four halos in the pawn colours drifting slowly */
+.logo-page::before {
+  content: '';
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 25%, #006ca8 0, transparent 28%),
+    radial-gradient(circle at 80% 20%, #f28a15 0, transparent 26%),
+    radial-gradient(circle at 25% 80%, #00a970 0, transparent 26%),
+    radial-gradient(circle at 78% 78%, #129a9c 0, transparent 28%);
+  opacity: 0.18;
+  filter: blur(30px);
+  animation:
+    halo-in 2000ms ease-out backwards,
+    halo-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes halo-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes halo-drift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(25deg) scale(1.15);
+  }
+}
+
+/* Pions qui flottent du bas vers le haut de la page, en se balançant */
+/* Pawns floating from the bottom to the top of the page, swaying */
+.logo-page__pawns {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.logo-page__pawn {
+  position: absolute;
+  top: 0;
+  opacity: 0.22;
+  animation: pawn-float linear infinite;
+}
+
+@keyframes pawn-float {
+  from {
+    transform: translate(0, 105vh) rotate(-18deg);
+  }
+  50% {
+    transform: translate(24px, 50vh) rotate(14deg);
+  }
+  to {
+    transform: translate(-12px, -20vh) rotate(-18deg);
+  }
+}
+
+/* Mouvement réduit : tout s'affiche tout de suite, sans animation */
+/* Reduced motion: everything shows immediately, with no animation */
+@media (prefers-reduced-motion: reduce) {
+  .logo-page__pawns {
+    display: none;
+  }
+
+  .logo-page,
+  .logo-page *,
+  .logo-page *::after,
+  .logo-page::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
