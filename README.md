@@ -5,6 +5,7 @@
 ![React Native](https://img.shields.io/badge/React%20Native-0.88-61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6)
 ![MariaDB](https://img.shields.io/badge/MariaDB-10.11-003545)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-Kustomize-326CE5)
 
@@ -49,7 +50,7 @@ Les documents de conception sont dans [`docs/`](docs/), avec un sommaire dans [`
 | Couche | Technologies |
 | --- | --- |
 | **Backend (API)** | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
-| **Base de données** | MariaDB 10 |
+| **Base de données** | MariaDB 10 ou PostgreSQL 17 (au choix) |
 | **Web (frontend)** | [React](https://react.dev) 19, TypeScript, Vite, React Router |
 | **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript |
 | **Client API partagé** | Types TypeScript générés depuis l'API, partagés entre web et mobile |
@@ -67,7 +68,7 @@ ludmigo/
 ├── web/        # Application React (navigateur)
 ├── mobile/     # Application React Native (iOS & Android)
 ├── packages/   # Code partagé entre web et mobile (types, client API, validation)
-├── docker-compose.yml  # Services locaux (MariaDB)
+├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)
 └── README.md
 ```
 
@@ -86,7 +87,7 @@ Principes :
 
 - [PHP](https://www.php.net) 8.5 avec les extensions requises par Symfony
 - [Composer](https://getcomposer.org) 2
-- [Docker](https://www.docker.com) (Docker Desktop ou Docker Engine avec Compose) pour MariaDB
+- [Docker](https://www.docker.com) (Docker Desktop ou Docker Engine avec Compose) pour MariaDB ou PostgreSQL
 - [Node.js](https://nodejs.org) 24 LTS et npm
 - Pour le mobile :
   - macOS avec [Xcode](https://developer.apple.com/xcode/) (simulateur iOS)
@@ -101,8 +102,8 @@ Principes :
 git clone git@github.com:<organisation>/ludmigo.git
 cd ludmigo
 
-# 2. Start the MariaDB database
-# 2. Démarrer la base de données MariaDB
+# 2. Start the database (MariaDB by default; PostgreSQL: make db-up DB=postgres)
+# 2. Démarrer la base de données (MariaDB par défaut ; PostgreSQL : make db-up DB=postgres)
 docker compose up -d db
 
 # 3. Install and configure the API
@@ -133,8 +134,8 @@ npm run start -w mobile
 
 | Action | Commande |
 | --- | --- |
-| Démarrer la base de données | `docker compose up -d db` |
-| Arrêter la base de données | `docker compose stop db` |
+| Démarrer la base de données | `docker compose up -d db` (MariaDB) ou `make db-up DB=postgres` (PostgreSQL) |
+| Arrêter la base de données | `docker compose stop db` ou `make db-down DB=postgres` |
 | Console Symfony (dans `api/`) | `php bin/console` |
 | Créer une migration | `php bin/console make:migration` |
 | Appliquer les migrations | `php bin/console doctrine:migrations:migrate` |
@@ -202,7 +203,7 @@ The design documents are in [`docs/`](docs/), with a table of contents in [`docs
 | Layer | Technologies |
 | --- | --- |
 | **Backend (API)** | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
-| **Database** | MariaDB 10 |
+| **Database** | MariaDB 10 or PostgreSQL 17 (your choice) |
 | **Web (frontend)** | [React](https://react.dev) 19, TypeScript, Vite, React Router |
 | **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript |
 | **Shared API client** | TypeScript types generated from the API, shared between web and mobile |
@@ -219,7 +220,7 @@ ludmigo/
 ├── web/        # Application React (navigateur)
 ├── mobile/     # Application React Native (iOS & Android)
 ├── packages/   # Code partagé entre web et mobile (types, client API, validation)
-├── docker-compose.yml  # Services locaux (MariaDB)
+├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)
 └── README.md
 ```
 
@@ -235,7 +236,7 @@ Principles:
 
 - [PHP](https://www.php.net) 8.5 with the extensions required by Symfony
 - [Composer](https://getcomposer.org) 2
-- [Docker](https://www.docker.com) (Docker Desktop or Docker Engine with Compose) for MariaDB
+- [Docker](https://www.docker.com) (Docker Desktop or Docker Engine with Compose) for MariaDB or PostgreSQL
 - [Node.js](https://nodejs.org) 24 LTS and npm
 - For mobile:
   - macOS with [Xcode](https://developer.apple.com/xcode/) (iOS simulator)
@@ -250,8 +251,8 @@ Principles:
 git clone git@github.com:<organisation>/ludmigo.git
 cd ludmigo
 
-# 2. Start the MariaDB database
-# 2. Démarrer la base de données MariaDB
+# 2. Start the database (MariaDB by default; PostgreSQL: make db-up DB=postgres)
+# 2. Démarrer la base de données (MariaDB par défaut ; PostgreSQL : make db-up DB=postgres)
 docker compose up -d db
 
 # 3. Install and configure the API
@@ -282,8 +283,8 @@ npm run start -w mobile
 
 | Action | Command |
 | --- | --- |
-| Start the database | `docker compose up -d db` |
-| Stop the database | `docker compose stop db` |
+| Start the database | `docker compose up -d db` (MariaDB) or `make db-up DB=postgres` (PostgreSQL) |
+| Stop the database | `docker compose stop db` or `make db-down DB=postgres` |
 | Symfony console (in `api/`) | `php bin/console` |
 | Create a migration | `php bin/console make:migration` |
 | Apply migrations | `php bin/console doctrine:migrations:migrate` |
