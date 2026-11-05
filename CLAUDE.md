@@ -6,18 +6,7 @@ Domaines : `ludmigo.fr` (public français), `ludmigo.com` (international).
 
 ## Documentation de référence
 
-Lire avant de développer une fonctionnalité :
-
-- `docs/01_PROJECT_BRIEF.md` : contexte du projet, utilisateurs, critères de succès, périmètre
-- `docs/02_PRD.md` : objectifs, fonctionnalités, périmètre V1, critères d'acceptation
-- `docs/03_ARCHITECTURE.md` : comment les parties s'assemblent
-- `docs/04_TRD.md` : choix techniques, sécurité, environnements
-- `docs/05_BACKEND_SCHEMA.md` : entités, relations, règles d'autorisation
-- `docs/06_APP_FLOW.md` : écrans et parcours utilisateur
-- `docs/07_UI_UX_DESIGN.md` : couleurs, composants, accessibilité
-- `docs/08_EPICS.md` : epics et user stories, avec leurs identifiants
-- `docs/09_IMPLEMENTATION_PLAN.md` : ordre de construction et points de contrôle
-- `docs/10_KANBAN.md` : comment le travail circule sur le tableau
+Les documents de conception sont dans `docs/`. Les lire avant de développer une fonctionnalité.
 
 Chaque document contient la version française, suivie de la traduction anglaise.
 
@@ -79,18 +68,7 @@ Domains: `ludmigo.fr` (French public), `ludmigo.com` (international).
 
 ## Reference documentation
 
-Read before building a feature:
-
-- `docs/01_PROJECT_BRIEF.md`: project context, users, success criteria, scope
-- `docs/02_PRD.md`: goals, features, V1 scope, acceptance criteria
-- `docs/03_ARCHITECTURE.md`: how the parts fit together
-- `docs/04_TRD.md`: technical choices, security, environments
-- `docs/05_BACKEND_SCHEMA.md`: entities, relations, authorisation rules
-- `docs/06_APP_FLOW.md`: screens and user flows
-- `docs/07_UI_UX_DESIGN.md`: colours, components, accessibility
-- `docs/08_EPICS.md`: epics and user stories, with their IDs
-- `docs/09_IMPLEMENTATION_PLAN.md`: build order and checkpoints
-- `docs/10_KANBAN.md`: how work flows across the board
+The design documents are in `docs/`. Read them before building a feature.
 
 Each document contains the French version, followed by the English translation.
 
