@@ -17,7 +17,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src=".github/assets/logo-ludmigo-people-noir.svg" alt="Ludmigo, les joueurs" height="80" align="middle">
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://www.maxime.bzh/maxime-black.svg" alt="Maxime" height="80" align="middle">
+<a href="https://maxime.bzh"><img src="https://www.maxime.bzh/maxime-black.svg" alt="Maxime" height="80" align="middle"></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <a href="https://github.com/maximejolivet"><img src="https://wsrv.nl/?url=github.com/maximejolivet.png&w=160&h=160&fit=cover&mask=circle" alt="maximejolivet" width="80" height="80" align="middle"></a>
 
@@ -43,19 +43,19 @@ dans une ville, ou dans des bars que nous accompagnons pour développer ce servi
 
 ## Documentation
 
-Les documents de conception sont dans [`docs/`](docs/), avec un sommaire dans [`docs/00_INDEX.md`](docs/00_INDEX.md) : brief projet, PRD, architecture, TRD, schéma backend, parcours, UI/UX, epics, plan d'implémentation et Kanban. Ils sont écrits en français, suivis de leur traduction anglaise.
+Les documents de conception sont dans `docs/` : brief projet, PRD, architecture, TRD, schéma backend, parcours, UI/UX, epics, plan d'implémentation et Kanban. Ils sont écrits en français, suivis de leur traduction anglaise.
 
 ## Stack technique
 
-| Couche | Technologies |
-| --- | --- |
-| **Backend (API)** | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
-| **Base de données** | MariaDB 10 ou PostgreSQL 17 (au choix) |
-| **Web (frontend)** | [React](https://react.dev) 19, TypeScript, Vite, React Router |
-| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript |
-| **Client API partagé** | Types TypeScript générés depuis l'API, partagés entre web et mobile |
-| **Tests** | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile) |
-| **Environnement local** | Docker Compose |
+| Couche                     | Technologies                                                          |
+| -------------------------- | --------------------------------------------------------------------- |
+| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
+| **Base de données**        | MariaDB 10 ou PostgreSQL 17 (au choix)                                |
+| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router         |
+| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript            |
+| **Client API partagé**     | Types TypeScript générés depuis l'API, partagés entre web et mobile   |
+| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile)          |
+| **Environnement local**    | Docker Compose                                                        |
 
 L'API Symfony expose les données via une API REST (JSON). Les applications web et mobile
 consomment cette même API, ce qui garantit une logique métier unique.
@@ -132,19 +132,19 @@ npm run start -w mobile
 
 ## Commandes utiles
 
-| Action | Commande |
-| --- | --- |
-| Démarrer la base de données | `docker compose up -d db` (MariaDB) ou `make db-up DB=postgres` (PostgreSQL) |
-| Arrêter la base de données | `docker compose stop db` ou `make db-down DB=postgres` |
-| Console Symfony (dans `api/`) | `php bin/console` |
-| Créer une migration | `php bin/console make:migration` |
-| Appliquer les migrations | `php bin/console doctrine:migrations:migrate` |
-| Lint PHP (PHP-CS-Fixer) | `composer cs:check` |
-| Analyse statique PHP (PHPStan) | `composer phpstan` |
-| Build web | `npm run build -w web` |
-| Lint JS/TS | `npm run lint` |
-| Lancer le mobile | `npm run start -w mobile` |
-| Build iOS / Android (EAS) | `npx eas build --platform ios` / `--platform android` |
+| Action                         | Commande                                                                     |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| Démarrer la base de données    | `docker compose up -d db` (MariaDB) ou `make db-up DB=postgres` (PostgreSQL) |
+| Arrêter la base de données     | `docker compose stop db` ou `make db-down DB=postgres`                       |
+| Console Symfony (dans `api/`)  | `php bin/console`                                                            |
+| Créer une migration            | `php bin/console make:migration`                                             |
+| Appliquer les migrations       | `php bin/console doctrine:migrations:migrate`                                |
+| Lint PHP (PHP-CS-Fixer)        | `composer cs:check`                                                          |
+| Analyse statique PHP (PHPStan) | `composer phpstan`                                                           |
+| Build web                      | `npm run build -w web`                                                       |
+| Lint JS/TS                     | `npm run lint`                                                               |
+| Lancer le mobile               | `npm run start -w mobile`                                                    |
+| Build iOS / Android (EAS)      | `npx eas build --platform ios` / `--platform android`                        |
 
 ## Tests
 
@@ -196,19 +196,19 @@ Beginner or experienced player, it doesn't matter: what counts is the wish to sh
 
 ## Documentation
 
-The design documents are in [`docs/`](docs/), with a table of contents in [`docs/00_INDEX.md`](docs/00_INDEX.md): project brief, PRD, architecture, TRD, backend schema, app flow, UI/UX design, epics, implementation plan and Kanban. They are written in French, followed by their English translation.
+The design documents are in `docs/`: project brief, PRD, architecture, TRD, backend schema, app flow, UI/UX design, epics, implementation plan and Kanban. They are written in French, followed by their English translation.
 
 ## Tech stack
 
-| Layer | Technologies |
-| --- | --- |
-| **Backend (API)** | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
-| **Database** | MariaDB 10 or PostgreSQL 17 (your choice) |
-| **Web (frontend)** | [React](https://react.dev) 19, TypeScript, Vite, React Router |
-| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript |
-| **Shared API client** | TypeScript types generated from the API, shared between web and mobile |
-| **Tests** | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile) |
-| **Local environment** | Docker Compose |
+| Layer                      | Technologies                                                           |
+| -------------------------- | ---------------------------------------------------------------------- |
+| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM  |
+| **Database**               | MariaDB 10 or PostgreSQL 17 (your choice)                              |
+| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router          |
+| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript             |
+| **Shared API client**      | TypeScript types generated from the API, shared between web and mobile |
+| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile)           |
+| **Local environment**      | Docker Compose                                                         |
 
 The Symfony API exposes data through a REST API (JSON). The web and mobile apps consume this same API, which guarantees a single business logic.
 
@@ -281,19 +281,19 @@ npm run start -w mobile
 
 ## Useful commands
 
-| Action | Command |
-| --- | --- |
-| Start the database | `docker compose up -d db` (MariaDB) or `make db-up DB=postgres` (PostgreSQL) |
-| Stop the database | `docker compose stop db` or `make db-down DB=postgres` |
-| Symfony console (in `api/`) | `php bin/console` |
-| Create a migration | `php bin/console make:migration` |
-| Apply migrations | `php bin/console doctrine:migrations:migrate` |
-| PHP lint (PHP-CS-Fixer) | `composer cs:check` |
-| PHP static analysis (PHPStan) | `composer phpstan` |
-| Web build | `npm run build -w web` |
-| JS/TS lint | `npm run lint` |
-| Start mobile | `npm run start -w mobile` |
-| iOS / Android build (EAS) | `npx eas build --platform ios` / `--platform android` |
+| Action                        | Command                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| Start the database            | `docker compose up -d db` (MariaDB) or `make db-up DB=postgres` (PostgreSQL) |
+| Stop the database             | `docker compose stop db` or `make db-down DB=postgres`                       |
+| Symfony console (in `api/`)   | `php bin/console`                                                            |
+| Create a migration            | `php bin/console make:migration`                                             |
+| Apply migrations              | `php bin/console doctrine:migrations:migrate`                                |
+| PHP lint (PHP-CS-Fixer)       | `composer cs:check`                                                          |
+| PHP static analysis (PHPStan) | `composer phpstan`                                                           |
+| Web build                     | `npm run build -w web`                                                       |
+| JS/TS lint                    | `npm run lint`                                                               |
+| Start mobile                  | `npm run start -w mobile`                                                    |
+| iOS / Android build (EAS)     | `npx eas build --platform ios` / `--platform android`                        |
 
 ## Tests
 
