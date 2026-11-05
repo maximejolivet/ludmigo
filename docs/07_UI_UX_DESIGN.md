@@ -44,7 +44,7 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 
 - **Boutons** : principal (plein), secondaire (contour), texte (lien). Hauteur minimale 44 px.
 - **Formulaires** : libellé au-dessus du champ, message d'erreur sous le champ, jamais de placeholder seul comme libellé.
-- **Cartes** : rencontre (jeu, lieu, date, places restantes), jeu (visuel, nom, nombre de joueurs, durée).
+- **Cartes** : rencontre (jeu, lieu, date, places restantes), jeu (visuel, nom, catégories, nombre de joueurs, durée).
 - **Navigation** : barre d'onglets en bas (mobile), barre latérale (web).
 - **Alertes** : bandeau pour l'état réseau, toast pour les confirmations (5 s), message en ligne pour les erreurs.
 - **Carte** : marqueurs par catégorie de lieu, regroupement quand ils se chevauchent, liste équivalente pour les lecteurs d'écran.
@@ -66,7 +66,8 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **Recherche** : filtres en haut (jeu, lieu, date), liste de cartes de rencontre, compteur de résultats.
 - **Détail d'une rencontre** : bouton « Rejoindre » en bas d'écran (mobile) ou à droite (web), infos clés (date, lieu, jeu, places) avant la description.
 - **Créer une rencontre** : formulaire en une page, champs obligatoires en tête, validation en direct.
-- **Fiche de jeu** : nombre de joueurs et durée en haut, description, puis rencontres liées.
+- **Catalogue de jeux** : filtres en haut, dont les catégories en puces à choix multiple, puis nombre de joueurs, durée et niveau ; liste de cartes de jeu avec leurs catégories.
+- **Fiche de jeu** : catégories, nombre de joueurs et durée en haut, description, puis rencontres liées.
 - **Profil** : rencontres à venir en premier, historique ensuite.
 - **Carte d'exploration** : carte pleine largeur, filtres dans un panneau repliable (mobile) ou à gauche (web), liste synchronisée avec la carte.
 - **Tableau de bord du lieu** : sur mobile, sections en onglets simples (Fiche, Jeux, Événements, Publications, Avis) ; sur web, barre latérale. L'action principale « Publier » reste visible.
@@ -158,7 +159,7 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 
 - **Buttons**: primary (filled), secondary (outlined), text (link). Minimum height 44 px.
 - **Forms**: label above the field, error message under the field, never a placeholder alone as a label.
-- **Cards**: meetup (game, venue, date, seats left), game (visual, name, number of players, duration).
+- **Cards**: meetup (game, venue, date, seats left), game (visual, name, categories, number of players, duration).
 - **Navigation**: bottom tab bar (mobile), sidebar (web).
 - **Alerts**: banner for the network state, toast for confirmations (5 s), inline message for errors.
 - **Map**: markers by venue category, clustering when they overlap, an equivalent list for screen readers.
@@ -180,7 +181,8 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 - **Search**: filters at the top (game, venue, date), list of meetup cards, result counter.
 - **Meetup detail**: "Join" button at the bottom of the screen (mobile) or on the right (web), key info (date, venue, game, seats) before the description.
 - **Create a meetup**: one-page form, required fields first, live validation.
-- **Game page**: number of players and duration at the top, description, then related meetups.
+- **Game catalogue**: filters at the top, including categories as multi-select chips, then number of players, duration and level; list of game cards showing their categories.
+- **Game page**: categories, number of players and duration at the top, description, then related meetups.
 - **Profile**: upcoming meetups first, history after.
 - **Exploration map**: full-width map, filters in a collapsible panel (mobile) or on the left (web), list synchronised with the map.
 - **Venue dashboard**: on mobile, sections as simple tabs (Page, Games, Events, Posts, Reviews); on web, a sidebar. The main "Publish" action stays visible.
