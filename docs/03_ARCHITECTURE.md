@@ -32,7 +32,7 @@ Couches prévues. C'est un plan pour la première implémentation, pas encore du
 
 ## Données
 
-Entités : `User`, `Game`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `Notification`, `PlaceOpeningHour`, `Report`, `PushSubscription`, les entités des lieux (`PlaceGame`, `PlaceEvent`, `PlacePost`, `PlacePhoto`), le contenu (`Article`, `EditorialPage`), le contact (`ContactMessage`), l'audit (`AuditLog`) et les consentements (`Consent`). Les entités gardées pour plus tard, hors V1, sont `CollectionItem`, `GroupMessage`, `GamificationTask`, `PointEvent` et `Reward`.
+Entités : `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `Notification`, `PlaceOpeningHour`, `Report`, `PushSubscription`, `FavoriteGame`, les entités des lieux (`PlaceGame`, `PlaceEvent`, `PlacePost`, `PlacePhoto`), le contenu (`Article`, `EditorialPage`), le contact (`ContactMessage`), l'audit (`AuditLog`) et les consentements (`Consent`). Les entités gardées pour plus tard, hors V1, sont `CollectionItem`, `GroupMessage`, `GamificationTask`, `PointEvent` et `Reward`.
 
 - Les migrations se créent avec `php bin/console make:migration` et se relisent avant chaque commit.
 - Une colonne n'est jamais supprimée dans la même migration que le code qui cesse de l'utiliser : le code change d'abord, la colonne est supprimée dans une migration ultérieure.
@@ -64,7 +64,7 @@ Entités : `User`, `Game`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `
 | Géocodage et distance | Adresses des lieux, recherche près de chez moi | OpenStreetMap (Nominatim) |
 | Stockage de fichiers | Photos des jeux et des lieux | Stockage objet compatible S3 (ex. OVH Object Storage) |
 | Analyse d'audience | Matomo ou Plausible (sans consentement) et Search Console | Prévu (étape 5) |
-| Affiliation Philibert | Liens vers les fiches produits, suivi des clics | Prévu (étape 4) |
+| Affiliation boutique de jeux de société | Liens vers les fiches produits, suivi des clics | Prévu (étape 4) |
 | Paiement (évolution) | Abonnements professionnels et chèque cadeau, hors V1 | Stripe, branché avec les abonnements |
 
 ## Environnements
@@ -131,7 +131,7 @@ Planned layers. This is a plan for the first implementation, not code yet:
 
 ## Data
 
-Entities: `User`, `Game`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `Notification`, `PlaceOpeningHour`, `Report`, `PushSubscription`, the venue entities (`PlaceGame`, `PlaceEvent`, `PlacePost`, `PlacePhoto`), content (`Article`, `EditorialPage`), contact (`ContactMessage`), audit (`AuditLog`) and consents (`Consent`). The entities kept for later, out of V1, are `CollectionItem`, `GroupMessage`, `GamificationTask`, `PointEvent` and `Reward`.
+Entities: `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `Notification`, `PlaceOpeningHour`, `Report`, `PushSubscription`, `FavoriteGame`, the venue entities (`PlaceGame`, `PlaceEvent`, `PlacePost`, `PlacePhoto`), content (`Article`, `EditorialPage`), contact (`ContactMessage`), audit (`AuditLog`) and consents (`Consent`). The entities kept for later, out of V1, are `CollectionItem`, `GroupMessage`, `GamificationTask`, `PointEvent` and `Reward`.
 
 - Migrations are created with `php bin/console make:migration` and reviewed before every commit.
 - A column is never dropped in the same migration as the code that stops using it: the code changes first, the column is dropped in a later migration.
@@ -163,7 +163,7 @@ Entities: `User`, `Game`, `Place`, `Meetup`, `MeetupParticipation`, `Review`, `N
 | Geocoding and distance | Venue addresses, "near me" search | OpenStreetMap (Nominatim) |
 | File storage | Game and venue photos | S3-compatible object storage (e.g. OVH Object Storage) |
 | Analytics | Matomo or Plausible (no consent needed) and Search Console | Planned (step 5) |
-| Philibert affiliation | Links to product pages, click tracking | Planned (step 4) |
+| Board game shop affiliation | Links to product pages, click tracking | Planned (step 4) |
 | Payment (evolution) | Professional subscriptions and gift card, out of V1 | Stripe, plugged in with the subscriptions |
 
 ## Environments

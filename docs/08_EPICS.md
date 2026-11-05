@@ -11,16 +11,18 @@ Les identifiants de stories ont la forme `E<epic>-S<story>`. Ils s'utilisent dan
 | E1-S3 | En tant que visiteur, je veux choisir de recevoir ou non la newsletter à l'inscription, et recevoir un email de bienvenue, afin de savoir à quoi j'ai consenti. | 4 | P1 |
 | E1-S4 | En tant que joueur, je veux gérer mon profil (pseudo, ville) et mes paramètres, afin que les autres joueurs sachent qui je suis. | 4 | P0 |
 | E1-S5 | En tant que joueur, je veux exporter ou supprimer mon compte, afin de garder le contrôle de mes données personnelles (RGPD). | 4 | P0 |
+| E1-S6 | En tant que nouveau joueur, je veux un onboarding court après mon inscription (présentation, jeux préférés, localisation), que je peux passer étape par étape, afin de démarrer sans effort. | 4 | P0 |
 
 ## E2 : Catalogue de jeux (P0)
 
 | ID | Story | Étape | Priorité |
 | --- | --- | --- | --- |
 | E2-S1 | En tant que joueur débutant, je veux parcourir des jeux adaptés aux débutants, afin de choisir un jeu à découvrir sans connaître les règles à l'avance. | 3 | P0 |
-| E2-S2 | En tant que joueur, je veux filtrer les jeux par nombre de joueurs, durée et niveau, afin de trouver un jeu adapté au groupe. | 3 | P0 |
+| E2-S2 | En tant que joueur, je veux filtrer les jeux par catégorie, nombre de joueurs, durée et niveau, afin de trouver un jeu adapté au groupe. | 3 | P0 |
 | E2-S3 | En tant que joueur, je veux voir la page d'un jeu avec sa description, afin de décider de rejoindre une rencontre autour de ce jeu. | 3 | P0 |
 | E2-S4 | En tant que joueur, je veux lire une explication des règles sur la page d'un jeu, afin d'apprendre un jeu sans l'acheter. | - | Hors V1 |
 | E2-S5 | En tant que joueur, je veux un lien depuis la page d'un jeu vers la fiche produit de la boutique, afin d'acheter le jeu après l'avoir découvert. | 4 | P1 |
+| E2-S6 | En tant que joueur, je veux choisir et gérer mes jeux favoris (10 au maximum) depuis mon profil, afin de retrouver les jeux que j'aime. | 4 | P0 |
 
 ## E3 : Lieux et carte d'exploration (P0)
 
@@ -175,7 +177,7 @@ Ces stories sont prévues mais ne font pas partie de la version 1. Elles n'ont p
 | ID | Story | Étape | Priorité |
 | --- | --- | --- | --- |
 | E17-S1 | En tant que responsable de lieu, je veux souscrire à une formule professionnelle avec paiement en ligne, avec une option annuelle, afin de débloquer davantage de fonctionnalités. | - | Évolution |
-| E17-S2 | En tant que joueur, je veux acheter un chèque cadeau pour des jeux de la boutique Philibert, afin d'offrir un jeu ou d'en choisir un moi-même. | - | Évolution |
+| E17-S2 | En tant que joueur, je veux acheter un chèque cadeau pour des jeux d'une boutique de jeux de société partenaire, afin d'offrir un jeu ou d'en choisir un moi-même. | - | Évolution |
 | E17-S3 | En tant que propriétaire de la plateforme, je veux adapter le prix des abonnements à la capacité d'accueil et à la ville de chaque lieu, afin que l'offre corresponde à chaque lieu. | - | Évolution |
 | E17-S4 | En tant que propriétaire de la plateforme, je veux des partenariats avec des éditeurs indépendants et une offre de dropshipping, afin de générer de nouveaux revenus. | - | Évolution |
 
@@ -222,16 +224,18 @@ Story identifiers have the form `E<epic>-S<story>`. Use them in commits and pull
 | E1-S3 | As a visitor, I want to choose whether to receive the newsletter at sign-up, and receive a welcome email, so that I know what I consented to. | 4 | P1 |
 | E1-S4 | As a player, I want to manage my profile (nickname, city) and my settings, so that other players know who I am. | 4 | P0 |
 | E1-S5 | As a player, I want to export or delete my account, so that I keep control of my personal data (GDPR). | 4 | P0 |
+| E1-S6 | As a new player, I want a short onboarding after sign-up (welcome, favourite games, location) that I can skip step by step, so that I get started with no effort. | 4 | P0 |
 
 ## E2: Game catalogue (P0)
 
 | ID | Story | Step | Priority |
 | --- | --- | --- | --- |
 | E2-S1 | As a beginner player, I want to browse beginner-friendly games, so that I can pick a game to discover without knowing the rules in advance. | 3 | P0 |
-| E2-S2 | As a player, I want to filter games by number of players, duration and level, so that I find a game that fits the group. | 3 | P0 |
+| E2-S2 | As a player, I want to filter games by category, number of players, duration and level, so that I find a game that fits the group. | 3 | P0 |
 | E2-S3 | As a player, I want to see a game's page with its description, so that I can decide to join a meetup around that game. | 3 | P0 |
 | E2-S4 | As a player, I want to read an explanation of the rules on a game's page, so that I can learn a game without buying it. | - | Out of V1 |
 | E2-S5 | As a player, I want a link from a game's page to the shop's product page, so that I can buy the game after discovering it. | 4 | P1 |
+| E2-S6 | As a player, I want to choose and manage my favourite games (10 at most) from my profile, so that I find the games I like. | 4 | P0 |
 
 ## E3: Venues and exploration map (P0)
 
@@ -386,7 +390,7 @@ These stories are planned but are not part of version 1. They have no implementa
 | ID | Story | Step | Priority |
 | --- | --- | --- | --- |
 | E17-S1 | As a venue manager, I want to subscribe to a professional plan with online payment, with an annual option, so that I unlock more features. | - | Evolution |
-| E17-S2 | As a player, I want to buy a gift card for games from the Philibert shop, so that I can give a game or choose one myself. | - | Evolution |
+| E17-S2 | As a player, I want to buy a gift card for games from a partner board game shop, so that I can give a game or choose one myself. | - | Evolution |
 | E17-S3 | As the platform owner, I want to adapt subscription prices to each venue's capacity and city, so that the offer fits each venue. | - | Evolution |
 | E17-S4 | As the platform owner, I want partnerships with independent publishers and a dropshipping offer, so that I generate new revenue. | - | Evolution |
 

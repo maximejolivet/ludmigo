@@ -16,13 +16,14 @@
 | Détail d'une rencontre | Voir le jeu, le lieu, les participants, rejoindre | Rencontre, participants, statut de l'utilisateur |
 | Créer une rencontre | Choisir un jeu, un lieu, une date, un nombre de places | Jeux, lieux, utilisateur connecté |
 | Gestion des demandes (organisateur) | Accepter ou refuser les joueurs qui demandent à rejoindre | Demandes, participants |
-| Catalogue de jeux | Parcourir et filtrer les jeux | Jeux (nom, joueurs, durée, niveau) |
+| Catalogue de jeux | Parcourir et filtrer les jeux | Jeux (nom, catégorie, joueurs, durée, niveau) |
 | Fiche de jeu | Description, avis, rencontres liées | Jeu, avis, rencontres |
 | Carte d'exploration | Carte interactive des lieux et des rencontres, filtres par catégorie et ville, recherche par mots-clés | Lieux publics, rencontres |
 | Fiche de lieu | Adresse, horaires, jeux, événements, rencontres du lieu | Lieu, rencontres |
 | Connexion / inscription | Créer ou retrouver son compte | Identifiants |
 | Réinitialisation du mot de passe | Recevoir un lien par email | Email |
-| Profil | Infos personnelles, rencontres passées et à venir | Utilisateur, rencontres |
+| Onboarding | Présentation, choix facultatif de jeux préférés, localisation facultative | Jeux, utilisateur connecté |
+| Profil | Infos personnelles, jeux favoris, rencontres passées et à venir | Utilisateur, jeux favoris, rencontres |
 | Paramètres | Compte, préférences d'email, export et suppression du compte | Utilisateur |
 | Inscription professionnelle | Créer le compte d'un lieu (gratuit au lancement) | Identifiants, informations du lieu |
 | Tableau de bord du lieu | Gérer la fiche : horaires, jeux, événements et soirées récurrentes, publications, photos, avis ; statistiques hors V1 | Lieu, événements, avis |
@@ -62,6 +63,7 @@ Tableau de bord du lieu → « Événements » → « Créer » → formulaire (
 - **Envoyer une demande de contact** : Contact → choix du sujet → formulaire → page de confirmation.
 - **Annuler sa rencontre** : Détail d'une rencontre → « Annuler la rencontre » (organisateur uniquement) → confirmation → les participants sont prévenus par email.
 - **Signaler un contenu** : avis, profil ou rencontre → « Signaler » → motif → confirmation.
+- **Gérer ses jeux favoris** : Profil → « Jeux favoris » → ajouter ou retirer un jeu (10 au maximum) → retour au profil.
 - **Exporter ou supprimer son compte** : Paramètres → « Exporter mes données » ou « Supprimer mon compte » → confirmation.
 - **Programmer une soirée récurrente** : Tableau de bord du lieu → « Événements » → « Créer » → répétition (par exemple chaque jeudi) → publier.
 
@@ -86,6 +88,7 @@ Pour chaque action : déclencheur, validation, chargement, succès, erreur, écr
 | Envoyer le formulaire de contact | Bouton « Envoyer » | Sujet, nom, email, message | Bouton désactivé | Page de confirmation | Champs en erreur | Confirmation |
 | Signaler un contenu | Bouton « Signaler » | Connecté, motif renseigné | Bouton désactivé | « Signalement envoyé » | « Échec, réessayez » | Écran d'origine |
 | Exporter mes données | Bouton « Exporter mes données » | Connecté | Bouton désactivé | Fichier de données téléchargé | Échec réseau | Paramètres |
+| Ajouter un jeu favori | Bouton « Ajouter aux favoris » | Connecté, 10 favoris au maximum | Bouton désactivé | Jeu ajouté au profil | « Limite de 10 jeux atteinte » ou « Échec, réessayez » | Profil |
 
 ## Règles de navigation
 
@@ -110,7 +113,7 @@ Pour chaque action : déclencheur, validation, chargement, succès, erreur, écr
 
 1. Écran d'accueil de présentation (une phrase, un bouton « Découvrir »).
 2. Inscription (email, mot de passe, pseudo).
-3. Choix facultatif de 3 jeux préférés (passable).
+3. Choix facultatif de jeux préférés, 3 conseillés (passable), enregistrés dans le profil.
 4. Autorisation de localisation (facultative, expliquée).
 5. Arrivée sur l'Accueil avec les rencontres proches.
 6. Bandeau de cookies sur le web : accepter, refuser ou ignorer. Sans choix, aucun cookie non essentiel n'est déposé.
@@ -141,13 +144,14 @@ Pour chaque action : déclencheur, validation, chargement, succès, erreur, écr
 | Meetup detail | See the game, the venue, the participants, join | Meetup, participants, user status |
 | Create a meetup | Choose a game, a venue, a date, a number of seats | Games, venues, signed-in user |
 | Request management (organiser) | Accept or refuse the players who ask to join | Requests, participants |
-| Game catalogue | Browse and filter games | Games (name, players, duration, level) |
+| Game catalogue | Browse and filter games | Games (name, category, players, duration, level) |
 | Game page | Description, reviews, related meetups | Game, reviews, meetups |
 | Exploration map | Interactive map of venues and meetups, filters by category and city, keyword search | Public venues, meetups |
 | Venue page | Address, hours, games, events, venue meetups | Venue, meetups |
 | Sign-in / sign-up | Create or recover an account | Credentials |
 | Password reset | Receive a link by email | Email |
-| Profile | Personal info, past and upcoming meetups | User, meetups |
+| Onboarding | Welcome, optional choice of favourite games, optional location | Games, signed-in user |
+| Profile | Personal info, favourite games, past and upcoming meetups | User, favourite games, meetups |
 | Settings | Account, email preferences, account export and deletion | User |
 | Professional sign-up | Create a venue's account (free at launch) | Credentials, venue information |
 | Venue dashboard | Manage the page: hours, games, events and recurring evenings, posts, photos, reviews; statistics out of V1 | Venue, events, reviews |
@@ -187,6 +191,7 @@ Venue dashboard → "Events" → "Create" → form (publish) → Dashboard (succ
 - **Send a contact request**: Contact → choice of subject → form → confirmation page.
 - **Cancel your meetup**: Meetup detail → "Cancel the meetup" (organiser only) → confirmation → participants are warned by email.
 - **Report content**: review, profile or meetup → "Report" → reason → confirmation.
+- **Manage your favourite games**: Profile → "Favourite games" → add or remove a game (10 at most) → back to the profile.
 - **Export or delete your account**: Settings → "Export my data" or "Delete my account" → confirmation.
 - **Schedule a recurring evening**: Venue dashboard → "Events" → "Create" → repetition (for example every Thursday) → publish.
 
@@ -211,6 +216,7 @@ For each action: trigger, validation, loading, success, error, next screen.
 | Send the contact form | "Send" button | Subject, name, email, message | Button disabled | Confirmation page | Fields in error | Confirmation |
 | Report content | "Report" button | Signed in, reason filled in | Button disabled | "Report sent" | "Failed, try again" | Original screen |
 | Export my data | "Export my data" button | Signed in | Button disabled | Data file downloaded | Network failure | Settings |
+| Add a favourite game | "Add to favourites" button | Signed in, 10 favourites at most | Button disabled | Game added to the profile | "Limit of 10 games reached" or "Failed, try again" | Profile |
 
 ## Navigation rules
 
@@ -235,7 +241,7 @@ For each action: trigger, validation, loading, success, error, next screen.
 
 1. Welcome screen (one sentence, a "Discover" button).
 2. Sign-up (email, password, nickname).
-3. Optional choice of 3 favourite games (skippable).
+3. Optional choice of favourite games, 3 suggested (skippable), saved in the profile.
 4. Location permission (optional, explained).
 5. Arrival on Home with nearby meetups.
 6. Cookie banner on the web: accept, refuse or ignore. Without a choice, no non-essential cookie is set.

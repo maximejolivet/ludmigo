@@ -12,7 +12,7 @@ Le projet démarre dans la grande région Ouest, puis s'étendra à Paris et à 
 
 Il est difficile pour un joueur de trouver des partenaires de jeu et une table, surtout s'il débute ou vient d'arriver dans une ville. Les bars à jeux sont rares et souvent complets, et les lieux n'ont pas de moyen direct d'atteindre une audience qualifiée.
 
-Solutions actuelles : groupes et pages Facebook, bouche-à-oreille, bars à jeux, ludothèques, associations et quelques plateformes existantes. Megalithe, en bêta, est le concurrent direct à surveiller.
+Solutions actuelles : groupes et pages Facebook, bouche-à-oreille, bars à jeux, ludothèques, associations et quelques plateformes existantes.
 
 ## Utilisateurs
 
@@ -37,7 +37,7 @@ Solutions actuelles : groupes et pages Facebook, bouche-à-oreille, bars à jeux
 ## Périmètre
 
 - **Versions** : version 1 (lancement, P0), version 1.1 (juste après, P1), version 2 (évolutions).
-- **V1, P0** : comptes utilisateurs, carte d'exploration, catalogue de jeux, fiches de lieux publics, rencontres (créer, rechercher, rejoindre, quitter, valider les participants), soirées récurrentes dans quelques bars partenaires, notifications par email, profil de lieu minimal, outil d'administration minimal pour saisir le catalogue, les lieux et les soirées, modération minimale.
+- **V1, P0** : comptes utilisateurs, onboarding, jeux favoris, carte d'exploration, catalogue de jeux, fiches de lieux publics, rencontres (créer, rechercher, rejoindre, quitter, valider les participants), soirées récurrentes dans quelques bars partenaires, notifications par email, profil de lieu minimal, outil d'administration minimal pour saisir le catalogue, les lieux et les soirées, modération minimale.
 - **V1.1, P1** : avis et notes, lien vers la boutique, actualités et blog, pages éditoriales, formulaire de contact simple, espace professionnel complet, back office avec journal des actions sensibles, analyse d'audience sans consentement et SEO, application web installable (PWA), lien de groupe externe et export calendrier, badge « débutants bienvenus ».
 - **Évolutions (version 2)** : abonnements professionnels avec paiement en ligne, chèque cadeau, tarification selon la capacité et la ville du lieu.
 - **Hors V1** : messagerie privée entre utilisateurs, messagerie de groupe intégrée, gamification et récompenses des partenaires, collection personnelle, statistiques du lieu, explications des règles, formulaire de contact complet, notifications de rencontres à proximité, rencontres chez un particulier, application mobile native, réservation de tables avec gestion de stock, interface dans une autre langue que le français.
@@ -56,7 +56,6 @@ Solutions actuelles : groupes et pages Facebook, bouche-à-oreille, bars à jeux
 - **Démarrage à froid** : peu de lieux et de joueurs au lancement, donc beaucoup d'écrans risquent d'être vides. Chaque écran prévoit un état vide utile.
 - **Taille de la communauté** : sans joueurs actifs, les lieux ne seront pas rejoints, et l'inverse est vrai. Réponses prévues : inscription gratuite, soirées récurrentes dans 5 à 10 bars partenaires dès le lancement, et avantages pour les joueurs actifs.
 - **Acquisition des lieux** : le démarchage commercial est indispensable (argumentaire, démo, présence sur le terrain).
-- **Concurrence** : Megalithe est en bêta ; une veille doit être maintenue.
 - **Modération** : les avis et les profils sont publiés sans validation préalable ; les utilisateurs signalent, l'administrateur traite sous 48 h.
 - **Paiements** : en V1, aucune consommation ni entrée n'est encaissée via la plateforme. Décidé : les rencontres payantes et la billetterie sont hors V1.
 
@@ -89,7 +88,7 @@ The project starts in the Grand Ouest region, then will extend to Paris and the 
 
 It is hard for a player to find playing partners and a table, especially a beginner or someone who has just arrived in a city. Game bars are rare and often full, and venues have no direct way to reach a qualified audience.
 
-Current solutions: Facebook groups and pages, word of mouth, game bars, game libraries (ludothèques), associations and a few existing platforms. Megalithe, in beta, is the direct competitor to watch.
+Current solutions: Facebook groups and pages, word of mouth, game bars, game libraries (ludothèques), associations and a few existing platforms.
 
 ## Users
 
@@ -114,7 +113,7 @@ Current solutions: Facebook groups and pages, word of mouth, game bars, game lib
 ## Scope
 
 - **Versions**: version 1 (launch, P0), version 1.1 (right after, P1), version 2 (evolutions).
-- **V1, P0**: user accounts, exploration map, game catalogue, public venue pages, meetups (create, search, join, leave, validate participants), recurring evenings in a few partner bars, email notifications, a minimal venue profile, a minimal admin tool to enter the catalogue, venues and evenings, minimal moderation.
+- **V1, P0**: user accounts, onboarding, favourite games, exploration map, game catalogue, public venue pages, meetups (create, search, join, leave, validate participants), recurring evenings in a few partner bars, email notifications, a minimal venue profile, a minimal admin tool to enter the catalogue, venues and evenings, minimal moderation.
 - **V1.1, P1**: reviews and ratings, link to the shop, news and blog, editorial pages, simple contact form, full professional area, back office with a log of sensitive actions, analytics without consent and SEO, installable web app (PWA), external group link and calendar export, "beginners welcome" badge.
 - **Evolutions (version 2)**: professional subscriptions with online payment, gift card, pricing based on the venue's capacity and city.
 - **Out of V1**: private messaging between users, built-in group messaging, gamification and partner rewards, personal collection, venue statistics, rules explanations, full contact form, nearby-meetup notifications, meetups at a private home, native mobile app, table booking with stock management, interface in languages other than French.
@@ -133,7 +132,6 @@ Current solutions: Facebook groups and pages, word of mouth, game bars, game lib
 - **Cold start**: few venues and players at launch, so many screens risk being empty. Each screen plans a useful empty state.
 - **Community size**: without active players, venues will not be joined, and the reverse is true. Planned answers: free sign-up, recurring evenings in 5 to 10 partner bars from the launch, and perks for active players.
 - **Venue acquisition**: commercial prospecting is essential (pitch, demo, field presence).
-- **Competition**: Megalithe is in beta; monitoring must be maintained.
 - **Moderation**: reviews and profiles are published without prior validation; users report, the administrator handles reports within 48 hours.
 - **Payments**: in V1, no drinks or entry fees are charged through the platform. Decided: paid meetups and ticketing are out of V1.
 

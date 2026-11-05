@@ -6,6 +6,8 @@
 | --- | --- |
 | `User` | Compte joueur (et responsable de lieu, selon le rôle) |
 | `Game` | Jeu de société du catalogue |
+| `Category` | Catégorie de jeu (stratégie, famille, ambiance…) |
+| `GameCategory` | Table de liaison entre un jeu et ses catégories |
 | `Place` | Lieu de jeu (espace dédié ou bar partenaire) |
 | `Meetup` | Rencontre autour d'un jeu, dans un lieu, à une date donnée |
 | `MeetupParticipation` | Participation d'un utilisateur à une rencontre |
@@ -23,6 +25,7 @@
 | `PushSubscription` | Abonnement d'un navigateur aux notifications web (PWA, P1) |
 | `AuditLog` | Trace d'une action de l'administration ou d'une suppression |
 | `Consent` | Consentement donné par un utilisateur (CGU, newsletter), avec sa version |
+| `FavoriteGame` | Jeu favori d'un utilisateur (10 au maximum) |
 | `CollectionItem` | Jeu possédé ou souhaité par un utilisateur (hors V1) |
 | `GamificationTask` | Tâche hebdomadaire rapportant des points (hors V1) |
 | `PointEvent` | Points gagnés par un utilisateur (hors V1) |
@@ -53,6 +56,18 @@
 - `difficulty` : enum (`beginner`, `intermediate`, `expert`), défaut `beginner`
 - `image_url` : string, facultatif
 - `created_at` : datetime_immutable, **obligatoire**
+
+### `category`
+- `id` : UUID, **obligatoire**
+- `code` : string(40), **obligatoire**, **unique** (par exemple `strategy`, `family`, `party`, `cooperative`, `cards`, `deduction`, `adventure`, `abstract`)
+- `label` : string(80), **obligatoire** (libellé affiché en français)
+- `position` : smallint, défaut `0` (ordre d'affichage)
+
+### `game_category`
+- `id` : UUID, **obligatoire**
+- `game_id` : FK vers `game`, **obligatoire**, index
+- `category_id` : FK vers `category`, **obligatoire**, index
+- Contrainte **unique** : (`game_id`, `category_id`)
 
 ### `place`
 - `id` : UUID, **obligatoire**
@@ -211,6 +226,14 @@
 - `granted` : boolean, **obligatoire**
 - `created_at` : datetime_immutable, **obligatoire**
 
+### `favorite_game`
+- `id` : UUID, **obligatoire**
+- `user_id` : FK vers `user`, **obligatoire**, index
+- `game_id` : FK vers `game`, **obligatoire**
+- `created_at` : datetime_immutable, **obligatoire**
+- Contrainte **unique** : (`user_id`, `game_id`)
+- 10 jeux au maximum par utilisateur
+
 ### Tables hors V1
 
 Ces tables ne sont pas créées au lancement.
@@ -243,6 +266,8 @@ Ces tables ne sont pas créées au lancement.
 - `Game` 1 - N `PlaceGame`
 - `Game` 1 - N `Review` ; `Place` 1 - N `Review` ; `User` 1 - N `Review`
 - `User` 1 - N `Notification`
+- `User` N - N `Game` via `FavoriteGame`
+- `Game` N - N `Category` via `GameCategory`
 - `User` 1 - N `Article` (auteur, administrateur)
 - `User` 1 - N `ContactMessage` (facultatif)
 - `User` 1 - N `Report` (auteur) ; `User` 1 - N `PushSubscription`
@@ -251,11 +276,11 @@ Ces tables ne sont pas créées au lancement.
 
 ## Propriété des données
 
-- Un utilisateur possède son profil, ses participations, ses avis et ses notifications.
+- Un utilisateur possède son profil, ses participations, ses avis, ses jeux favoris et ses notifications.
 - Une rencontre appartient à son organisateur ; le responsable d'un lieu peut la consulter, pas la modifier.
 - Un lieu appartient à son responsable ; l'administrateur valide son activation.
 - Un responsable de lieu possède les jeux, événements, publications et photos de son lieu.
-- Le catalogue de jeux, les articles et les pages éditoriales appartiennent à Ludmigo (écriture administrateur uniquement).
+- Le catalogue de jeux et ses catégories, les articles et les pages éditoriales appartiennent à Ludmigo (écriture administrateur uniquement).
 - Les messages de contact sont lisibles par les administrateurs seulement.
 - Le journal d'audit est en écriture seule : personne ne le modifie ni ne le supprime, pas même un administrateur.
 - Les consentements appartiennent à l'utilisateur et sont conservés comme preuve.
@@ -274,10 +299,13 @@ Ces tables ne sont pas créées au lancement.
 | --- | --- | --- | --- | --- |
 | `User` | Soi-même (complet) ; autres (pseudo uniquement) | Inscription | Soi-même | Soi-même (anonymisation) |
 | `Game` | Tous | Admin | Admin | Admin |
+| `Category` | Tous | Admin | Admin | Admin |
+| `GameCategory` | Tous | Admin | Admin | Admin |
 | `Place` | Tous (actifs) ; responsable (siens) | Responsable ou admin | Responsable (siens, sans activation) ; admin | Admin |
 | `Meetup` | Tous (ouvertes) | Utilisateur connecté | Organisateur (tant que non commencée) ; admin | Organisateur ; admin |
 | `MeetupParticipation` | Participants de la rencontre | Utilisateur connecté, rencontre ouverte | Organisateur (accepter, refuser) | Soi-même (quitter) |
 | `Review` | Tous | Utilisateur connecté (un avis par jeu ou lieu) | Auteur | Auteur ; admin |
+| `FavoriteGame` | Soi-même | Soi-même (10 au maximum) | Jamais | Soi-même |
 | `Notification` | Destinataire | Système | Destinataire (marquer lue) | Destinataire |
 | `PlaceOpeningHour` | Tous | Responsable | Responsable | Responsable |
 | `PlaceGame` | Tous (lieu actif) | Responsable (son lieu) | Responsable | Responsable |
@@ -304,20 +332,22 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 - Lieu : adresse et ville obligatoires, activation uniquement après validation.
 - Événement : titre obligatoire et date future.
 - Article : titre et slug uniques.
+- Jeu : au moins une catégorie, sans doublon (`game_id`, `category_id`).
+- Jeux favoris : 10 au maximum par utilisateur, un même jeu une seule fois.
 - Rencontre chez un particulier : hors V1. Si elle est ajoutée plus tard, seule une zone approximative sera stockée et affichée.
 
 ## Conservation et suppression
 
 - **Conservé** : rencontres passées (anonymisées), avis (auteur anonymisé), catalogue de jeux.
 - **Supprimé** : données personnelles du compte à la demande de l'utilisateur, notifications après 90 jours, messages de contact 6 mois après traitement.
-- **Exportable** : profil, participations et avis au format JSON (RGPD).
+- **Exportable** : profil, participations, avis et jeux favoris au format JSON (RGPD).
 - **Journal d'audit** : conservé 12 mois, jamais modifié.
 - **Consentements** : conservés 3 ans comme preuve, même après la suppression du compte.
 
 ## Migrations et données initiales
 
 - Toute modification de schéma passe par une migration Doctrine (`php bin/console make:migration`), relue avant commit.
-- Données initiales (fixtures) : catalogue de jeux de départ, 2 lieux de test, un compte administrateur créé hors dépôt.
+- Données initiales (fixtures) : catalogue de jeux de départ avec ses catégories, 2 lieux de test, un compte administrateur créé hors dépôt.
 - Une migration ne supprime jamais une colonne en une seule étape : d'abord la colonne n'est plus utilisée, puis elle est supprimée dans une migration suivante.
 
 <br>
@@ -336,6 +366,8 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 | --- | --- |
 | `User` | Player account (and venue manager, depending on the role) |
 | `Game` | Board game in the catalogue |
+| `Category` | Game category (strategy, family, party…) |
+| `GameCategory` | Link table between a game and its categories |
 | `Place` | Game venue (dedicated space or partner bar) |
 | `Meetup` | Meetup around a game, in a venue, at a given date |
 | `MeetupParticipation` | A user's participation in a meetup |
@@ -353,6 +385,7 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 | `PushSubscription` | A browser's subscription to web notifications (PWA, P1) |
 | `AuditLog` | Trace of an administration action or a deletion |
 | `Consent` | Consent given by a user (terms, newsletter), with its version |
+| `FavoriteGame` | Favourite game of a user (10 at most) |
 | `CollectionItem` | Game owned or wanted by a user (out of V1) |
 | `GamificationTask` | Weekly task earning points (out of V1) |
 | `PointEvent` | Points earned by a user (out of V1) |
@@ -383,6 +416,18 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 - `difficulty`: enum (`beginner`, `intermediate`, `expert`), default `beginner`
 - `image_url`: string, optional
 - `created_at`: datetime_immutable, **required**
+
+### `category`
+- `id`: UUID, **required**
+- `code`: string(40), **required**, **unique** (for example `strategy`, `family`, `party`, `cooperative`, `cards`, `deduction`, `adventure`, `abstract`)
+- `label`: string(80), **required** (label shown in French)
+- `position`: smallint, default `0` (display order)
+
+### `game_category`
+- `id`: UUID, **required**
+- `game_id`: FK to `game`, **required**, indexed
+- `category_id`: FK to `category`, **required**, indexed
+- **Unique** constraint: (`game_id`, `category_id`)
 
 ### `place`
 - `id`: UUID, **required**
@@ -541,6 +586,14 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 - `granted`: boolean, **required**
 - `created_at`: datetime_immutable, **required**
 
+### `favorite_game`
+- `id`: UUID, **required**
+- `user_id`: FK to `user`, **required**, indexed
+- `game_id`: FK to `game`, **required**
+- `created_at`: datetime_immutable, **required**
+- **Unique** constraint: (`user_id`, `game_id`)
+- 10 games at most per user
+
 ### Tables out of V1
 
 These tables are not created at launch.
@@ -573,6 +626,8 @@ These tables are not created at launch.
 - `Game` 1 - N `PlaceGame`
 - `Game` 1 - N `Review`; `Place` 1 - N `Review`; `User` 1 - N `Review`
 - `User` 1 - N `Notification`
+- `User` N - N `Game` through `FavoriteGame`
+- `Game` N - N `Category` through `GameCategory`
 - `User` 1 - N `Article` (author, administrator)
 - `User` 1 - N `ContactMessage` (optional)
 - `User` 1 - N `Report` (author); `User` 1 - N `PushSubscription`
@@ -581,11 +636,11 @@ These tables are not created at launch.
 
 ## Data ownership
 
-- A user owns their profile, participations, reviews and notifications.
+- A user owns their profile, participations, reviews, favourite games and notifications.
 - A meetup belongs to its organiser; the venue manager can view it, not edit it.
 - A venue belongs to its manager; the administrator validates its activation.
 - A venue manager owns the games, events, posts and photos of their venue.
-- The game catalogue, articles and editorial pages belong to Ludmigo (administrator write access only).
+- The game catalogue and its categories, articles and editorial pages belong to Ludmigo (administrator write access only).
 - Contact messages are readable by administrators only.
 - The audit log is write-only: nobody edits or deletes it, not even an administrator.
 - Consents belong to the user and are kept as proof.
@@ -604,10 +659,13 @@ These tables are not created at launch.
 | --- | --- | --- | --- | --- |
 | `User` | Self (full); others (nickname only) | Sign-up | Self | Self (anonymisation) |
 | `Game` | Everyone | Admin | Admin | Admin |
+| `Category` | Everyone | Admin | Admin | Admin |
+| `GameCategory` | Everyone | Admin | Admin | Admin |
 | `Place` | Everyone (active); manager (own) | Manager or admin | Manager (own, without activation); admin | Admin |
 | `Meetup` | Everyone (open) | Signed-in user | Organiser (until it starts); admin | Organiser; admin |
 | `MeetupParticipation` | Meetup participants | Signed-in user, open meetup | Organiser (accept, refuse) | Self (leave) |
 | `Review` | Everyone | Signed-in user (one review per game or venue) | Author | Author; admin |
+| `FavoriteGame` | Self | Self (10 at most) | Never | Self |
 | `Notification` | Recipient | System | Recipient (mark as read) | Recipient |
 | `PlaceOpeningHour` | Everyone | Manager | Manager | Manager |
 | `PlaceGame` | Everyone (active venue) | Manager (own venue) | Manager | Manager |
@@ -634,18 +692,20 @@ Out of V1: `CollectionItem` (owner only), `GamificationTask` and `Reward` (publi
 - Venue: address and city required, activation only after validation.
 - Event: title required and future date.
 - Article: unique title and slug.
+- Game: at least one category, with no duplicate (`game_id`, `category_id`).
+- Favourite games: 10 at most per user, the same game only once.
 - Meetup at a private home: out of V1. If added later, only an approximate area will be stored and shown.
 
 ## Retention and deletion
 
 - **Kept**: past meetups (anonymised), reviews (author anonymised), game catalogue.
 - **Deleted**: the account's personal data at the user's request, notifications after 90 days, contact messages 6 months after handling.
-- **Exportable**: profile, participations and reviews as JSON (GDPR).
+- **Exportable**: profile, participations, reviews and favourite games as JSON (GDPR).
 - **Audit log**: kept 12 months, never edited.
 - **Consents**: kept 3 years as proof, even after the account is deleted.
 
 ## Migrations and initial data
 
 - Every schema change goes through a Doctrine migration (`php bin/console make:migration`), reviewed before commit.
-- Initial data (fixtures): starter game catalogue, 2 test venues, an administrator account created outside the repository.
+- Initial data (fixtures): starter game catalogue with its categories, 2 test venues, an administrator account created outside the repository.
 - A migration never drops a column in a single step: first the column is no longer used, then it is dropped in a later migration.

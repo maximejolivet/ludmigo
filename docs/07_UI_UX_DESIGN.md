@@ -7,9 +7,8 @@
 - **Administrateurs** : équipe Ludmigo, sur ordinateur, pour le catalogue, la modération et le journal d'audit.
 - **Trois adjectifs** : **chaleureux**, **accessible**, **ludique**.
 
-## Inspirations
+## Principes
 
-- **Meetup**, pour la clarté des listes d'événements.
 - **À reprendre** : cartes de rencontre lisibles, filtres simples, actions principales visibles.
 - **À éviter** : interfaces surchargées, bannières promotionnelles, saisie longue dès la première visite.
 
@@ -122,9 +121,8 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **Administrators**: the Ludmigo team, on a computer, for the catalogue, moderation and the audit log.
 - **Three adjectives**: **warm**, **accessible**, **playful**.
 
-## Inspirations
+## Principles
 
-- **Meetup**, for the clarity of its event lists.
 - **To take on**: readable meetup cards, simple filters, visible main actions.
 - **To avoid**: cluttered interfaces, promotional banners, long data entry on the first visit.
 

@@ -54,7 +54,7 @@ Les points 1 à 4 complètent le lancement ; les points 5 à 9 (P1) suivent just
 1. Notifications par email : rencontre rejointe, quittée, annulée, rappel 24 h avant (E7).
 2. Profil de lieu minimal : fiche (adresse, horaires, jeux) et événements du lieu (E9).
 3. Soirées récurrentes des 5 à 10 bars partenaires, rejoignables comme une rencontre (E3, E9). Au début, l'équipe les saisit elle-même, avec l'outil d'administration minimal (E15-S4).
-4. Carte d'exploration (E3), profil complet, suppression et export de compte (RGPD) (E1), signalement et modération minimale (E15-S3).
+4. Carte d'exploration (E3), profil complet, onboarding et jeux favoris (E1-S6, E2-S6), suppression et export de compte (RGPD) (E1), signalement et modération minimale (E15-S3).
 
 La charte graphique et les logos SVG sont dans `web/src/assets/logos/`.
 
@@ -170,7 +170,7 @@ Items 1 to 4 complete the launch; items 5 to 9 (P1) follow right after. Epics E9
 1. Email notifications: meetup joined, left, cancelled, reminder 24 h before (E7).
 2. Minimal venue profile: page (address, hours, games) and venue events (E9).
 3. Recurring evenings of the 5 to 10 partner bars, joinable like a meetup (E3, E9). At first, the team enters them itself, with the minimal admin tool (E15-S4).
-4. Exploration map (E3), full profile, account deletion and export (GDPR) (E1), reporting and minimal moderation (E15-S3).
+4. Exploration map (E3), full profile, onboarding and favourite games (E1-S6, E2-S6), account deletion and export (GDPR) (E1), reporting and minimal moderation (E15-S3).
 
 The visual identity and the SVG logos are in `web/src/assets/logos/`.
 
