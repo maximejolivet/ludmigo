@@ -14,10 +14,7 @@ Seule la dernière version de la branche `develop` et la dernière version de pr
 
 **N'ouvrez pas de ticket public, de Pull Request ni de discussion pour un problème de sécurité.**
 
-Signalez-le de façon privée par l'un de ces canaux :
-
-- le signalement privé de vulnérabilités de GitHub (bouton « Report a vulnerability » dans l'onglet Security du dépôt), **[À CONFIRMER : activé sur le dépôt]**
-- par email : **[À CONFIRMER : adresse de contact sécurité, par ex. security@ludmigo.fr]**
+Signalez-le de façon privée, par email : [maximejolivet.pro@gmail.com](mailto:maximejolivet.pro@gmail.com).
 
 Merci d'inclure :
 
@@ -28,8 +25,8 @@ Merci d'inclure :
 
 ## Délais
 
-- **Accusé de réception** : dans les 72 heures suivant votre signalement **[À CONFIRMER : délai]**.
-- **Qualification** : une première évaluation (gravité, périmètre, étapes suivantes) dans les 7 jours **[À CONFIRMER : délai]**.
+- **Accusé de réception** : dans les 72 heures suivant votre signalement.
+- **Qualification** : une première évaluation (gravité, périmètre, étapes suivantes) dans les 7 jours.
 - **Correctif et publication** : nous corrigeons en priorité les problèmes confirmés et nous convenons avec vous de la date de publication. Nous citons les personnes qui le souhaitent.
 
 ## Périmètre
@@ -55,7 +52,7 @@ Hors périmètre :
 
 ## Secrets
 
-Les identifiants, clés d'API et mots de passe ne doivent jamais être committés. Si vous en trouvez dans le dépôt ou son historique, signalez-le immédiatement par les canaux ci-dessus. Considérez-le comme compromis et ne l'utilisez pas.
+Les identifiants, clés d'API et mots de passe ne doivent jamais être committés. Si vous en trouvez dans le dépôt ou son historique, signalez-le immédiatement par email, comme indiqué ci-dessus. Considérez-le comme compromis et ne l'utilisez pas.
 
 <br>
 
@@ -81,10 +78,7 @@ Only the latest version on the `develop` branch and the latest production releas
 
 **Do not open a public issue, pull request or discussion for a security problem.**
 
-Report it privately through one of these channels:
-
-- GitHub private vulnerability reporting (the "Report a vulnerability" button in the Security tab of the repository), **[TO CONFIRM: enabled on the repository]**
-- Email: **[TO CONFIRM: security contact address, e.g. security@ludmigo.fr]**
+Report it privately by email: [maximejolivet.pro@gmail.com](mailto:maximejolivet.pro@gmail.com).
 
 Please include:
 
@@ -95,8 +89,8 @@ Please include:
 
 ## What to expect
 
-- **Acknowledgement**: within 72 hours of your report **[TO CONFIRM: delay]**.
-- **Triage**: a first assessment (severity, scope, next steps) within 7 days **[TO CONFIRM: delay]**.
+- **Acknowledgement**: within 72 hours of your report.
+- **Triage**: a first assessment (severity, scope, next steps) within 7 days.
 - **Fix and disclosure**: we fix confirmed issues as a priority and coordinate the publication date with you. We credit reporters who wish to be named.
 
 ## Scope
@@ -122,4 +116,4 @@ Out of scope:
 
 ## Secrets
 
-Credentials, API keys and passwords must never be committed. If you find one in the repository or its history, report it immediately using the channels above. Treat it as compromised and do not use it.
+Credentials, API keys and passwords must never be committed. If you find one in the repository or its history, report it immediately by email, as described above. Treat it as compromised and do not use it.
