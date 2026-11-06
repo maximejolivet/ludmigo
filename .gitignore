@@ -23,5 +23,5 @@ api/var/
 # Claude Code local settings (personal, never committed)
 .claude/settings.local.json
 
-# Documentation
-docs/
+# macOS
+.DS_Store
