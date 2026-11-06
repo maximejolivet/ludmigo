@@ -5,3 +5,9 @@ framework:
     http_method_override: false
     php_errors:
         log: true
+
+# Active le client de test de WebTestCase uniquement en environnement de test
+# Enables the WebTestCase test client in the test environment only
+when@test:
+    framework:
+        test: true
