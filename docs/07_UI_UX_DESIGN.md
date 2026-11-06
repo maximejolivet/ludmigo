@@ -12,6 +12,19 @@
 - **À reprendre** : cartes de rencontre lisibles, filtres simples, actions principales visibles.
 - **À éviter** : interfaces surchargées, bannières promotionnelles, saisie longue dès la première visite.
 
+## Approche mobile first
+
+Chaque écran est conçu d'abord pour un téléphone de 360 × 640 px, tenu à une main, puis enrichi pour la tablette et l'ordinateur. La maquette mobile est la référence ; les versions tablette et web en sont des extensions, jamais l'inverse.
+
+- **Ordre de conception** : 1) mobile (360 px), 2) tablette (640 px), 3) ordinateur (1024 px). Un écran n'est validé que si sa version mobile l'est.
+- **Contenu d'abord** : sur petit écran, ne garder que l'essentiel (une action principale par écran). Ce qui est secondaire passe dans un panneau repliable, un onglet ou une page dédiée, et réapparaît à côté du contenu sur grand écran.
+- **Zone du pouce** : les actions principales (« Rejoindre », « Créer une rencontre », « Publier ») et la navigation sont en bas de l'écran, à portée du pouce. Les actions destructrices ne sont jamais collées aux actions principales.
+- **Une colonne** : un seul flux vertical sur mobile ; les colonnes multiples n'apparaissent qu'à partir de 640 px.
+- **Saisie réduite** : claviers adaptés (`type`, `inputmode`, `autocomplete`), sélecteurs natifs pour les dates, connexion sociale ou lien magique plutôt qu'un long formulaire, enregistrement du brouillon.
+- **Réseau fragile** : pages légères, images dimensionnées et chargées à la demande, squelettes plutôt qu'écrans blancs, état hors ligne clair (bandeau réseau).
+- **Amélioration progressive** : le grand écran ajoute (barre latérale, panneaux côte à côte, survol, raccourcis clavier) sans retirer de fonction au mobile.
+- **Tests** : chaque maquette et chaque PR front est vérifiée à 360 px avant 1024 px, en portrait, avec une taille de police agrandie.
+
 ## Palette de couleurs
 
 Les couleurs viennent du logo : les quatre pions, le jaune-orangé et le beige. Les valeurs utilisées pour du texte (vert, orange, turquoise) sont assombries pour rester lisibles.
@@ -56,9 +69,10 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 
 - **Grille** : 4 colonnes (mobile), 8 colonnes (tablette), 12 colonnes (web).
 - **Espacements** : multiples de 4 px (4, 8, 12, 16, 24, 32).
-- **Points de rupture** : 640 px (tablette), 1024 px (ordinateur).
+- **Points de rupture** : 640 px (tablette), 1024 px (ordinateur). Les styles de base sont ceux du mobile ; les points de rupture les enrichissent avec des media queries `min-width` (jamais `max-width`).
 - **Plage couverte** : de 360 × 640 px à 1920 × 1080 px. Au-delà, le contenu reste centré avec une largeur maximale.
 - **Marges latérales sur mobile** : 16 px.
+- **Zones sûres** : respecter les encoches et barres système (`safe-area-inset`) pour la barre d'onglets et les boutons fixés en bas.
 
 ## Notes par écran
 
@@ -127,6 +141,19 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **To take on**: readable meetup cards, simple filters, visible main actions.
 - **To avoid**: cluttered interfaces, promotional banners, long data entry on the first visit.
 
+## Mobile-first approach
+
+Every screen is designed first for a 360 × 640 px phone held in one hand, then enriched for tablet and desktop. The mobile mock-up is the reference; the tablet and web versions are extensions of it, never the other way round.
+
+- **Design order**: 1) mobile (360 px), 2) tablet (640 px), 3) desktop (1024 px). A screen is only approved if its mobile version is.
+- **Content first**: on a small screen, keep only the essentials (one main action per screen). Secondary items go into a collapsible panel, a tab or a dedicated page, and appear next to the content on larger screens.
+- **Thumb zone**: the main actions ("Join", "Create a meetup", "Publish") and the navigation sit at the bottom of the screen, within thumb reach. Destructive actions are never placed next to main actions.
+- **One column**: a single vertical flow on mobile; multiple columns only appear from 640 px.
+- **Reduced typing**: suitable keyboards (`type`, `inputmode`, `autocomplete`), native date pickers, social sign-in or magic link rather than a long form, draft saving.
+- **Fragile network**: light pages, sized and lazy-loaded images, skeletons rather than blank screens, a clear offline state (network banner).
+- **Progressive enhancement**: larger screens add (sidebar, side-by-side panels, hover, keyboard shortcuts) without removing any feature from mobile.
+- **Testing**: every mock-up and every front-end PR is checked at 360 px before 1024 px, in portrait, with an enlarged font size.
+
 ## Colour palette
 
 The colours come from the logo: the four pawns, the orange-yellow and the beige. The values used for text (green, orange, turquoise) are darkened to stay readable.
@@ -171,9 +198,10 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 
 - **Grid**: 4 columns (mobile), 8 columns (tablet), 12 columns (web).
 - **Spacing**: multiples of 4 px (4, 8, 12, 16, 24, 32).
-- **Breakpoints**: 640 px (tablet), 1024 px (desktop).
+- **Breakpoints**: 640 px (tablet), 1024 px (desktop). Base styles are the mobile ones; breakpoints enrich them with `min-width` media queries (never `max-width`).
 - **Range covered**: from 360 × 640 px to 1920 × 1080 px. Beyond that, content stays centred with a maximum width.
 - **Side margins on mobile**: 16 px.
+- **Safe areas**: respect notches and system bars (`safe-area-inset`) for the tab bar and buttons fixed at the bottom.
 
 ## Notes per screen
 
