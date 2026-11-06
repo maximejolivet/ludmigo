@@ -57,6 +57,10 @@
         "test": "phpunit",
         "cs:check": "php-cs-fixer fix --dry-run --diff",
         "cs:fix": "php-cs-fixer fix",
-        "phpstan": "phpstan analyse --memory-limit=1G"
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     }
 }
