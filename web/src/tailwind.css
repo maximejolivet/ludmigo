@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+/* Jetons de la charte (docs/07_UI_UX_DESIGN.md) : charte graphique pour les illustrations, */
+/* valeurs assombries du document pour le texte et les actions */
+/* Brand tokens (docs/07_UI_UX_DESIGN.md): brand chart for illustrations, */
+/* darkened document values for text and actions */
+@theme {
+  --font-ui: 'Fira Sans', system-ui, sans-serif;
+
+  --color-ink: #3e3e3e;
+  --color-ink-soft: #5a5a5a;
+  --color-canvas: #f4f4f4;
+  --color-line: #e4e4e4;
+  --color-primary: #f8a00d;
+  --color-petrol: #155767;
+  --color-petrol-tint: #d9eaee;
+  --color-link: #006ca8;
+  --color-success: #007a52;
+  --color-success-tint: #e3f4ec;
+  --color-beige: #d7b695;
+  --color-beige-tint: #f1e2d0;
+
+  /* Couleurs des épingles par catégorie */
+  /* Pin colours per category */
+  --color-pin-players: #e48f39;
+  --color-pin-meetups: #006ca8;
+  --color-pin-events: #6b6b6b;
+  --color-pin-venues: #4ba674;
+}
+
+/* Focus visible de 2 px, comme dans le document de conception */
+/* 2 px visible focus, as in the design document */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-petrol);
+    outline-offset: 2px;
+  }
+}
