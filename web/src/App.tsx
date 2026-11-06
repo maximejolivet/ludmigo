@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { APP_NAME } from '@ludmigo/shared';
+import { exploreRoutes } from './features/explore/routes';
 import logoSvg from './assets/logos/logo-baseline-ludmigo-couleur-noir.svg?raw';
 import peopleLogo from './assets/logos/logo-ludmigo-people-noir.svg';
 
@@ -95,14 +96,23 @@ function LogoPage() {
   );
 }
 
-// Composant racine avec les routes de l'application web
-// Root component with the routes of the web app
+// Routes de l'application web (séparées du routeur pour pouvoir les tester)
+// Routes of the web app (kept apart from the router so they can be tested)
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<LogoPage />} />
+      {exploreRoutes}
+    </Routes>
+  );
+}
+
+// Composant racine avec le routeur de l'application web
+// Root component with the router of the web app
 export function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LogoPage />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
