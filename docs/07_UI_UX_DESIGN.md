@@ -3,7 +3,7 @@
 ## Public et ton
 
 - **Joueurs** : débutants et confirmés, de 18 à 45 ans environ, en mobilité, qui cherchent à se retrouver autour d'un jeu.
-- **Gestionnaires de lieux** : responsables de bars, de ludothèques, d'associations et de boutiques, sur ordinateur ou tablette, qui gèrent leur fiche entre deux services.
+- **Gestionnaires de lieux** : responsables de bars, de ludothèques, d'associations et de boutiques, d'abord sur téléphone, puis sur tablette ou ordinateur, qui gèrent leur fiche entre deux services.
 - **Administrateurs** : équipe Ludmigo, sur ordinateur, pour le catalogue, la modération et le journal d'audit.
 - **Trois adjectifs** : **chaleureux**, **accessible**, **ludique**.
 
@@ -84,7 +84,13 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **Fiche de jeu** : catégories, nombre de joueurs et durée en haut, description, puis rencontres liées.
 - **Profil** : rencontres à venir en premier, historique ensuite.
 - **Carte d'exploration** : carte pleine largeur, filtres dans un panneau repliable (mobile) ou à gauche (web), liste synchronisée avec la carte.
-- **Tableau de bord du lieu** : sur mobile, sections en onglets simples (Fiche, Jeux, Événements, Publications, Avis) ; sur web, barre latérale. L'action principale « Publier » reste visible.
+- **Tableau de bord du lieu** : conçu d'abord pour le téléphone, utilisé entre deux services.
+  - **Accueil du tableau** : une colonne ; en haut, les chiffres clés (rencontres à venir, places restantes, avis récents) en cartes empilées ou en défilement horizontal ; dessous, la liste des prochaines rencontres du lieu.
+  - **Navigation** : barre d'onglets en bas (Fiche, Jeux, Événements, Publications, Avis) ; au-delà de cinq entrées, un onglet « Plus ». Sur tablette, la barre passe sur le côté ; sur web, elle devient la barre latérale.
+  - **Action principale** : « Publier » (ou « Créer un événement ») est un bouton fixé en bas, au-dessus de la barre d'onglets, toujours visible.
+  - **Listes** : cartes empilées plutôt que tableaux ; filtres dans un panneau repliable ; actions secondaires (modifier, annuler) dans un menu par carte, avec confirmation pour les actions destructrices.
+  - **Formulaires** : une colonne, un sujet par écran (fiche, horaires, jeux), brouillon enregistré automatiquement, photos prises depuis l'appareil.
+  - **Grand écran** : à partir de 1024 px, les cartes deviennent un tableau triable et les chiffres clés se placent en rangée.
 - **Formulaire de contact** : choix du sujet en premier, puis les champs ; page de confirmation sobre.
 - **Blog** : cartes avec image, date et titre ; lecture sans inscription.
 - **Bandeau de cookies** : en bas de page, sans bloquer la lecture ; « Accepter » et « Refuser » ont le même poids visuel.
@@ -132,7 +138,7 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 ## Audience and tone
 
 - **Players**: beginners and experienced, aged about 18 to 45, on the move, looking to get together around a game.
-- **Venue managers**: managers of bars, game libraries, associations and shops, on a computer or tablet, who manage their page between two services.
+- **Venue managers**: managers of bars, game libraries, associations and shops, first on a phone, then on a tablet or computer, who manage their page between two services.
 - **Administrators**: the Ludmigo team, on a computer, for the catalogue, moderation and the audit log.
 - **Three adjectives**: **warm**, **accessible**, **playful**.
 
@@ -213,7 +219,13 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 - **Game page**: categories, number of players and duration at the top, description, then related meetups.
 - **Profile**: upcoming meetups first, history after.
 - **Exploration map**: full-width map, filters in a collapsible panel (mobile) or on the left (web), list synchronised with the map.
-- **Venue dashboard**: on mobile, sections as simple tabs (Page, Games, Events, Posts, Reviews); on web, a sidebar. The main "Publish" action stays visible.
+- **Venue dashboard**: designed for the phone first, used between two services.
+  - **Dashboard home**: one column; key figures at the top (upcoming meetups, seats left, recent reviews) as stacked cards or a horizontal scroll; below, the list of the venue's next meetups.
+  - **Navigation**: bottom tab bar (Page, Games, Events, Posts, Reviews); beyond five entries, a "More" tab. On tablet, the bar moves to the side; on web, it becomes the sidebar.
+  - **Main action**: "Publish" (or "Create an event") is a button fixed at the bottom, above the tab bar, always visible.
+  - **Lists**: stacked cards rather than tables; filters in a collapsible panel; secondary actions (edit, cancel) in a per-card menu, with confirmation for destructive actions.
+  - **Forms**: one column, one topic per screen (page, opening hours, games), draft saved automatically, photos taken from the device.
+  - **Large screen**: from 1024 px, cards become a sortable table and key figures sit in a row.
 - **Contact form**: choice of subject first, then the fields; plain confirmation page.
 - **Blog**: cards with image, date and title; reading without signing up.
 - **Cookie banner**: at the bottom of the page, without blocking reading; "Accept" and "Refuse" have the same visual weight.
