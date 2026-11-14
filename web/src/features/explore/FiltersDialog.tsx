@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { Icon, PinIcon } from './components/Icon';
-import { BUTTON_PRIMARY, PIN_COLOR } from './components/styles';
+import { CategoryMark } from './components/CategoryIcon';
+import { Icon } from './components/Icon';
+import { BUTTON_OUTLINE, BUTTON_PRIMARY, BUTTON_SUCCESS, CHOICE_OFF, CHOICE_ON } from './components/styles';
 import { useExplore } from './context';
 import { CATEGORIES, CATEGORY_LABELS } from './types';
 import type { PeriodFilter } from './types';
@@ -14,10 +15,7 @@ const PERIODS: ReadonlyArray<{ value: PeriodFilter; label: string }> = [
 ];
 
 const FIELD =
-  'box-border min-h-12 w-full rounded-full border-2 border-[#8a8a8a] bg-white pr-3.5 pl-11 text-base text-ink';
-
-const CHOICE =
-  'inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 px-3.5 text-sm font-bold';
+  'box-border min-h-12 w-full rounded-full border-2 border-fg-soft bg-surface pr-3.5 pl-11 text-base text-fg';
 
 // Panneau de filtres : se superpose à la carte, les réglages s'appliquent en direct
 // Filters panel: overlays the map, settings apply live
@@ -25,7 +23,9 @@ export function FiltersDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { filters, setFilters, resetFilters, results } = useExplore();
+  const { filters, setFilters, resetFilters, results, gameAlerts, toggleGameAlert, notify } = useExplore();
+  const game = filters.game.trim();
+  const alerting = gameAlerts.includes(game);
   const total = results.meetups.length + results.events.length;
 
   // Revient à l'écran précédent, ou à la carte si le panneau a été ouvert directement
@@ -55,10 +55,10 @@ export function FiltersDialog() {
       onClick={(event) => {
         if (event.target === event.currentTarget) close();
       }}
-      className="m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-transparent p-0 text-ink backdrop:bg-ink/55"
+      className="m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-transparent p-0 text-fg backdrop:bg-ink/55"
     >
-      <div className="absolute inset-x-0 top-16 bottom-0 mx-auto flex max-w-[480px] flex-col rounded-t-3xl bg-white font-ui shadow-[0_-6px_24px_rgba(0,0,0,.25)]">
-        <div aria-hidden="true" className="mx-auto mt-2 h-[5px] w-10 rounded-full bg-[#cfcfcf]" />
+      <div className="absolute inset-x-0 top-16 bottom-0 mx-auto flex max-w-[480px] flex-col rounded-t-3xl bg-surface font-ui shadow-[0_-6px_24px_rgba(0,0,0,.25)] lg:top-1/2 lg:bottom-auto lg:h-[min(720px,88dvh)] lg:max-w-[520px] lg:-translate-y-1/2 lg:rounded-3xl">
+        <div aria-hidden="true" className="mx-auto mt-2 h-[5px] w-10 rounded-full bg-fg-soft/40" />
         <header className="flex items-center justify-between py-1 pr-2 pl-5">
           <h2 id="filters-title" className="m-0 text-[22px] leading-tight font-bold">
             Filtres
@@ -67,7 +67,7 @@ export function FiltersDialog() {
             <button
               type="button"
               onClick={resetFilters}
-              className="min-h-11 cursor-pointer border-0 bg-transparent px-3 text-[15px] font-medium text-link"
+              className="min-h-11 cursor-pointer border-0 bg-transparent px-3 text-[15px] font-medium text-link-text"
             >
               Réinitialiser
             </button>
@@ -75,7 +75,7 @@ export function FiltersDialog() {
               type="button"
               aria-label="Fermer les filtres"
               onClick={close}
-              className="flex size-11 cursor-pointer items-center justify-center border-0 bg-transparent text-ink"
+              className="flex size-11 cursor-pointer items-center justify-center border-0 bg-transparent text-fg"
             >
               <Icon name="close" />
             </button>
@@ -101,9 +101,9 @@ export function FiltersDialog() {
                         categories: { ...current.categories, [category]: !pressed },
                       }))
                     }
-                    className={`${CHOICE} ${pressed ? 'border-petrol bg-petrol text-white' : 'border-[#cfcfcf] bg-white text-ink'}`}
+                    className={pressed ? CHOICE_ON : CHOICE_OFF}
                   >
-                    <PinIcon className={`h-[19px] w-3.5 ${pressed ? 'text-white' : PIN_COLOR[category]}`} />
+                    <CategoryMark category={category} tone={pressed ? 'inverse' : 'color'} />
                     {CATEGORY_LABELS[category]}
                   </button>
                 );
@@ -116,7 +116,7 @@ export function FiltersDialog() {
               Jeu
             </label>
             <div className="relative">
-              <Icon name="search" size={22} className="absolute top-3 left-3.5 text-ink-soft" />
+              <Icon name="search" size={22} className="absolute top-3 left-3.5 text-fg-soft" />
               <input
                 id="filter-game"
                 type="search"
@@ -125,6 +125,20 @@ export function FiltersDialog() {
                 className={FIELD}
               />
             </div>
+            {game !== '' && (
+              <button
+                type="button"
+                aria-pressed={alerting}
+                onClick={() => {
+                  toggleGameAlert(game);
+                  if (!alerting) notify(`Nous vous prévenons dès qu'une partie de ${game} apparaît.`);
+                }}
+                className={`${alerting ? BUTTON_SUCCESS : BUTTON_OUTLINE} mt-1 self-start`}
+              >
+                <Icon name={alerting ? 'check' : 'bell'} size={20} />
+                Me prévenir pour « {game} »
+              </button>
+            )}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -132,7 +146,7 @@ export function FiltersDialog() {
               Lieu
             </label>
             <div className="relative">
-              <Icon name="pin" size={22} className="absolute top-3 left-3.5 text-ink-soft" />
+              <Icon name="pin" size={22} className="absolute top-3 left-3.5 text-fg-soft" />
               <input
                 id="filter-place"
                 type="search"
@@ -146,7 +160,7 @@ export function FiltersDialog() {
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-distance" className="flex justify-between text-[15px] font-bold">
               <span>Distance</span>
-              <output htmlFor="filter-distance" className="font-medium text-ink-soft">
+              <output htmlFor="filter-distance" className="font-medium text-fg-soft">
                 {filters.maxDistanceKm} km
               </output>
             </label>
@@ -176,7 +190,7 @@ export function FiltersDialog() {
                     type="button"
                     aria-pressed={pressed}
                     onClick={() => setFilters((current) => ({ ...current, period: period.value }))}
-                    className={`${CHOICE} px-4 ${pressed ? 'border-petrol bg-petrol text-white' : 'border-[#cfcfcf] bg-white text-ink'}`}
+                    className={pressed ? CHOICE_ON : CHOICE_OFF}
                   >
                     {period.label}
                   </button>

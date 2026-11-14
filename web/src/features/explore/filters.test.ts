@@ -3,21 +3,29 @@ import { EXPLORE_DATA, NOW } from './data';
 import { DEFAULT_FILTERS, applyFilters, countActiveFilters, isInPeriod, normalize } from './filters';
 
 describe('filters', () => {
-  // Les valeurs par défaut gardent Nantes et 10 km : Rezé et Saint-Herblain sont exclus
-  // Defaults keep Nantes and 10 km: Rezé and Saint-Herblain are excluded
-  it('keeps only Nantes items by default', () => {
+  // Par défaut, le lieu est « France » : rien n'est écarté, et la liste est triée par heure de début
+  // By default the place is "France": nothing is left out, and the list is sorted by start time
+  it('covers the whole country by default', () => {
     const results = applyFilters(EXPLORE_DATA, DEFAULT_FILTERS, NOW);
-    expect(results.meetups.map((item) => item.id)).toEqual(['m1', 'm2', 'm3']);
-    expect(results.events.map((item) => item.id)).toEqual(['e1', 'e2', 'e3']);
+    expect(results.meetups.map((item) => item.id)).toEqual(['m10', 'm1', 'm2', 'm6', 'm3', 'm8', 'm4', 'm5', 'm7', 'm9']);
+    expect(results.events.map((item) => item.id)).toEqual(['e9', 'e1', 'e5', 'e7', 'e2', 'e3', 'e4', 'e6', 'e8']);
+    expect(results.venues).toHaveLength(10);
+    expect(results.players).toHaveLength(24);
   });
 
-  // Vider le lieu élargit aux communes voisines, dans la limite de la distance
-  // Clearing the place widens to neighbouring towns, within the distance limit
-  it('widens the area when the place is empty', () => {
-    const results = applyFilters(EXPLORE_DATA, { ...DEFAULT_FILTERS, place: '' }, NOW);
-    expect(results.meetups).toHaveLength(5);
+  // Choisir une commune ne garde que ses éléments
+  // Choosing a city keeps only its items
+  it('narrows to a city when one is chosen', () => {
+    const results = applyFilters(EXPLORE_DATA, { ...DEFAULT_FILTERS, place: 'Nantes' }, NOW);
+    expect(results.meetups.map((item) => item.id)).toEqual(['m10', 'm1', 'm2', 'm6', 'm3', 'm7']);
+    expect(results.events.map((item) => item.id)).toEqual(['e9', 'e1', 'e5', 'e2', 'e3', 'e6']);
+  });
+
+  // La distance maximale écarte les éléments trop éloignés
+  // The maximum distance leaves out items that are too far
+  it('limits by distance', () => {
     const near = applyFilters(EXPLORE_DATA, { ...DEFAULT_FILTERS, place: '', maxDistanceKm: 5 }, NOW);
-    expect(near.meetups.map((item) => item.id)).toEqual(['m1', 'm2', 'm3', 'm4']);
+    expect(near.meetups.map((item) => item.id)).toEqual(['m10', 'm1', 'm2', 'm6', 'm3', 'm8', 'm4', 'm7']);
   });
 
   // Le lieu et le jeu ignorent la casse et les accents
@@ -51,11 +59,22 @@ describe('filters', () => {
     expect(results.events.length).toBeGreaterThan(0);
   });
 
+  // « Ouvert » ne garde que les établissements ouverts jeudi à 18 h 30
+  // "Open" keeps only the venues open on Thursday at 6:30 pm
+  it('keeps only the open venues when asked', () => {
+    const all = applyFilters(EXPLORE_DATA, DEFAULT_FILTERS, NOW);
+    expect(all.venues).toHaveLength(10);
+    const open = applyFilters(EXPLORE_DATA, { ...DEFAULT_FILTERS, openNow: true }, NOW);
+    expect(open.venues.map((item) => item.id)).toEqual(['v1', 'v2', 'v4', 'v5', 'v6', 'v9', 'v10']);
+  });
+
   // La pastille compte les réglages qui s'écartent des valeurs par défaut
   // The badge counts settings that differ from the defaults
   it('counts active filters', () => {
     expect(countActiveFilters(DEFAULT_FILTERS)).toBe(0);
+    expect(countActiveFilters({ ...DEFAULT_FILTERS, place: 'Nantes' })).toBe(1);
     expect(countActiveFilters({ ...DEFAULT_FILTERS, game: 'Catan', period: 'week' })).toBe(2);
+    expect(countActiveFilters({ ...DEFAULT_FILTERS, openNow: true })).toBe(1);
     expect(
       countActiveFilters({
         ...DEFAULT_FILTERS,

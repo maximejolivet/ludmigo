@@ -38,20 +38,23 @@ describe('Explore dashboard', () => {
   it('lets the user join and leave a meetup', () => {
     renderAt('/explorer/partie/m1');
     fireEvent.click(screen.getByRole('button', { name: 'Je participe' }));
-    expect(screen.getByRole('button', { name: 'Vous participez' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Je participe', pressed: true })).toBeTruthy();
     expect(screen.getByText(/10 joueurs · 7 inscrits/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Vous participez' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Je participe', pressed: true }));
     expect(screen.getByText(/10 joueurs · 6 inscrits/)).toBeTruthy();
   });
 
-  // Une partie complète ne peut plus être rejointe
-  // A full meetup can no longer be joined
-  it('disables joining a full meetup', () => {
+  // Une partie complète propose une liste d'attente au lieu de l'inscription
+  // A full meetup offers a waiting list instead of signing up
+  it('offers a waiting list on a full meetup', () => {
     // m4 (Tarot) a 4 places pour 4 inscrits
     // m4 (Tarot) has 4 seats for 4 players
     renderAt('/explorer/partie/m4');
-    const button = screen.getByRole('button', { name: 'Complet' }) as HTMLButtonElement;
-    expect(button.disabled).toBe(true);
+    expect(screen.getByText('Complet')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Je participe' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Me prévenir', pressed: false }));
+    expect(screen.getByRole('button', { name: 'Me prévenir', pressed: true })).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toContain('prévenons');
   });
 
   // La vue liste donne la même information que la carte
@@ -60,7 +63,7 @@ describe('Explore dashboard', () => {
     renderAt('/explorer/liste');
     expect(screen.getByRole('heading', { name: 'Les événements près de chez vous' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Les parties près de chez vous' })).toBeTruthy();
-    expect(screen.getByText('6 résultats')).toBeTruthy();
+    expect(screen.getByText('19 résultats')).toBeTruthy();
   });
 
   // Masquer une catégorie retire ses éléments de la liste
@@ -70,7 +73,7 @@ describe('Explore dashboard', () => {
     const chips = screen.getByRole('group', { name: 'Catégories affichées' });
     fireEvent.click(within(chips).getByRole('button', { name: 'Événements' }));
     expect(screen.queryByRole('heading', { name: 'Les événements près de chez vous' })).toBeNull();
-    expect(screen.getByText('3 résultats')).toBeTruthy();
+    expect(screen.getByText('10 résultats')).toBeTruthy();
   });
 
   // Le panneau de filtres s'applique en direct et propose de réinitialiser
@@ -82,7 +85,7 @@ describe('Explore dashboard', () => {
     fireEvent.change(game, { target: { value: 'catan' } });
     expect(within(dialog).getByRole('button', { name: 'Voir 2 résultats' })).toBeTruthy();
     fireEvent.click(within(dialog).getByRole('button', { name: 'Réinitialiser' }));
-    expect(within(dialog).getByRole('button', { name: 'Voir 6 résultats' })).toBeTruthy();
+    expect(within(dialog).getByRole('button', { name: 'Voir 19 résultats' })).toBeTruthy();
   });
 
   // Une action pas encore disponible l'indique par un message court

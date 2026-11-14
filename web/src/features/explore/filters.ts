@@ -1,5 +1,6 @@
 import { CATEGORIES } from './types';
 import type { Category, ExploreData, PeriodFilter } from './types';
+import { isOpenNow } from './venues';
 
 export interface Filters {
   categories: Record<Category, boolean>;
@@ -7,15 +8,23 @@ export interface Filters {
   place: string;
   maxDistanceKm: number;
   period: PeriodFilter;
+  // Ne garder que les établissements ouverts maintenant
+  // Keep only the venues open right now
+  openNow: boolean;
 }
 
 export const DEFAULT_FILTERS: Filters = {
   categories: { players: true, meetups: true, events: true, venues: true },
   game: '',
-  place: 'Nantes',
-  maxDistanceKm: 10,
+  place: 'France',
+  maxDistanceKm: 50,
   period: 'any',
+  openNow: false,
 };
+
+// Valeur du lieu qui couvre tout le pays : aucun filtre par commune
+// Place value covering the whole country: no filtering by city
+const WHOLE_COUNTRY = 'france';
 
 // Minuscules sans accents, pour comparer « Rezé » et « reze »
 // Lowercase without accents, to compare "Rezé" and "reze"
@@ -35,6 +44,7 @@ export function countActiveFilters(filters: Filters): number {
   if (normalize(filters.place) !== normalize(DEFAULT_FILTERS.place)) count += 1;
   if (filters.maxDistanceKm !== DEFAULT_FILTERS.maxDistanceKm) count += 1;
   if (filters.period !== DEFAULT_FILTERS.period) count += 1;
+  if (filters.openNow) count += 1;
   if (CATEGORIES.some((category) => !filters.categories[category])) count += 1;
   return count;
 }
@@ -63,6 +73,12 @@ export function isInPeriod(iso: string, period: PeriodFilter, now: Date): boolea
   return day >= saturday && day < saturday + 2 * DAY_MS;
 }
 
+// Les parties et les événements sont triés par heure de début, du plus proche au plus lointain
+// Meetups and events are sorted by start time, soonest first
+function byStart<T extends { startsAt: string }>(items: T[]): T[] {
+  return [...items].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+}
+
 // Applique les filtres aux données fictives
 // Applies the filters to the fictional data
 export function applyFilters(data: ExploreData, filters: Filters, now: Date): ExploreData {
@@ -71,15 +87,19 @@ export function applyFilters(data: ExploreData, filters: Filters, now: Date): Ex
 
   const inArea = (item: { city: string; district?: string; distanceKm: number }, extra = ''): boolean => {
     if (item.distanceKm > filters.maxDistanceKm) return false;
-    if (place === '') return true;
+    if (place === '' || place === WHOLE_COUNTRY) return true;
     return normalize(`${item.city} ${item.district ?? ''} ${extra}`).includes(place);
   };
 
   return {
     players: filters.categories.players ? data.players.filter((item) => inArea(item)) : [],
-    venues: filters.categories.venues ? data.venues.filter((item) => inArea(item, item.name)) : [],
+    venues: filters.categories.venues
+      ? data.venues.filter(
+          (item) => inArea(item, item.name) && (!filters.openNow || isOpenNow(item.schedule, now)),
+        )
+      : [],
     meetups: filters.categories.meetups
-      ? data.meetups.filter(
+      ? byStart(data.meetups).filter(
           (item) =>
             inArea(item, item.venueName) &&
             isInPeriod(item.startsAt, filters.period, now) &&
@@ -87,7 +107,7 @@ export function applyFilters(data: ExploreData, filters: Filters, now: Date): Ex
         )
       : [],
     events: filters.categories.events
-      ? data.events.filter(
+      ? byStart(data.events).filter(
           (item) =>
             inArea(item, item.organizerName) &&
             isInPeriod(item.startsAt, filters.period, now) &&

@@ -1,198 +1,168 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
-import mapBackground from './assets/map-background.svg';
-import { CategoryChips } from './components/CategoryChips';
-import { MeetupSheetCard } from './components/Cards';
-import { Icon, PinIcon } from './components/Icon';
+import type { Map as LeafletMapInstance } from 'leaflet';
+import { EventDetail } from './components/EventDetail';
+import { FilterChips } from './components/FilterChips';
+import { FindMeetupButton } from './components/FindMeetupButton';
+import { Icon } from './components/Icon';
 import { MeetupDetail } from './components/MeetupDetail';
-import { NoResults } from './components/NoResults';
-import { BUTTON_PRIMARY, PIN_COLOR } from './components/styles';
+import { NearbySheet } from './components/NearbySheet';
+import { PlayerDetail } from './components/PlayerDetail';
+import { PawnScene } from './components/PawnScene';
+import { ResultsSections } from './components/ResultsSections';
+import { BUTTON_ICON, BUTTON_PRIMARY } from './components/styles';
+import { VenueDetail } from './components/VenueDetail';
 import { ViewToggle } from './components/ViewToggle';
 import { useExplore } from './context';
-import { EXPLORE_DATA } from './data';
-import { MAP_SIZE } from './types';
-import type { Category, MapPoint } from './types';
+import { LeafletMap } from './LeafletMap';
+import { useIsDesktop } from './useIsDesktop';
+import { useLocate } from './useLocate';
 
-const ZOOM_MIN = 1;
-const ZOOM_MAX = 1.6;
-const ZOOM_STEP = 0.2;
-
-const CONTROL =
-  'flex size-11 cursor-pointer items-center justify-center rounded-full border-0 bg-white text-ink shadow-[0_2px_8px_rgba(62,62,62,.25)] disabled:opacity-40';
-
-interface PinProps {
-  point: MapPoint;
-  category: Category;
-  selected?: boolean;
-  label?: string;
-  onSelect?: () => void;
-}
-
-// Épingle posée sur le plan : un bouton pour les parties, une image décorative pour le reste
-// Pin placed on the plane: a button for meetups, a decorative image for the rest
-function MapPin({ point, category, selected = false, label, onSelect }: PinProps) {
-  const style = {
-    left: `${(point.x / MAP_SIZE.width) * 100}%`,
-    top: `${(point.y / MAP_SIZE.height) * 100}%`,
-  };
-  const icon = (
-    <PinIcon
-      className={`block h-[37px] w-7 ${PIN_COLOR[category]} ${
-        selected ? 'origin-bottom scale-[1.4] drop-shadow-[0_2px_3px_rgba(0,0,0,.35)]' : ''
-      }`}
-    />
-  );
-
-  if (!onSelect) {
-    return (
-      <span aria-hidden="true" className="absolute -translate-x-1/2 -translate-y-full" style={style}>
-        {icon}
-      </span>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      aria-pressed={selected}
-      onClick={onSelect}
-      style={style}
-      className={`absolute -translate-x-1/2 -translate-y-full cursor-pointer border-0 bg-transparent p-0 before:absolute before:-inset-x-2 before:-inset-y-1 before:content-[''] ${
-        selected ? 'z-10' : ''
-      }`}
-    >
-      {icon}
-    </button>
-  );
-}
-
-// Écran principal : carte, volet des parties proches ou détail de la partie choisie
-// Main screen: map, nearby meetups sheet or detail of the chosen meetup
+// Écran principal : carte, puis volet (mobile) ou panneau de résultats (ordinateur)
+// Main screen: map, then sheet (mobile) or results panel (desktop)
 export function MapView() {
-  const { results, notify } = useExplore();
-  const { meetupId } = useParams();
+  const { data, results, notify } = useExplore();
+  const { meetupId, venueId, eventId, playerId } = useParams();
   const navigate = useNavigate();
-  const [zoom, setZoom] = useState(ZOOM_MIN);
+  const isDesktop = useIsDesktop();
+  const [map, setMap] = useState<LeafletMapInstance | null>(null);
+  const { position, locating, locate } = useLocate(map);
 
-  const selected = meetupId ? EXPLORE_DATA.meetups.find((meetup) => meetup.id === meetupId) : undefined;
+  const meetup = meetupId ? data.meetups.find((item) => item.id === meetupId) : undefined;
+  const venue = venueId ? data.venues.find((item) => item.id === venueId) : undefined;
+  const event = eventId ? data.events.find((item) => item.id === eventId) : undefined;
+  const player = playerId ? data.players.find((item) => item.id === playerId) : undefined;
+  const hasSelection = Boolean(meetupId || venueId || eventId || playerId);
+  const total = results.meetups.length + results.events.length;
+
+  // Message quand l'élément demandé n'existe pas
+  // Message when the requested item does not exist
+  const missingLabel = meetupId
+    ? "Cette partie n'existe plus."
+    : venueId
+      ? "Cet établissement n'existe plus."
+      : eventId
+        ? "Cet événement n'existe plus."
+        : "Ce joueur n'est plus visible.";
+  const found = meetup ?? venue ?? event ?? player;
+
+  // Contenu sous la carte quand un élément est choisi : sa fiche, ou un message s'il est introuvable
+  // Content below the map when an item is chosen: its page, or a message if it is missing
+  const detail = meetup ? (
+    <MeetupDetail meetup={meetup} />
+  ) : venue ? (
+    <VenueDetail venue={venue} />
+  ) : event ? (
+    <EventDetail event={event} />
+  ) : player ? (
+    <PlayerDetail player={player} />
+  ) : hasSelection && !found ? (
+    <div className="flex flex-col items-start gap-3 p-4">
+      <PawnScene className="h-14 w-auto" />
+      <p className="m-0">{missingLabel}</p>
+      <Link to="/explorer" className={BUTTON_PRIMARY}>
+        Revenir à la carte
+      </Link>
+    </div>
+  ) : null;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <section aria-label="Carte" className="relative min-h-0 flex-1 overflow-hidden bg-[#ecefec]">
-        <div
-          className="absolute top-0 left-0 w-full origin-[50%_30%]"
-          style={{ aspectRatio: `${MAP_SIZE.width} / ${MAP_SIZE.height}`, transform: `scale(${zoom})` }}
-        >
-          <img src={mapBackground} alt="" className="block size-full" />
-          {selected && (
-            <span
-              aria-hidden="true"
-              className="absolute size-[84px] -translate-x-1/2 -translate-y-[85%] rounded-full border-2 border-pin-meetups/45 bg-pin-meetups/20"
-              style={{
-                left: `${(selected.position.x / MAP_SIZE.width) * 100}%`,
-                top: `${(selected.position.y / MAP_SIZE.height) * 100}%`,
-              }}
+    <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <div className="relative flex min-h-0 flex-1 flex-col">
+        {/* `isolate` garde les z-index internes de Leaflet à l'intérieur de la carte */}
+        {/* `isolate` keeps Leaflet's internal z-indexes inside the map */}
+        <section aria-label="Carte" className="relative isolate min-h-0 flex-1 overflow-hidden bg-[#e9f2ec]">
+          <LeafletMap
+            userPosition={position}
+            selectedId={meetupId}
+            selectedVenueId={venueId}
+            selectedEventId={eventId}
+            selectedPlayerId={playerId}
+            onSelectMeetup={(id) => navigate(`/explorer/partie/${id}`)}
+            onSelectVenue={(id) => navigate(`/explorer/lieu/${id}`)}
+            onSelectEvent={(id) => navigate(`/explorer/evenement/${id}`)}
+            onSelectPlayer={(id) => navigate(`/explorer/joueur/${id}`)}
+            onReady={setMap}
+          />
+
+          <p className="sr-only">
+            Carte de France : {results.meetups.length} parties, {results.events.length} événements,{' '}
+            {results.venues.length} établissements et {results.players.length} zones de joueurs. La même information
+            est disponible dans la liste des résultats.{position && ' Votre position est affichée sur la carte.'}
+          </p>
+
+          <FilterChips className="absolute inset-x-0 top-2.5 z-[1000] px-3 pt-0.5 pb-1.5 lg:right-auto lg:left-3 lg:px-0" />
+          {!isDesktop && (
+            <ViewToggle
+              current="map"
+              className="absolute top-16 left-3 z-[1000] bg-surface/90 shadow-[0_2px_8px_rgba(62,62,62,.25)] backdrop-blur"
             />
           )}
-          {results.players.map((player) => (
-            <MapPin key={player.id} point={player.position} category="players" />
-          ))}
-          {results.venues.map((venue) => (
-            <MapPin key={venue.id} point={venue.position} category="venues" />
-          ))}
-          {results.events.map((event) => (
-            <MapPin key={event.id} point={event.position} category="events" />
-          ))}
-          {results.meetups.map((meetup) => (
-            <MapPin
-              key={meetup.id}
-              point={meetup.position}
-              category="meetups"
-              selected={meetup.id === selected?.id}
-              label={`Partie : ${meetup.title}`}
-              onSelect={() => navigate(`/explorer/partie/${meetup.id}`)}
-            />
-          ))}
-        </div>
 
-        <p className="sr-only">
-          Carte de Nantes : {results.meetups.length} parties, {results.events.length} événements,{' '}
-          {results.venues.length} établissements et {results.players.length} zones de joueurs. La même information est
-          disponible dans la vue liste.
-        </p>
+          <div className="absolute top-16 right-3 z-[1000] flex flex-col gap-2 lg:top-3">
+            <button type="button" aria-label="Zoom avant" onClick={() => map?.zoomIn()} className={BUTTON_ICON}>
+              <Icon name="plus" size={22} />
+            </button>
+            <button type="button" aria-label="Zoom arrière" onClick={() => map?.zoomOut()} className={BUTTON_ICON}>
+              <Icon name="minus" size={22} />
+            </button>
+            <button
+              type="button"
+              aria-label="Me localiser"
+              aria-busy={locating}
+              disabled={locating}
+              onClick={locate}
+              className={`${BUTTON_ICON} mt-1 disabled:opacity-60`}
+            >
+              <Icon name="locate" size={22} />
+            </button>
+          </div>
 
-        <CategoryChips variant="map" className="absolute inset-x-0 top-2.5 px-3 pt-0.5 pb-1.5" />
-        <ViewToggle current="map" className="absolute top-16 left-3 bg-white shadow-[0_2px_8px_rgba(62,62,62,.25)]" />
+          {!isDesktop && !hasSelection && (
+            <FindMeetupButton className="absolute bottom-[6.25rem] left-3 z-[1000] min-h-[52px] px-5 text-base" />
+          )}
+          {!isDesktop && !hasSelection && (
+            <button
+              type="button"
+              onClick={() => notify("L'organisation d'une partie arrive bientôt.")}
+              className={`${BUTTON_PRIMARY} absolute bottom-10 left-3 z-[1000] min-h-[52px] px-5 text-base`}
+            >
+              <Icon name="plus" size={22} />
+              Organiser une partie
+            </button>
+          )}
+        </section>
 
-        <div className="absolute top-16 right-3 flex flex-col gap-2">
-          <button
-            type="button"
-            aria-label="Zoom avant"
-            disabled={zoom >= ZOOM_MAX}
-            onClick={() => setZoom((current) => Math.min(ZOOM_MAX, +(current + ZOOM_STEP).toFixed(2)))}
-            className={CONTROL}
-          >
-            <Icon name="plus" size={22} />
-          </button>
-          <button
-            type="button"
-            aria-label="Zoom arrière"
-            disabled={zoom <= ZOOM_MIN}
-            onClick={() => setZoom((current) => Math.max(ZOOM_MIN, +(current - ZOOM_STEP).toFixed(2)))}
-            className={CONTROL}
-          >
-            <Icon name="minus" size={22} />
-          </button>
-        </div>
-
-        {!meetupId && (
-          <button
-            type="button"
-            onClick={() => notify("L'organisation d'une partie arrive bientôt.")}
-            className={`${BUTTON_PRIMARY} absolute bottom-10 left-3 min-h-[52px] px-5 text-base shadow-[0_3px_10px_rgba(62,62,62,.3)]`}
-          >
-            <Icon name="plus" size={22} />
-            Organiser une partie
-          </button>
-        )}
-      </section>
-
-      <div className="relative z-10 -mt-6 rounded-t-3xl bg-white shadow-[0_-6px_18px_rgba(62,62,62,.16)]">
-        <div aria-hidden="true" className="mx-auto mt-2 h-[5px] w-10 rounded-full bg-[#cfcfcf]" />
-        {selected ? (
-          <MeetupDetail meetup={selected} />
-        ) : meetupId ? (
-          <div className="flex flex-col items-start gap-3 p-4">
-            <p className="m-0">Cette partie n'existe plus.</p>
-            <Link to="/explorer" className={BUTTON_PRIMARY}>
-              Revenir à la carte
-            </Link>
+        {isDesktop ? (
+          // Ordinateur : le détail devient une carte flottante au-dessus de la carte
+          // Desktop: the detail becomes a floating card above the map
+          detail && (
+            <div className="absolute bottom-6 left-6 z-10 max-h-[calc(100%-3rem)] w-[480px] overflow-y-auto rounded-3xl bg-surface shadow-[0_12px_40px_rgba(0,0,0,.25)]">
+              {detail}
+            </div>
+          )
+        ) : detail ? (
+          <div className="relative z-10 -mt-6 max-h-[70%] overflow-y-auto rounded-t-3xl bg-surface shadow-[0_-6px_18px_rgba(62,62,62,.16)]">
+            <div aria-hidden="true" className="mx-auto mt-2 h-[5px] w-10 rounded-full bg-fg-soft/40" />
+            {detail}
           </div>
         ) : (
-          <section aria-labelledby="nearby-title" className="pt-2 pb-3">
-            <div className="flex items-baseline justify-between px-4">
-              <h2 id="nearby-title" className="m-0 text-lg leading-snug font-bold">
-                Les parties près de chez vous
-              </h2>
-              <span className="text-sm text-ink-soft">
-                {results.meetups.length} {results.meetups.length > 1 ? 'parties' : 'partie'}
-              </span>
-            </div>
-            {results.meetups.length > 0 ? (
-              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pt-2.5 pb-1 [scrollbar-width:none]">
-                {results.meetups.map((meetup) => (
-                  <MeetupSheetCard key={meetup.id} meetup={meetup} />
-                ))}
-              </div>
-            ) : (
-              <div className="px-4 pt-2.5">
-                <NoResults subject="partie" />
-              </div>
-            )}
-          </section>
+          <NearbySheet />
         )}
       </div>
+
+      {isDesktop && (
+        <aside
+          aria-label="Résultats"
+          className="flex w-[480px] shrink-0 flex-col gap-5 overflow-y-auto border-l border-line bg-canvas p-4"
+        >
+          <FindMeetupButton className="min-h-12 text-[15px]" />
+          <p className="m-0 text-sm text-fg-soft" aria-live="polite">
+            {total} {total > 1 ? 'résultats' : 'résultat'}
+          </p>
+          <ResultsSections />
+        </aside>
+      )}
     </div>
   );
 }

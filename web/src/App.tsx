@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { APP_NAME } from '@ludmigo/shared';
 import { exploreRoutes } from './features/explore/routes';
+import { PAWN_PATH, PAWN_VIEWBOX } from './pawn';
 import logoSvg from './assets/logos/logo-baseline-ludmigo-couleur-noir.svg?raw';
 import peopleLogo from './assets/logos/logo-ludmigo-people-noir.svg';
 
@@ -15,12 +16,6 @@ const LOGO_MARKUP = logoSvg
   .replace(/<\?xml[^>]*\?>/, '')
   .replace(/<title>[^<]*<\/title>/, '')
   .replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
-
-// Forme exacte d'un pion du logo (SVG des personnages), réutilisée pour tous les pions du fond
-// Exact shape of a pawn from the logo (people SVG), reused for every background pawn
-const PAWN_PATH =
-  'M131.319 162.828 C131.319 167.043 130.575 171.258 128.096 174.605 C125.369 178.325 120.906 180.06 116.691 181.424 C107.269 184.151 97.475 184.771 87.805 184.027 C80.739 183.531 73.548 182.292 67.35 178.82 C65.118 177.581 62.887 175.969 61.647 173.614 C60.655 171.63 60.407 169.151 60.283 166.919 C58.672 136.422 73.424 108.033 80.119 78.279 C80.119 78.279 75.036 74.188 74.54 73.692 C72.805 71.833 71.317 69.725 70.077 67.494 C67.598 63.031 66.11 57.824 65.986 52.617 C65.738 42.079 71.193 32.41 79.499 26.831 C83.714 23.98 88.673 22.368 93.756 22.244 C106.153 21.996 118.054 31.418 121.402 44.063 C124.749 56.708 119.17 71.337 108.384 77.907 C113.839 96.007 119.294 114.231 124.749 132.331 C126.98 139.893 129.336 147.58 130.699 155.39 C130.947 157.993 131.319 160.473 131.319 162.828 Z';
-const PAWN_VIEWBOX = '58.6 21.9 72.8 163';
 
 // Pions du fond : position horizontale (%), taille (px), couleur du pion, durée et délai (s)
 // Background pawns: horizontal position (%), size (px), pawn colour, duration and delay (s)

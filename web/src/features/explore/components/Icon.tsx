@@ -44,9 +44,8 @@ const PATHS = {
   dice: (
     <>
       <rect x="4" y="4" width="16" height="16" rx="3.5" />
-      <circle cx="9" cy="9" r="1.2" fill="currentColor" />
-      <circle cx="15" cy="15" r="1.2" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+      <circle cx="8.5" cy="8.5" r="2" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="15.5" r="2" fill="currentColor" stroke="none" />
     </>
   ),
   calendar: (
@@ -59,6 +58,29 @@ const PATHS = {
     <>
       <circle cx="12" cy="8" r="4" />
       <path d="M4 20c1-4 4-6 8-6s7 2 8 6" />
+    </>
+  ),
+  store: (
+    <path d="M4 10l1.5-5h13L20 10M4 10v10h16V10M4 10a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M10 20v-5h4v5" />
+  ),
+  locate: (
+    <>
+      <circle cx="12" cy="12" r="3" />
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+    </>
+  ),
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+    </>
+  ),
+  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
     </>
   ),
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
@@ -90,20 +112,6 @@ export function Icon({ name, size = 24, className }: IconProps) {
       className={className}
     >
       {PATHS[name]}
-    </svg>
-  );
-}
-
-// Épingle de carte : prend la couleur du texte courant
-// Map pin: takes the current text colour
-export function PinIcon({ className }: { className?: string }) {
-  return (
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 32" className={className}>
-      <path
-        d="M12 0C5.4 0 0 5.2 0 11.7 0 20 12 32 12 32s12-12 12-20.3C24 5.2 18.6 0 12 0z"
-        fill="currentColor"
-      />
-      <circle cx="12" cy="11.5" r="5" fill="#fff" />
     </svg>
   );
 }

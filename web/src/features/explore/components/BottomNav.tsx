@@ -30,24 +30,24 @@ export function BottomNav() {
   const { pathname } = useLocation();
   const { notify } = useExplore();
   const onList = pathname.endsWith('/liste');
-  const idle = 'cursor-pointer border-0 bg-transparent font-medium text-ink-soft';
+  const idle = 'cursor-pointer border-0 bg-transparent font-medium text-fg-soft';
 
   return (
     <nav
       aria-label="Navigation principale"
-      className="relative z-20 flex gap-1 border-t border-[#e2e2e2] bg-white px-2 pt-2 pb-[max(1.375rem,env(safe-area-inset-bottom))]"
+      className="relative z-20 flex gap-1 border-t border-line bg-surface px-2 pt-2 pb-[max(1.375rem,env(safe-area-inset-bottom))]"
     >
       <Link
         to="/explorer"
         aria-current={onList ? undefined : 'page'}
-        className={`${TAB_BASE} ${onList ? 'font-medium text-ink-soft' : 'font-bold text-petrol'}`}
+        className={`${TAB_BASE} ${onList ? 'font-medium text-fg-soft' : 'font-bold text-accent'}`}
       >
         <TabContent icon="map" label="Carte" active={!onList} />
       </Link>
       <Link
         to="/explorer/liste"
         aria-current={onList ? 'page' : undefined}
-        className={`${TAB_BASE} ${onList ? 'font-bold text-petrol' : 'font-medium text-ink-soft'}`}
+        className={`${TAB_BASE} ${onList ? 'font-bold text-accent' : 'font-medium text-fg-soft'}`}
       >
         <TabContent icon="dice" label="Parties" active={onList} />
       </Link>

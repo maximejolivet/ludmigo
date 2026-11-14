@@ -11,7 +11,7 @@ interface ViewToggleProps {
 export function ViewToggle({ current, className = '' }: ViewToggleProps) {
   const base = 'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-sm font-bold no-underline';
   const active = 'bg-petrol text-white';
-  const idle = 'text-ink';
+  const idle = 'text-fg';
 
   return (
     <nav aria-label="Mode d'affichage" className={`flex rounded-full p-0.5 ${className}`}>
