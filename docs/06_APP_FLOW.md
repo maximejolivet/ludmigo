@@ -38,7 +38,7 @@
 
 **Trouver et rejoindre une rencontre**
 
-Accueil → « Rechercher » (saisir ou choisir les filtres) → Recherche de rencontres (réussite : liste de résultats) → Détail d'une rencontre (« Rejoindre ») → Détail d'une rencontre (réussite : « Vous participez »)
+Accueil → « Rechercher » (saisir ou choisir les filtres) → Recherche de rencontres (réussite : liste de résultats) → Détail d'une rencontre (« Rejoindre ») → Détail d'une rencontre (réussite : « Je participe »)
 
 **Créer une rencontre**
 
