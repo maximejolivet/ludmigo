@@ -1,0 +1,31 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "pseudo": "{{pseudo}}"
+  }
+}
+
+tests {
+  test("account created", function () {
+    expect(res.status).to.equal(201);
+    expect(res.body).to.not.have.property("password");
+  });
+}
+
+docs {
+  Inscription. Mot de passe : 12 caractères minimum, avec une lettre et un chiffre. Pseudo : 3 à 40 caractères (lettres, chiffres, - et _). Erreurs : 422 avec la liste des violations.
+  Sign-up. Password: 12 characters minimum, with a letter and a digit. Pseudo: 3 to 40 characters (letters, digits, - and _). Errors: 422 with the list of violations.
+}

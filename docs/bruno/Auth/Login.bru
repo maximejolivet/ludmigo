@@ -1,0 +1,38 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{email}}",
+    "password": "{{password}}"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("token", res.body.token);
+    bru.setEnvVar("refresh_token", res.body.refresh_token);
+  }
+}
+
+tests {
+  test("returns a JWT and a refresh token", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.token).to.be.a("string");
+    expect(res.body.refresh_token).to.be.a("string");
+  });
+}
+
+docs {
+  Connexion. Enregistre `token` (JWT, 1 h) et `refresh_token` (30 jours) dans l'environnement.
+  Sign-in. Stores `token` (JWT, 1 h) and `refresh_token` (30 days) in the environment.
+}

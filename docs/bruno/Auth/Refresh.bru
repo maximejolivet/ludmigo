@@ -1,0 +1,35 @@
+meta {
+  name: Refresh
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/auth/refresh
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "refresh_token": "{{refresh_token}}"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("token", res.body.token);
+  }
+}
+
+tests {
+  test("returns a new JWT", function () {
+    expect(res.status).to.equal(200);
+    expect(res.body.token).to.be.a("string");
+  });
+}
+
+docs {
+  Renouvelle le JWT à partir du refresh token. Refus : 401 si le jeton est inconnu, expiré ou révoqué.
+  Renews the JWT from the refresh token. Rejected with 401 if the token is unknown, expired or revoked.
+}
