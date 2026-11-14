@@ -1,0 +1,9 @@
+# Refresh token : valable 30 jours (docs/05_BACKEND_SCHEMA.md), stocké haché en base
+# Refresh token: valid for 30 days (docs/05_BACKEND_SCHEMA.md), stored hashed in the database
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Entity\RefreshToken
+    ttl: 2592000
+    token_parameter_name: refresh_token
+    hash_tokens:
+        enabled: true
+        accept_stored_in_the_clear: false

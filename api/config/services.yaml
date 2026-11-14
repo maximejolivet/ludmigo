@@ -1,5 +1,14 @@
 # Configuration par défaut : chaque classe de src/ est un service
 # Default service configuration: every class in src/ is a service
+parameters:
+    # Accès à la doc de l'API (/api, /api/docs) : public en dev et test, ROLE_ADMIN en production
+    # Access to the API docs (/api, /api/docs): public in dev and test, ROLE_ADMIN in production
+    app.docs_access: PUBLIC_ACCESS
+
+when@prod:
+    parameters:
+        app.docs_access: ROLE_ADMIN
+
 services:
     _defaults:
         autowire: true

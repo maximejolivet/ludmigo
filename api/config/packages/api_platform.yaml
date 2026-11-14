@@ -1,9 +1,33 @@
 # API Platform : JSON uniquement ; le préfixe /api est défini dans config/routes/api_platform.yaml (cohérent avec Caddy et l'Ingress)
-# API Platform: JSON only; the /api prefix is set in config/routes/api_platform.yaml (matches the Caddy/Ingress routing)
+# API Platform: JSON (JSON-LD added for the documentation UI); the /api prefix is set in config/routes/api_platform.yaml (matches the Caddy/Ingress routing)
 api_platform:
     title: Ludmigo API
     version: 0.1.0
     formats:
         json: ['application/json']
+        jsonld: ['application/ld+json']
+    # Formats de la documentation : OpenAPI (JSON) et interface Swagger UI (HTML)
+    # Documentation formats: OpenAPI (JSON) and Swagger UI (HTML)
+    docs_formats:
+        jsonld: ['application/ld+json']
+        jsonopenapi: ['application/vnd.openapi+json']
+        html: ['text/html']
     defaults:
         stateless: true
+    # Bouton « Authorize » de Swagger UI : coller « Bearer <jeton> » (jeton obtenu via /api/auth/login)
+    # Swagger UI "Authorize" button: paste "Bearer <token>" (token from /api/auth/login)
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+
+# En production : pas d'interface graphique (Swagger UI, ReDoc, Scalar). La doc Hydra/OpenAPI et le point d'entrée
+# restent servis, car le back office (admin/) en a besoin ; l'accès est réservé à ROLE_ADMIN (voir security.yaml).
+# In production: no graphical UI (Swagger UI, ReDoc, Scalar). The Hydra/OpenAPI docs and the entrypoint stay served,
+# because the back office (admin/) needs them; access is reserved for ROLE_ADMIN (see security.yaml).
+when@prod:
+    api_platform:
+        enable_swagger_ui: false
+        enable_re_doc: false
+        enable_scalar: false

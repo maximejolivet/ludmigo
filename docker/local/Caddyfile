@@ -6,10 +6,18 @@
 # The apps run on the host machine, reachable through host.docker.internal.
 #   http://ludmigo.test       -> web React (Vite, port 5173) / React web (Vite, port 5173)
 #   http://ludmigo.test/api   -> API Symfony (port 8000) / Symfony API (port 8000)
+#   http://ludmigo.test/admin -> back office React (Vite, port 5174) / React back office (Vite, port 5174)
 
 http://ludmigo.test {
-	handle /api/* {
+	# /bundles/* : CSS et JS de Swagger UI (/api/docs), servis par l'API
+	# /bundles/*: Swagger UI CSS and JS (/api/docs), served by the API
+	@api path /api/* /bundles/*
+	handle @api {
 		reverse_proxy host.docker.internal:8000
+	}
+
+	handle /admin* {
+		reverse_proxy host.docker.internal:5174
 	}
 
 	handle {
