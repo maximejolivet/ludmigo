@@ -66,6 +66,7 @@ consomment cette même API, ce qui garantit une logique métier unique.
 ludmigo/
 ├── api/        # Backend Symfony (API REST, authentification, métier)
 ├── web/        # Application React (navigateur)
+├── admin/      # Back office React (API Platform Admin, ROLE_ADMIN)
 ├── mobile/     # Application React Native (iOS & Android)
 ├── packages/   # Code partagé entre web et mobile (types, client API, validation)
 ├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)
@@ -218,6 +219,7 @@ The Symfony API exposes data through a REST API (JSON). The web and mobile apps 
 ludmigo/
 ├── api/        # Backend Symfony (API REST, authentification, métier)
 ├── web/        # Application React (navigateur)
+├── admin/      # Back office React (API Platform Admin, ROLE_ADMIN)
 ├── mobile/     # Application React Native (iOS & Android)
 ├── packages/   # Code partagé entre web et mobile (types, client API, validation)
 ├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)

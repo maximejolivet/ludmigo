@@ -17,6 +17,7 @@ En cas de conflit entre le code et ces documents, signaler l'écart avant de cho
 ```
 api/       Backend Symfony 7 (API REST, API Platform, Doctrine) — source de vérité métier
 web/       React 19 + Vite + React Router + TypeScript
+admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
 packages/  Types et client API partagés entre web et mobile
 docs/      Documents de conception
@@ -79,6 +80,7 @@ If the code and these documents disagree, report the gap before choosing.
 ```
 api/       Symfony 7 backend (REST API, API Platform, Doctrine) — business source of truth
 web/       React 19 + Vite + React Router + TypeScript
+admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
 packages/  Types and API client shared between web and mobile
 docs/      Design documents

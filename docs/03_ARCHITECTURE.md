@@ -15,6 +15,7 @@ Ludmigo est un monorepo composé de quatre parties :
 | --- | --- | --- |
 | `api/` | Source de vérité métier : API REST, règles, persistance | Symfony 7, PHP 8.5, API Platform, Doctrine, MariaDB / PostgreSQL |
 | `web/` | Application navigateur | React 19, Vite, React Router, TypeScript |
+| `admin/` | Back office (réservé à `ROLE_ADMIN`) | React 19, Vite, API Platform Admin, TypeScript |
 | `mobile/` | Application iOS et Android (hors V1, squelette seulement) | React Native 0.88, Expo, TypeScript |
 | `packages/` | Types et client API partagés entre web et mobile | TypeScript |
 
@@ -42,7 +43,7 @@ Entités : `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `Meetu
 
 - **Web et mobile** appellent les mêmes endpoints. Chaque client a son interface, adaptée à sa plateforme. Le code partagé se limite aux types et au client API de `packages/`.
 - **Navigation** : les routes web suivent les écrans de l'application avec React Router.
-- **Back office** : interface web réservée à `ROLE_ADMIN`, dans la même API, pour le catalogue, les articles, les pages éditoriales, la modération, les comptes administrateurs et le journal d'audit.
+- **Back office** : application web séparée (`admin/`, API Platform Admin) réservée à `ROLE_ADMIN`, qui consomme la même API et se connecte avec le même JWT, pour le catalogue, les articles, les pages éditoriales, la modération, les comptes administrateurs et le journal d'audit.
 
 ## Sécurité
 
@@ -114,6 +115,7 @@ Ludmigo is a monorepo made of four parts:
 | --- | --- | --- |
 | `api/` | Business source of truth: REST API, rules, persistence | Symfony 7, PHP 8.5, API Platform, Doctrine, MariaDB / PostgreSQL |
 | `web/` | Browser application | React 19, Vite, React Router, TypeScript |
+| `admin/` | Back office (reserved for `ROLE_ADMIN`) | React 19, Vite, API Platform Admin, TypeScript |
 | `mobile/` | iOS and Android app (out of V1, skeleton only) | React Native 0.88, Expo, TypeScript |
 | `packages/` | Types and API client shared between web and mobile | TypeScript |
 
@@ -141,7 +143,7 @@ Entities: `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `Meetup
 
 - **Web and mobile** call the same endpoints. Each client has its own interface, adapted to its platform. Shared code is limited to the types and the API client in `packages/`.
 - **Navigation**: the web routes follow the application screens with React Router.
-- **Back office**: a web interface reserved for `ROLE_ADMIN`, in the same API, for the catalogue, articles, editorial pages, moderation, administrator accounts and the audit log.
+- **Back office**: a separate web application (`admin/`, API Platform Admin) reserved for `ROLE_ADMIN`, which consumes the same API and signs in with the same JWT, for the catalogue, articles, editorial pages, moderation, administrator accounts and the audit log.
 
 ## Security
 

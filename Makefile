@@ -10,6 +10,7 @@ SHELL := /bin/bash
 COMPOSE := docker compose
 API_DIR := api
 WEB_DIR := web
+ADMIN_DIR := admin
 MOBILE_DIR := mobile
 
 # Moteur de base de données : mariadb (défaut) ou postgres. Exemple : make db-up DB=postgres
@@ -44,7 +45,7 @@ DOMAIN_FR := https://ludmigo.fr
 DOMAIN_WORLD := https://ludmigo.com
 DOMAIN_LOCAL := http://ludmigo.test
 
-.PHONY: overview help setup dev stop urls info outdated install hosts proxy-up db-up db-down db-logs db-shell db-reset api-env api-deps migrate api-serve web-dev mobile-start test lint build docker-build
+.PHONY: overview help setup dev stop urls info outdated install hosts proxy-up db-up db-down db-logs db-shell db-reset api-env api-deps migrate api-serve web-dev admin-dev mobile-start test lint build docker-build
 
 # Cible par défaut (`make` seul) : infos du projet, dépendances obsolètes, puis la liste des commandes
 # Default target (plain `make`): project info, outdated dependencies, then the command list
@@ -55,9 +56,9 @@ help: ## Show this help
 
 setup: install hosts db-up api-env migrate ## First-time setup (dependencies, /etc/hosts, database, migrations)
 
-dev: hosts db-up proxy-up api-env migrate ## Start the database and proxy, then the API and web app. Ctrl+C stops the API and web app
+dev: hosts db-up proxy-up api-env migrate ## Start the database and proxy, then the API, web app and back office. Ctrl+C stops them
 	@$(MAKE) --no-print-directory urls
-	@$(MAKE) -j2 api-serve web-dev
+	@$(MAKE) -j3 api-serve web-dev admin-dev
 
 stop: ## Stop all containers (data is kept)
 	$(COMPOSE) --profile postgres stop
@@ -67,7 +68,8 @@ urls: ## Show the development URLs
 	@echo "  Web app           http://ludmigo.test"
 	@echo "  API               http://ludmigo.test/api"
 	@echo "  API (direct)      http://127.0.0.1:8000"
-	@echo "  Vite (direct)     http://localhost:5173"
+	@echo "  Back office       http://ludmigo.test/admin"
+	@echo "  Vite (direct)     http://localhost:5173  (back office: http://localhost:5174/admin/)"
 	@echo "  $(DB_LABEL)       127.0.0.1:$(DB_PORT)  (ludmigo / ludmigo)"
 	@echo "  Expo (mobile)     run 'make mobile-start'"
 	@echo ""
@@ -100,8 +102,9 @@ outdated: ## Check for Composer and npm dependency updates
 	@if [ -d $(API_DIR) ]; then cd $(API_DIR) && composer outdated --direct || true; else echo "api/ not found, skipping Composer"; fi
 	@npm outdated || true
 
-install: ## Install PHP and JavaScript dependencies
+install: ## Install PHP and JavaScript dependencies (and the Swagger UI assets)
 	cd $(API_DIR) && composer install
+	cd $(API_DIR) && php bin/console assets:install public --symlink --relative
 	npm install
 
 # --- Domaine local ---
@@ -162,15 +165,19 @@ api-serve: api-deps ## Start the API on http://127.0.0.1:8000
 web-dev: ## Start the React web app on http://localhost:5173
 	npm run dev -w $(WEB_DIR)
 
+admin-dev: ## Start the React back office on http://localhost:5174/admin/
+	npm run dev -w $(ADMIN_DIR)
+
 mobile-start: ## Start Expo (Metro) for iOS or Android
 	npm run start -w $(MOBILE_DIR)
 
 # --- Qualité ---
 # --- Quality ---
 
-test: api-deps ## Run the API, web and mobile tests
+test: api-deps ## Run the API, web, back office and mobile tests
 	cd $(API_DIR) && composer test
 	npm run test -w $(WEB_DIR)
+	npm run test -w $(ADMIN_DIR)
 	npm run test -w $(MOBILE_DIR)
 
 lint: api-deps ## Run the PHP linters (CS-Fixer, PHPStan) and TypeScript lint (web, mobile)
@@ -178,8 +185,9 @@ lint: api-deps ## Run the PHP linters (CS-Fixer, PHPStan) and TypeScript lint (w
 	cd $(API_DIR) && composer phpstan
 	npm run lint
 
-build: ## Production build of the web app
+build: ## Production build of the web app and back office
 	npm run build -w $(WEB_DIR)
+	npm run build -w $(ADMIN_DIR)
 
 docker-build: ## Build the production images (API, web)
 	docker build -f docker/api/Dockerfile -t ludmigo-api:local .
