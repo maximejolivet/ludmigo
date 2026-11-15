@@ -47,15 +47,16 @@ Les documents de conception sont dans `docs/` : brief projet, PRD, architecture,
 
 ## Stack technique
 
-| Couche                     | Technologies                                                          |
-| -------------------------- | --------------------------------------------------------------------- |
-| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM |
-| **Base de données**        | MariaDB 10 ou PostgreSQL 17 (au choix)                                |
-| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router         |
-| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript            |
-| **Client API partagé**     | Types TypeScript générés depuis l'API, partagés entre web et mobile   |
-| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile)          |
-| **Environnement local**    | Docker Compose                                                        |
+| Couche                     | Technologies                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM                   |
+| **Base de données**        | MariaDB 10 ou PostgreSQL 17 (au choix)                                                  |
+| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router                           |
+| **Back office**            | React 19, Vite, Tailwind CSS 4, API Platform Admin (react-admin), interface en français |
+| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript                              |
+| **Client API partagé**     | Types TypeScript générés depuis l'API, partagés entre web et mobile                     |
+| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Vitest (back office), Jest (mobile)      |
+| **Environnement local**    | Docker Compose                                                                          |
 
 L'API Symfony expose les données via une API REST (JSON). Les applications web et mobile
 consomment cette même API, ce qui garantit une logique métier unique.
@@ -69,7 +70,11 @@ ludmigo/
 ├── admin/      # Back office React (API Platform Admin, ROLE_ADMIN)
 ├── mobile/     # Application React Native (iOS & Android)
 ├── packages/   # Code partagé entre web et mobile (types, client API, validation)
-├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)
+├── docker/     # Images Docker (api, web, mobile) et proxy local (Caddy)
+├── k8s/        # Manifestes Kubernetes (Kustomize)
+├── docs/       # Documents de conception
+├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option, proxy local)
+├── Makefile    # Commandes de développement (make help)
 └── README.md
 ```
 
@@ -82,7 +87,7 @@ Principes :
 - **Mobile et web séparés** : deux applications distinctes, avec un code partagé minimal
   (logique, types, validations) et une UI spécifique à chaque plateforme.
 
-> Le dépôt ne contient pour l'instant que la documentation : les dossiers ci-dessus sont la cible d'architecture, à mettre en place au fil du développement.
+> Le dépôt contient la documentation de conception (`docs/`) et le code de départ : API Symfony, web, back office, mobile (squelette) et configuration de déploiement.
 
 ## Prérequis
 
@@ -96,6 +101,14 @@ Principes :
   - Un compte [Expo](https://expo.dev) si vous utilisez EAS pour les builds
 
 ## Installation
+
+Démarrage rapide avec `make` : `make setup` (première fois : dépendances, `/etc/hosts`, base de données, migrations), puis `make dev` (base, proxy local, API, web et back office). `make urls` affiche les adresses et `make help` liste toutes les commandes.
+
+- Web : http://ludmigo.test
+- API : http://ludmigo.test/api (documentation : `/api/docs`, publique en dev, réservée à `ROLE_ADMIN` sinon)
+- Back office : http://ludmigo.test/admin (accès direct : http://localhost:5174/admin/, compte `ROLE_ADMIN` requis, voir `app:user:promote` plus bas)
+
+Étapes détaillées :
 
 ```bash
 # 1. Clone the repository
@@ -114,8 +127,17 @@ composer install
 # Copy the env file, then adjust the variables if needed
 # Copier le fichier d'environnement, puis adapter les variables si besoin
 cp .env .env.local
+# Générer les clés JWT (passphrase : JWT_PASSPHRASE de .env.local)
+# Generate the JWT keys (passphrase: JWT_PASSPHRASE from .env.local)
+php bin/console lexik:jwt:generate-keypair
+# Installer les assets de la documentation Swagger UI
+# Install the Swagger UI documentation assets
+php bin/console assets:install public --symlink --relative
 php bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:migrations:migrate --no-interaction
+# Promouvoir un compte existant en administrateur (back office)
+# Promote an existing account to administrator (back office)
+php bin/console app:user:promote <email>
 
 # 4. Install JavaScript dependencies (workspaces)
 # 4. Installer les dépendances JavaScript (workspaces)
@@ -133,19 +155,22 @@ npm run start -w mobile
 
 ## Commandes utiles
 
-| Action                         | Commande                                                                     |
-| ------------------------------ | ---------------------------------------------------------------------------- |
-| Démarrer la base de données    | `docker compose up -d db` (MariaDB) ou `make db-up DB=postgres` (PostgreSQL) |
-| Arrêter la base de données     | `docker compose stop db` ou `make db-down DB=postgres`                       |
-| Console Symfony (dans `api/`)  | `php bin/console`                                                            |
-| Créer une migration            | `php bin/console make:migration`                                             |
-| Appliquer les migrations       | `php bin/console doctrine:migrations:migrate`                                |
-| Lint PHP (PHP-CS-Fixer)        | `composer cs:check`                                                          |
-| Analyse statique PHP (PHPStan) | `composer phpstan`                                                           |
-| Build web                      | `npm run build -w web`                                                       |
-| Lint JS/TS                     | `npm run lint`                                                               |
-| Lancer le mobile               | `npm run start -w mobile`                                                    |
-| Build iOS / Android (EAS)      | `npx eas build --platform ios` / `--platform android`                        |
+| Action                                           | Commande                                                                     |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Démarrer la base de données                      | `docker compose up -d db` (MariaDB) ou `make db-up DB=postgres` (PostgreSQL) |
+| Arrêter la base de données                       | `docker compose stop db` ou `make db-down DB=postgres`                       |
+| Console Symfony (dans `api/`)                    | `php bin/console`                                                            |
+| Créer une migration                              | `php bin/console make:migration`                                             |
+| Appliquer les migrations                         | `php bin/console doctrine:migrations:migrate`                                |
+| Lint PHP (PHP-CS-Fixer)                          | `composer cs:check`                                                          |
+| Analyse statique PHP (PHPStan)                   | `composer phpstan`                                                           |
+| Build web                                        | `npm run build -w web`                                                       |
+| Lint JS/TS                                       | `npm run lint` (`tsc` ; `tsc` + `oxlint` pour le back office)                |
+| Lancer le back office                            | `npm run dev -w admin` (http://localhost:5174/admin/)                        |
+| Tout lancer (base, proxy, API, web, back office) | `make dev`                                                                   |
+| Tous les tests / tous les linters                | `make test` / `make lint`                                                    |
+| Lancer le mobile                                 | `npm run start -w mobile`                                                    |
+| Build iOS / Android (EAS)                        | `npx eas build --platform ios` / `--platform android`                        |
 
 ## Tests
 
@@ -157,8 +182,14 @@ composer test
 # Web (Vitest)
 npm run test -w web
 
+# Back office (Vitest)
+npm run test -w admin
+
 # Mobile (Jest)
 npm run test -w mobile
+
+# Tout lancer / Run everything
+make test
 ```
 
 ## Contribuer
@@ -201,15 +232,16 @@ The design documents are in `docs/`: project brief, PRD, architecture, TRD, back
 
 ## Tech stack
 
-| Layer                      | Technologies                                                           |
-| -------------------------- | ---------------------------------------------------------------------- |
-| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM  |
-| **Database**               | MariaDB 10 or PostgreSQL 17 (your choice)                              |
-| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router          |
-| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript             |
-| **Shared API client**      | TypeScript types generated from the API, shared between web and mobile |
-| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Jest (mobile)           |
-| **Local environment**      | Docker Compose                                                         |
+| Layer                      | Technologies                                                                       |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| **Backend (API)**          | [Symfony](https://symfony.com) 7, PHP 8.5, API Platform, Doctrine ORM              |
+| **Database**               | MariaDB 10 or PostgreSQL 17 (your choice)                                          |
+| **Web (frontend)**         | [React](https://react.dev) 19, TypeScript, Vite, React Router                      |
+| **Back office**            | React 19, Vite, Tailwind CSS 4, API Platform Admin (react-admin), French UI        |
+| **Mobile (iOS & Android)** | [React Native](https://reactnative.dev) (Expo), TypeScript                         |
+| **Shared API client**      | TypeScript types generated from the API, shared between web and mobile             |
+| **Tests**                  | PHPUnit (API), Vitest + Testing Library (web), Vitest (back office), Jest (mobile) |
+| **Local environment**      | Docker Compose                                                                     |
 
 The Symfony API exposes data through a REST API (JSON). The web and mobile apps consume this same API, which guarantees a single business logic.
 
@@ -217,12 +249,16 @@ The Symfony API exposes data through a REST API (JSON). The web and mobile apps 
 
 ```
 ludmigo/
-├── api/        # Backend Symfony (API REST, authentification, métier)
-├── web/        # Application React (navigateur)
-├── admin/      # Back office React (API Platform Admin, ROLE_ADMIN)
-├── mobile/     # Application React Native (iOS & Android)
-├── packages/   # Code partagé entre web et mobile (types, client API, validation)
-├── docker-compose.yml  # Services locaux (MariaDB, PostgreSQL en option)
+├── api/        # Symfony backend (REST API, authentication, business logic)
+├── web/        # React app (browser)
+├── admin/      # React back office (API Platform Admin, ROLE_ADMIN)
+├── mobile/     # React Native app (iOS & Android)
+├── packages/   # Code shared between web and mobile (types, API client, validation)
+├── docker/     # Docker images (api, web, mobile) and local proxy (Caddy)
+├── k8s/        # Kubernetes manifests (Kustomize)
+├── docs/       # Design documents
+├── docker-compose.yml  # Local services (MariaDB, optional PostgreSQL, local proxy)
+├── Makefile    # Development commands (make help)
 └── README.md
 ```
 
@@ -232,7 +268,7 @@ Principles:
 - **Typed contracts**: API responses are typed on the front end via `packages/`, to avoid mismatches between the backend and the clients.
 - **Separate mobile and web apps**: two distinct applications, with minimal shared code (logic, types, validations) and a UI specific to each platform.
 
-> The repository currently contains only the documentation: the folders above are the architecture target, to be built as development goes on.
+> The repository contains the design documentation (`docs/`) and the starter code: Symfony API, web app, back office, mobile (skeleton) and deployment configuration.
 
 ## Prerequisites
 
@@ -246,6 +282,14 @@ Principles:
   - An [Expo](https://expo.dev) account if you use EAS for builds
 
 ## Installation
+
+Quick start with `make`: `make setup` (first time: dependencies, `/etc/hosts`, database, migrations), then `make dev` (database, local proxy, API, web app and back office). `make urls` shows the addresses and `make help` lists every command.
+
+- Web: http://ludmigo.test
+- API: http://ludmigo.test/api (documentation: `/api/docs`, public in dev, reserved for `ROLE_ADMIN` otherwise)
+- Back office: http://ludmigo.test/admin (direct access: http://localhost:5174/admin/, `ROLE_ADMIN` account required, see `app:user:promote` below)
+
+Step by step:
 
 ```bash
 # 1. Clone the repository
@@ -264,8 +308,17 @@ composer install
 # Copy the env file, then adjust the variables if needed
 # Copier le fichier d'environnement, puis adapter les variables si besoin
 cp .env .env.local
+# Générer les clés JWT (passphrase : JWT_PASSPHRASE de .env.local)
+# Generate the JWT keys (passphrase: JWT_PASSPHRASE from .env.local)
+php bin/console lexik:jwt:generate-keypair
+# Installer les assets de la documentation Swagger UI
+# Install the Swagger UI documentation assets
+php bin/console assets:install public --symlink --relative
 php bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:migrations:migrate --no-interaction
+# Promouvoir un compte existant en administrateur (back office)
+# Promote an existing account to administrator (back office)
+php bin/console app:user:promote <email>
 
 # 4. Install JavaScript dependencies (workspaces)
 # 4. Installer les dépendances JavaScript (workspaces)
@@ -283,19 +336,22 @@ npm run start -w mobile
 
 ## Useful commands
 
-| Action                        | Command                                                                      |
-| ----------------------------- | ---------------------------------------------------------------------------- |
-| Start the database            | `docker compose up -d db` (MariaDB) or `make db-up DB=postgres` (PostgreSQL) |
-| Stop the database             | `docker compose stop db` or `make db-down DB=postgres`                       |
-| Symfony console (in `api/`)   | `php bin/console`                                                            |
-| Create a migration            | `php bin/console make:migration`                                             |
-| Apply migrations              | `php bin/console doctrine:migrations:migrate`                                |
-| PHP lint (PHP-CS-Fixer)       | `composer cs:check`                                                          |
-| PHP static analysis (PHPStan) | `composer phpstan`                                                           |
-| Web build                     | `npm run build -w web`                                                       |
-| JS/TS lint                    | `npm run lint`                                                               |
-| Start mobile                  | `npm run start -w mobile`                                                    |
-| iOS / Android build (EAS)     | `npx eas build --platform ios` / `--platform android`                        |
+| Action                                                    | Command                                                                      |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Start the database                                        | `docker compose up -d db` (MariaDB) or `make db-up DB=postgres` (PostgreSQL) |
+| Stop the database                                         | `docker compose stop db` or `make db-down DB=postgres`                       |
+| Symfony console (in `api/`)                               | `php bin/console`                                                            |
+| Create a migration                                        | `php bin/console make:migration`                                             |
+| Apply migrations                                          | `php bin/console doctrine:migrations:migrate`                                |
+| PHP lint (PHP-CS-Fixer)                                   | `composer cs:check`                                                          |
+| PHP static analysis (PHPStan)                             | `composer phpstan`                                                           |
+| Web build                                                 | `npm run build -w web`                                                       |
+| JS/TS lint                                                | `npm run lint` (`tsc`; `tsc` + `oxlint` for the back office)                 |
+| Start the back office                                     | `npm run dev -w admin` (http://localhost:5174/admin/)                        |
+| Start everything (database, proxy, API, web, back office) | `make dev`                                                                   |
+| All tests / all linters                                   | `make test` / `make lint`                                                    |
+| Start mobile                                              | `npm run start -w mobile`                                                    |
+| iOS / Android build (EAS)                                 | `npx eas build --platform ios` / `--platform android`                        |
 
 ## Tests
 
@@ -307,8 +363,14 @@ composer test
 # Web (Vitest)
 npm run test -w web
 
+# Back office (Vitest)
+npm run test -w admin
+
 # Mobile (Jest)
 npm run test -w mobile
+
+# Tout lancer / Run everything
+make test
 ```
 
 ## Contributing
