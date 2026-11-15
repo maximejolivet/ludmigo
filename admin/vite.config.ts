@@ -17,6 +17,9 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
     allowedHosts: ['ludmigo.test'],
+    // Adresse directe http://localhost:5174/admin/ : /api est relayé vers l'API locale, comme le fait le proxy ludmigo.test
+    // Direct address http://localhost:5174/admin/: /api is forwarded to the local API, as the ludmigo.test proxy does
+    proxy: { '/api': 'http://127.0.0.1:8000' },
   },
   test: {
     environment: 'jsdom',
