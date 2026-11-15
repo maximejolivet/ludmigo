@@ -1,4 +1,4 @@
-# CLAUDE.md — Ludmigo
+# CLAUDE.md - Ludmigo
 
 Ludmigo est une plateforme communautaire pour partager et découvrir les jeux de société et faciliter les rencontres entre joueurs, dans des espaces dédiés ou des bars partenaires.
 
@@ -15,7 +15,7 @@ En cas de conflit entre le code et ces documents, signaler l'écart avant de cho
 ## Architecture
 
 ```
-api/       Backend Symfony 7 (API REST, API Platform, Doctrine) — source de vérité métier
+api/       Backend Symfony 7 (API REST, API Platform, Doctrine) - source de vérité métier
 web/       React 19 + Vite + React Router + TypeScript
 admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
@@ -61,7 +61,7 @@ Les migrations se créent avec `php bin/console make:migration` et se relisent a
 
 <br>
 
-# CLAUDE.md — Ludmigo
+# CLAUDE.md - Ludmigo
 
 Ludmigo is a community platform for sharing and discovering board games, and for making it easier for players to meet, in dedicated spaces or partner bars.
 
@@ -78,7 +78,7 @@ If the code and these documents disagree, report the gap before choosing.
 ## Architecture
 
 ```
-api/       Symfony 7 backend (REST API, API Platform, Doctrine) — business source of truth
+api/       Symfony 7 backend (REST API, API Platform, Doctrine) - business source of truth
 web/       React 19 + Vite + React Router + TypeScript
 admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
