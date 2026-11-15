@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,5 +73,28 @@ final class AdminUsersTest extends WebTestCase
         $content = (string) $this->client->getResponse()->getContent();
         $this->assertStringContainsString('player@example.com', $content);
         $this->assertStringNotContainsString('"password"', $content);
+    }
+
+    // Le filtre exists[deletedAt]=false écarte les comptes supprimés (suppression logique)
+    // The exists[deletedAt]=false filter leaves out deleted accounts (soft deletion)
+    public function testAdminCanLeaveOutDeletedAccounts(): void
+    {
+        $this->tokenFor('player@example.com', 'player');
+        $this->tokenFor('gone@example.com', 'gone');
+        $this->tokenFor('boss@example.com', 'boss');
+        $this->promote('boss@example.com');
+        static::getContainer()->get(EntityManagerInterface::class)->getConnection()
+            ->executeStatement('UPDATE user SET deleted_at = NOW() WHERE email = ?', ['gone@example.com']);
+        $this->client->request('POST', '/api/auth/login', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['email' => 'boss@example.com', 'password' => 'correct-horse-1'], \JSON_THROW_ON_ERROR));
+        $token = json_decode((string) $this->client->getResponse()->getContent(), true)['token'];
+        $server = ['HTTP_AUTHORIZATION' => 'Bearer '.$token, 'HTTP_ACCEPT' => 'application/ld+json'];
+
+        $this->client->request('GET', '/api/users', server: $server);
+        $this->assertSame(3, json_decode((string) $this->client->getResponse()->getContent(), true)['totalItems']);
+
+        $this->client->request('GET', '/api/users?exists[deletedAt]=false', server: $server);
+        $data = json_decode((string) $this->client->getResponse()->getContent(), true);
+        $this->assertSame(2, $data['totalItems']);
+        $this->assertStringNotContainsString('gone@example.com', (string) $this->client->getResponse()->getContent());
     }
 }

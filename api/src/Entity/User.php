@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -25,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['user:admin']],
     security: "is_granted('ROLE_ADMIN')",
 )]
+// Filtre ?exists[deletedAt]=false : comptes non supprimés / Filter ?exists[deletedAt]=false: accounts not deleted
+#[ApiFilter(ExistsFilter::class, properties: ['deletedAt'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
 #[UniqueEntity(fields: ['email'], message: 'This email is already used.')]

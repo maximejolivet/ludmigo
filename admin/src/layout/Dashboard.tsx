@@ -45,7 +45,9 @@ export function Dashboard() {
   // Une seule requête pour les jeux : les 5 derniers et le total
   // A single request for games: the latest 5 and the total
   const games = useGetList<Game>('games', { pagination: { page: 1, perPage: 5 }, sort: { field: 'createdAt', order: 'DESC' } });
-  const users = useGetList('users', { pagination: { page: 1, perPage: 1 } });
+  // Comptes actifs : on écarte les comptes supprimés logiquement (filtre exists[deletedAt]=false)
+  // Active accounts: soft-deleted accounts are left out (filter exists[deletedAt]=false)
+  const users = useGetList('users', { pagination: { page: 1, perPage: 1 }, filter: { exists: { deletedAt: false } } });
 
   return (
     <div>
@@ -53,7 +55,7 @@ export function Dashboard() {
 
       <section aria-label="Contenu de la plateforme" className="grid gap-3 sm:grid-cols-2">
         <CountCard resource="games" label="Jeux du catalogue" icon="game" total={games.total} isPending={games.isPending} failed={!!games.error} />
-        <CountCard resource="users" label="Comptes" icon="player" total={users.total} isPending={users.isPending} failed={!!users.error} />
+        <CountCard resource="users" label="Comptes actifs" icon="player" total={users.total} isPending={users.isPending} failed={!!users.error} />
       </section>
 
       <section aria-labelledby="derniers-jeux" className="mt-8">
