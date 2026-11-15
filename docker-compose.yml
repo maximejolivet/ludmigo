@@ -52,7 +52,9 @@ services:
     container_name: ludmigo-proxy
     restart: unless-stopped
     ports:
-      - "80:80"
+      # Boucle locale seulement : ne pas exposer l'API de développement au réseau
+      # Loopback only: do not expose the development API to the network
+      - "127.0.0.1:80:80"
     extra_hosts:
       # Permet au conteneur d'atteindre l'API et le web lancés sur la machine hôte
       # Lets the container reach the API and the web app running on the host machine

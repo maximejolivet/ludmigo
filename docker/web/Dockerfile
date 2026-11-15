@@ -21,7 +21,9 @@ RUN npm run build -w web
 
 # 2. Service des fichiers statiques
 # 2. Serving static files
-FROM nginx:1.31-alpine AS runtime
+# Image nginx sans privilèges : processus non root, écoute sur 8080
+# Unprivileged nginx image: non-root process, listens on 8080
+FROM nginxinc/nginx-unprivileged:1.31-alpine AS runtime
 
 COPY docker/web/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/web/dist /usr/share/nginx/html

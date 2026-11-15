@@ -7,3 +7,10 @@
 docs
 k8s
 *.md
+# Jamais de clé ni de secret dans une image : les clés JWT arrivent par un Secret k8s monté à l'exécution
+# Never a key or secret in an image: the JWT keys come from a k8s Secret mounted at runtime
+**/*.pem
+**/*.key
+**/.env.test
+api/tests
+.github
