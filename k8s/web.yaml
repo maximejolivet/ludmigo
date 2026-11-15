@@ -35,8 +35,13 @@ spec:
           image: ghcr.io/ORG/ludmigo-web:0.1.0
           securityContext:
             allowPrivilegeEscalation: false
+            # Lecture seule : nginx n'écrit que dans /tmp / Read-only: nginx only writes to /tmp
+            readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           ports:
             - name: http
               containerPort: 8080
@@ -52,6 +57,9 @@ spec:
               memory: 32Mi
             limits:
               memory: 128Mi
+      volumes:
+        - name: tmp
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

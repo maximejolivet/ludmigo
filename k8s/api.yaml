@@ -45,6 +45,9 @@ spec:
               containerPort: 8080
           securityContext:
             allowPrivilegeEscalation: false
+            # Système de fichiers en lecture seule : seuls /tmp, /data et /config (Caddy) sont inscriptibles
+            # Read-only filesystem: only /tmp, /data and /config (Caddy) are writable
+            readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
           envFrom:
@@ -59,6 +62,12 @@ spec:
             - name: jwt-keys
               mountPath: /app/config/jwt
               readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: caddy-data
+              mountPath: /data
+            - name: caddy-config
+              mountPath: /config
           readinessProbe:
             tcpSocket:
               port: http
@@ -80,6 +89,12 @@ spec:
           secret:
             secretName: ludmigo-jwt
             defaultMode: 0440
+        - name: tmp
+          emptyDir: {}
+        - name: caddy-data
+          emptyDir: {}
+        - name: caddy-config
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

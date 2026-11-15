@@ -11,6 +11,7 @@ resources:
   - api.yaml
   - web.yaml
   - ingress.yaml
+  - networkpolicy.yaml
 
 # Les Secrets ne sont PAS versionnés : les créer avec kubectl (voir secrets.example.yaml).
 # Secrets are NOT versioned: create them with kubectl (see secrets.example.yaml).

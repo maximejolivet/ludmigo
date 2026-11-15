@@ -1,0 +1,68 @@
+# Réseau fermé par défaut : seul le trafic nécessaire est autorisé en entrée.
+# Closed by default: only the necessary incoming traffic is allowed.
+# Suppose un Ingress Controller nginx dans le namespace "ingress-nginx" (voir ingress.yaml).
+# Assumes an nginx Ingress Controller in the "ingress-nginx" namespace (see ingress.yaml).
+# Adapter la valeur de kubernetes.io/metadata.name si le contrôleur est ailleurs.
+# Adjust the kubernetes.io/metadata.name value if the controller lives elsewhere.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: ludmigo
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# Le contrôleur d'Ingress atteint l'API et le web, sur le port 8080
+# The Ingress controller reaches the API and the web app, on port 8080
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-controller
+  namespace: ludmigo
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values: [api, web]
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+# La base n'accepte que l'API et le Job de migration
+# The database only accepts the API and the migration Job
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-database-from-api
+  namespace: ludmigo
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values: [mariadb, postgresql]
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api
+        - podSelector:
+            matchLabels:
+              job-name: api-migrate
+      ports:
+        - protocol: TCP
+          port: 3306
+        - protocol: TCP
+          port: 5432

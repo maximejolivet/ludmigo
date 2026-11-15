@@ -33,8 +33,12 @@ spec:
           image: ghcr.io/ORG/ludmigo-api:0.1.0
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--env=prod"]
           # Seulement la connexion à la base : pas APP_SECRET ni JWT_PASSPHRASE
           # Only the database connection: no APP_SECRET or JWT_PASSPHRASE
@@ -46,3 +50,6 @@ spec:
                   key: DATABASE_URL
             - name: APP_SECRET
               value: migration-only
+      volumes:
+        - name: tmp
+          emptyDir: {}
