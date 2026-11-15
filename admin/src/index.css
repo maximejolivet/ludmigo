@@ -1,0 +1,78 @@
+/* Police en local (pas de CDN) : Fira Sans, comme l'application web */
+/* Self-hosted font (no CDN): Fira Sans, like the web app */
+@import '@fontsource/fira-sans/400.css';
+@import '@fontsource/fira-sans/500.css';
+@import '@fontsource/fira-sans/700.css';
+
+/* Tailwind sans « preflight » : sa remise à zéro est inutile ici et gênerait les restes de Material UI */
+/* Tailwind without "preflight": its reset is not needed here and would disturb the remains of Material UI */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Jetons de la charte, les mêmes que l'application web (docs/07_UI_UX_DESIGN.md) */
+/* Brand tokens, the same as the web app (docs/07_UI_UX_DESIGN.md) */
+@theme {
+  --font-ui: 'Fira Sans', system-ui, sans-serif;
+
+  --color-ink: #3e3e3e;
+  --color-canvas: #f4f4f4;
+  --color-line: #e4e4e4;
+  --color-primary: #f8a00d;
+  --color-petrol: #155767;
+  --color-petrol-tint: #d9eaee;
+  --color-link: #006ca8;
+  --color-success: #007a52;
+  --color-success-tint: #e3f4ec;
+  --color-beige: #d7b695;
+  --color-beige-tint: #f1e2d0;
+  --color-danger: #d70605;
+
+  /* Jetons qui changent en mode soirée (classe .night) / Tokens that change in evening mode (.night class) */
+  --color-surface: #ffffff;
+  --color-fg: #3e3e3e;
+  --color-fg-soft: #5a5a5a;
+  --color-edge: #3e3e3e;
+  --color-accent: #155767;
+  --color-success-text: #007a52;
+  --color-link-text: #006ca8;
+  --color-orange-text: #b85f00;
+  --color-danger-text: #d70605;
+  --color-warning-tint: #fde3b0;
+}
+
+@layer base {
+  .night {
+    --color-surface: #1f2a2f;
+    --color-fg: #eef2f3;
+    --color-fg-soft: #b4c0c5;
+    --color-edge: #eef2f3;
+    --color-accent: #8fd3e3;
+    --color-success-text: #6fd6a6;
+    --color-link-text: #7cc4f0;
+    --color-orange-text: #ffb066;
+    --color-danger-text: #ff8f8a;
+    --color-warning-tint: #4a3a14;
+    --color-canvas: #141c20;
+    --color-line: #35444b;
+    --color-petrol-tint: #20414b;
+    --color-success-tint: #173a2d;
+    --color-beige-tint: #2b363b;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+  }
+
+  /* Focus visible de 2 px, comme dans le document de conception / 2 px visible focus, as in the design document */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}

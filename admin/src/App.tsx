@@ -1,12 +1,19 @@
 import {
   HydraAdmin,
-  ResourceGuesser,
   fetchHydra as baseFetchHydra,
   hydraDataProvider,
 } from '@api-platform/admin';
+import { Resource } from 'react-admin';
 import { parseHydraDocumentation } from '@api-platform/api-doc-parser';
 import { API_URL, authHeaders, refresh } from './auth';
 import { authProvider } from './authProvider';
+import { GameCreate, GameEdit } from './games/GamePages';
+import { GameList } from './games/GameList';
+import { i18nProvider } from './i18n';
+import { Dashboard } from './layout/Dashboard';
+import { Layout } from './layout/Layout';
+import { LoginPage } from './layout/LoginPage';
+import { UserList, UserShow } from './users/UserPages';
 
 // L'API n'a pas de hub Mercure : pas de temps réel
 // The API has no Mercure hub: no real time
@@ -43,8 +50,14 @@ export default function App() {
       dataProvider={dataProvider}
       authProvider={authProvider}
       title="Ludmigo"
+      i18nProvider={i18nProvider}
+      layout={Layout}
+      loginPage={LoginPage}
+      dashboard={Dashboard}
+      darkTheme={null}
     >
-      <ResourceGuesser name="users" />
+      <Resource name="games" list={GameList} create={GameCreate} edit={GameEdit} recordRepresentation="name" />
+      <Resource name="users" list={UserList} show={UserShow} recordRepresentation="pseudo" />
     </HydraAdmin>
   );
 }
