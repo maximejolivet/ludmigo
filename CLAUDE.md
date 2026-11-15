@@ -20,6 +20,8 @@ web/       React 19 + Vite + React Router + TypeScript
 admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
 packages/  Types et client API partagés entre web et mobile
+docker/    Images Docker (api, web, mobile) et proxy local
+k8s/       Manifestes Kubernetes (Kustomize)
 docs/      Documents de conception
 ```
 
@@ -83,6 +85,8 @@ web/       React 19 + Vite + React Router + TypeScript
 admin/     Back office React 19 + Vite + API Platform Admin (ROLE_ADMIN)
 mobile/    React Native (Expo) + TypeScript
 packages/  Types and API client shared between web and mobile
+docker/    Docker images (api, web, mobile) and local proxy
+k8s/       Kubernetes manifests (Kustomize)
 docs/      Design documents
 ```
 

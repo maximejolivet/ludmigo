@@ -34,7 +34,7 @@ Merci d'inclure :
 Dans le périmètre :
 
 - l'API (`api/`), y compris l'authentification, les autorisations et le traitement des données personnelles ;
-- l'application web (`web/`) et l'application mobile (`mobile/`) ;
+- l'application web (`web/`), le back office (`admin/`) et l'application mobile (`mobile/`) ;
 - la configuration de déploiement de ce dépôt (`docker/`, `k8s/`, `docker-compose.yml`).
 
 Hors périmètre :
@@ -98,7 +98,7 @@ Please include:
 In scope:
 
 - the API (`api/`), including authentication, authorisation and personal data handling;
-- the web application (`web/`) and the mobile application (`mobile/`);
+- the web application (`web/`), the back office (`admin/`) and the mobile application (`mobile/`);
 - the deployment configuration in this repository (`docker/`, `k8s/`, `docker-compose.yml`).
 
 Out of scope:

@@ -5,6 +5,7 @@
 | Entité | Représente |
 | --- | --- |
 | `User` | Compte joueur (et responsable de lieu, selon le rôle) |
+| `RefreshToken` | Jeton de rafraîchissement de la connexion (table `refresh_token`, fournie par `gesdinet/jwt-refresh-token-bundle`) |
 | `Game` | Jeu de société du catalogue |
 | `Category` | Catégorie de jeu (stratégie, famille, ambiance…) |
 | `GameCategory` | Table de liaison entre un jeu et ses catégories |
@@ -49,13 +50,13 @@
 ### `game`
 - `id` : UUID, **obligatoire**
 - `name` : string(180), **obligatoire**, index
-- `description` : text, facultatif
-- `min_players` : smallint, **obligatoire**
-- `max_players` : smallint, **obligatoire**, ≥ `min_players`
-- `duration_minutes` : smallint, facultatif
+- `description` : text, facultatif, 5000 caractères maximum
+- `min_players` : smallint, **obligatoire**, entre 1 et 32767
+- `max_players` : smallint, **obligatoire**, ≥ `min_players`, 32767 maximum
+- `duration_minutes` : smallint, facultatif, entre 1 et 32767
 - `difficulty` : enum (`beginner`, `intermediate`, `expert`), défaut `beginner`
-- `image_url` : string, facultatif
-- `created_at` : datetime_immutable, **obligatoire**
+- `image_url` : string(255), facultatif, adresse http ou https valide
+- `created_at` : datetime_immutable, **obligatoire**, index (tri par défaut de la liste)
 
 ### `category`
 - `id` : UUID, **obligatoire**
@@ -365,6 +366,7 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 | Entity | Represents |
 | --- | --- |
 | `User` | Player account (and venue manager, depending on the role) |
+| `RefreshToken` | Sign-in refresh token (`refresh_token` table, provided by `gesdinet/jwt-refresh-token-bundle`) |
 | `Game` | Board game in the catalogue |
 | `Category` | Game category (strategy, family, party…) |
 | `GameCategory` | Link table between a game and its categories |
@@ -409,13 +411,13 @@ Hors V1 : `CollectionItem` (propriétaire seul), `GamificationTask` et `Reward` 
 ### `game`
 - `id`: UUID, **required**
 - `name`: string(180), **required**, indexed
-- `description`: text, optional
-- `min_players`: smallint, **required**
-- `max_players`: smallint, **required**, ≥ `min_players`
-- `duration_minutes`: smallint, optional
+- `description`: text, optional, 5000 characters at most
+- `min_players`: smallint, **required**, between 1 and 32767
+- `max_players`: smallint, **required**, ≥ `min_players`, 32767 at most
+- `duration_minutes`: smallint, optional, between 1 and 32767
 - `difficulty`: enum (`beginner`, `intermediate`, `expert`), default `beginner`
-- `image_url`: string, optional
-- `created_at`: datetime_immutable, **required**
+- `image_url`: string(255), optional, valid http or https address
+- `created_at`: datetime_immutable, **required**, indexed (default ordering of the list)
 
 ### `category`
 - `id`: UUID, **required**

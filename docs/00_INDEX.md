@@ -8,7 +8,7 @@ Ce dossier contient les documents de conception de Ludmigo. Chaque document cont
 | --- | --- | --- |
 | 01 | Brief projet | Le contexte : problème, utilisateurs, objectif, périmètre, contraintes, risques et questions ouvertes. |
 | 02 | PRD | Les exigences produit : utilisateurs cibles, marché, fonctionnalités, versions et critères d'acceptation. |
-| 03 | Architecture | Comment les parties s'assemblent : `api/`, `web/`, `mobile/`, `packages/` et les services externes. |
+| 03 | Architecture | Comment les parties s'assemblent : `api/`, `web/`, `admin/`, `mobile/`, `packages/` et les services externes. |
 | 04 | TRD | Les choix techniques : plateformes, hébergement, base de données, sécurité et environnements. |
 | 05 | Schéma du backend | Les entités, leurs champs, leurs relations et les règles d'autorisation. |
 | 06 | Parcours de l'appli | Les points d'entrée, les écrans et les parcours utilisateur. |
@@ -33,7 +33,7 @@ flowchart TD
     D08["08 Epics"]
     D09["09 Plan"]
     D10["10 Kanban"]
-    CODE[("Code : api/, web/, mobile/, packages/")]
+    CODE[("Code : api/, web/, admin/, mobile/, packages/")]
 
     D01 --> D02
     D02 --> D03 & D04 & D06 & D08
@@ -94,7 +94,7 @@ This folder holds the Ludmigo design documents. Each document contains the Frenc
 | --- | --- | --- |
 | 01 | Project brief | The context: problem, users, goal, scope, constraints, risks and open questions. |
 | 02 | PRD | The product requirements: target users, market, features, versions and acceptance criteria. |
-| 03 | Architecture | How the parts fit together: `api/`, `web/`, `mobile/`, `packages/` and the external services. |
+| 03 | Architecture | How the parts fit together: `api/`, `web/`, `admin/`, `mobile/`, `packages/` and the external services. |
 | 04 | TRD | The technical choices: platforms, hosting, database, security and environments. |
 | 05 | Backend schema | The entities, their fields, their relations and the authorisation rules. |
 | 06 | App flow | The entry points, the screens and the user flows. |
@@ -119,7 +119,7 @@ flowchart TD
     D08["08 Epics"]
     D09["09 Plan"]
     D10["10 Kanban"]
-    CODE[("Code: api/, web/, mobile/, packages/")]
+    CODE[("Code: api/, web/, admin/, mobile/, packages/")]
 
     D01 --> D02
     D02 --> D03 & D04 & D06 & D08

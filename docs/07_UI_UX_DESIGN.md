@@ -88,7 +88,7 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **Formulaire de contact** : choix du sujet en premier, puis les champs ; page de confirmation sobre.
 - **Blog** : cartes avec image, date et titre ; lecture sans inscription.
 - **Bandeau de cookies** : en bas de page, sans bloquer la lecture ; « Accepter » et « Refuser » ont le même poids visuel.
-- **Back office** : web uniquement, barre latérale, tableaux pour les listes, formulaires en colonne unique.
+- **Back office** : web uniquement ; navigation dans l'en-tête sur ordinateur et barre d'onglets en bas sur petit écran, listes en cartes, formulaires en colonne unique.
 
 ## Accessibilité
 
@@ -108,6 +108,10 @@ Contrastes mesurés sur le fond `#F4F4F4` : texte principal 9,7:1, texte seconda
 - **Chargement** : spinner dans le bouton, squelette pour les listes.
 - **Erreur** : message texte et couleur d'erreur, jamais la couleur seule.
 - **Succès** : toast vert avec un message court.
+
+## Mode soirée (back office)
+
+Le back office propose un thème sombre, activé par la classe `.night` sur `<html>`. Le choix est mémorisé (`localStorage`, clé `ludmigo.admin.night`), sinon la préférence du système s'applique. Les jetons Tailwind (`@theme` dans `admin/src/index.css`) changent : fond `#141C20`, surface `#1F2A2F`, texte `#EEF2F3`, texte secondaire `#B4C0C5`, accent `#8FD3E3`. La page de documentation de l'API (`/api/docs`) suit le même réglage.
 
 ## Éléments graphiques
 
@@ -217,7 +221,7 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 - **Contact form**: choice of subject first, then the fields; plain confirmation page.
 - **Blog**: cards with image, date and title; reading without signing up.
 - **Cookie banner**: at the bottom of the page, without blocking reading; "Accept" and "Refuse" have the same visual weight.
-- **Back office**: web only, sidebar, tables for lists, single-column forms.
+- **Back office**: web only; navigation in the header on desktop and a bottom tab bar on small screens, lists as cards, single-column forms.
 
 ## Accessibility
 
@@ -237,6 +241,10 @@ Contrasts measured on the `#F4F4F4` background: main text 9.7:1, secondary text 
 - **Loading**: spinner in the button, skeleton for lists.
 - **Error**: text message and error colour, never colour alone.
 - **Success**: green toast with a short message.
+
+## Evening mode (back office)
+
+The back office offers a dark theme, enabled by the `.night` class on `<html>`. The choice is remembered (`localStorage`, key `ludmigo.admin.night`), otherwise the system preference applies. The Tailwind tokens (`@theme` in `admin/src/index.css`) change: background `#141C20`, surface `#1F2A2F`, text `#EEF2F3`, secondary text `#B4C0C5`, accent `#8FD3E3`. The API documentation page (`/api/docs`) follows the same setting.
 
 ## Graphic assets
 

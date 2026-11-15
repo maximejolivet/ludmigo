@@ -8,11 +8,11 @@
 
 ## Étape 1 : mise en place du projet
 
-- **Repo** : monorepo `api/`, `web/`, `mobile/`, `packages/`, déjà en place (README et Renovate).
+- **Repo** : monorepo `api/`, `web/`, `admin/`, `mobile/`, `packages/`, déjà en place (README et Renovate).
 - **Environnement** : Docker Compose pour MariaDB ou PostgreSQL, PHP 8.5, Node.js 24 LTS.
 - **Dépendances** : `composer install` dans `api/`, `npm install` à la racine (workspaces).
 - **Squelettes** : Symfony 7 et API Platform dans `api/`, Vite et React 19 dans `web/`, Expo dans `mobile/`, types partagés dans `packages/`.
-- **Outils qualité** : PHP-CS-Fixer, PHPStan, ESLint, Vitest, Jest et PHPUnit configurés et lançables.
+- **Outils qualité** : PHP-CS-Fixer, PHPStan, TypeScript (`tsc`), oxlint, Vitest, Jest et PHPUnit configurés et lançables.
 - **Déploiement** : hébergement de préproduction relié au dépôt : Vercel pour le web, OVH France pour l'API.
 
 **Points de contrôle** :
@@ -124,11 +124,11 @@ Hors V1 : collection personnelle (E6), gamification (E12), messagerie intégrée
 
 ## Step 1: project setup
 
-- **Repo**: `api/`, `web/`, `mobile/`, `packages/` monorepo, already in place (README and Renovate).
+- **Repo**: `api/`, `web/`, `admin/`, `mobile/`, `packages/` monorepo, already in place (README and Renovate).
 - **Environment**: Docker Compose for MariaDB or PostgreSQL, PHP 8.5, Node.js 24 LTS.
 - **Dependencies**: `composer install` in `api/`, `npm install` at the root (workspaces).
 - **Skeletons**: Symfony 7 and API Platform in `api/`, Vite and React 19 in `web/`, Expo in `mobile/`, shared types in `packages/`.
-- **Quality tools**: PHP-CS-Fixer, PHPStan, ESLint, Vitest, Jest and PHPUnit configured and runnable.
+- **Quality tools**: PHP-CS-Fixer, PHPStan, TypeScript (`tsc`), oxlint, Vitest, Jest and PHPUnit configured and runnable.
 - **Deployment**: staging hosting connected to the repository: Vercel for the web, OVH France for the API.
 
 **Checkpoints**:

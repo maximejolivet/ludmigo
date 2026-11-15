@@ -17,6 +17,7 @@
 
 - **Framework** : Symfony 7 sur PHP 8.5, API Platform pour l'exposition REST (JSON), Doctrine ORM.
 - **Base de données** : MariaDB 10 ou PostgreSQL 17, au choix, via `DATABASE_URL` ; en local via Docker Compose (MariaDB par défaut, PostgreSQL avec `make db-up DB=postgres`). Les migrations Doctrine sont relues pour les deux moteurs.
+- **API** : les listes sont paginées ; le client choisit `itemsPerPage`, plafonné à 50. Filtres : jeux par `name` (partiel) et `difficulty` (exact), triés par `name` ou `createdAt` ; utilisateurs par `exists[deletedAt]`.
 - **Hébergement de production** : OVH France (prévu par le business plan).
 - **Stockage de fichiers** (photos de jeux et de lieux) : stockage objet compatible S3 (ex. OVH Object Storage).
 
@@ -55,6 +56,8 @@
 - **Conservation** : suppression du compte sur demande, avec anonymisation des rencontres passées.
 - **Conformité** : RGPD (consentement, export et suppression des données).
 - **Transport** : HTTPS uniquement.
+- **Documentation de l'API** : `/api` et `/api/docs` sont réservés à `ROLE_ADMIN` par défaut (paramètre `app.docs_access`) ; publics seulement en dev et test. En production, l'interface Swagger UI est désactivée.
+- **Conteneurs** : les images de l'API (FrankenPHP) et du web (nginx-unprivileged) tournent sans root sur le port 8080 et sont épinglées par digest ; les clés JWT sont montées depuis le Secret `ludmigo-jwt` (jamais dans l'image) ; système de fichiers en lecture seule, NetworkPolicy et jeton de compte de service désactivé (`docker/`, `k8s/`).
 
 ## Pages légales et cookies
 
@@ -73,7 +76,7 @@
 ## Environnements et mise en production
 
 - **Domaines** : `ludmigo.fr` (site et public français), `ludmigo.com` (site international).
-- **Local** : Docker Compose pour MariaDB ou PostgreSQL, `npm run dev -w web`, `npm run start -w mobile`, `php bin/console` pour l'API.
+- **Local** : Docker Compose pour MariaDB ou PostgreSQL, `npm run dev -w web`, `npm run start -w mobile`, `php bin/console` pour l'API ; `make dev` lance la base, le proxy local http://ludmigo.test (Caddy : `/api` vers l'API, `/admin` vers le back office), l'API, le web et le back office.
 - **Préproduction** : Vercel pour le web, OVH France pour l'API.
 - **Production** : OVH France.
 - **CI/CD** : lint, tests et analyses sur chaque pull request vers `develop` (PHP-CS-Fixer, PHPStan, PHPUnit, Vitest, Jest, lint JS/TS). Renovate pour les mises à jour de dépendances (déjà configuré).
@@ -120,6 +123,7 @@
 
 - **Framework**: Symfony 7 on PHP 8.5, API Platform for the REST (JSON) exposure, Doctrine ORM.
 - **Database**: MariaDB 10 or PostgreSQL 17, either one, through `DATABASE_URL`; locally via Docker Compose (MariaDB by default, PostgreSQL with `make db-up DB=postgres`). Doctrine migrations are reviewed for both engines.
+- **API**: lists are paginated; the client chooses `itemsPerPage`, capped at 50. Filters: games by `name` (partial) and `difficulty` (exact), sorted by `name` or `createdAt`; users by `exists[deletedAt]`.
 - **Production hosting**: OVH France (planned by the business plan).
 - **File storage** (game and venue photos): S3-compatible object storage (e.g. OVH Object Storage).
 
@@ -158,6 +162,8 @@
 - **Retention**: account deletion on request, with anonymisation of past meetups.
 - **Compliance**: GDPR (consent, data export and deletion).
 - **Transport**: HTTPS only.
+- **API documentation**: `/api` and `/api/docs` are reserved for `ROLE_ADMIN` by default (`app.docs_access` parameter); public only in dev and test. In production the Swagger UI is disabled.
+- **Containers**: the API (FrankenPHP) and web (nginx-unprivileged) images run without root on port 8080 and are pinned by digest; the JWT keys are mounted from the `ludmigo-jwt` Secret (never in the image); read-only filesystem, NetworkPolicy and service account token disabled (`docker/`, `k8s/`).
 
 ## Legal pages and cookies
 
@@ -176,7 +182,7 @@
 ## Environments and release
 
 - **Domains**: `ludmigo.fr` (French site and public), `ludmigo.com` (international site).
-- **Local**: Docker Compose for MariaDB or PostgreSQL, `npm run dev -w web`, `npm run start -w mobile`, `php bin/console` for the API.
+- **Local**: Docker Compose for MariaDB or PostgreSQL, `npm run dev -w web`, `npm run start -w mobile`, `php bin/console` for the API; `make dev` starts the database, the local proxy http://ludmigo.test (Caddy: `/api` to the API, `/admin` to the back office), the API, the web app and the back office.
 - **Staging**: Vercel for the web, OVH France for the API.
 - **Production**: OVH France.
 - **CI/CD**: lint, tests and analyses on every pull request to `develop` (PHP-CS-Fixer, PHPStan, PHPUnit, Vitest, Jest, JS/TS lint). Renovate for dependency updates (already configured).

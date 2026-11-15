@@ -9,7 +9,7 @@
                           └── services externes (email, push, géocodage)
 ```
 
-Ludmigo est un monorepo composé de quatre parties :
+Ludmigo est un monorepo composé de cinq parties :
 
 | Dossier | Rôle | Stack |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ Ludmigo est un monorepo composé de quatre parties :
 
 ## Structure du backend (`api/`)
 
-Couches prévues. C'est un plan pour la première implémentation, pas encore du code :
+Couches. Les ressources `Game` et `User`, l'authentification JWT et la commande `app:user:promote` existent ; les voters et les services métier restent à écrire :
 
 - **Ressources (API Platform)** : une ressource par entité exposée aux clients, avec ses opérations (lecture, création, rejoindre, quitter).
 - **Entités (Doctrine)** : les tables décrites dans le schéma du backend.
@@ -78,7 +78,7 @@ Entités : `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `Meetu
 
 ## Contrôles qualité
 
-Chaque pull request vers `develop` lance les contrôles des parties touchées : PHP-CS-Fixer, PHPStan, PHPUnit, ESLint, Vitest, Jest. Renovate maintient les dépendances à jour.
+Chaque pull request vers `develop` lance les contrôles des parties touchées : PHP-CS-Fixer, PHPStan, PHPUnit, TypeScript (`tsc`), oxlint (back office), Vitest, Jest. Renovate maintient les dépendances à jour.
 
 ## Décisions prises
 
@@ -109,7 +109,7 @@ Chaque pull request vers `develop` lance les contrôles des parties touchées : 
                           └── external services (email, push, geocoding)
 ```
 
-Ludmigo is a monorepo made of four parts:
+Ludmigo is a monorepo made of five parts:
 
 | Folder | Role | Stack |
 | --- | --- | --- |
@@ -123,7 +123,7 @@ Ludmigo is a monorepo made of four parts:
 
 ## Backend structure (`api/`)
 
-Planned layers. This is a plan for the first implementation, not code yet:
+Layers. The `Game` and `User` resources, JWT authentication and the `app:user:promote` command exist; voters and business services are still to be written:
 
 - **Resources (API Platform)**: one resource per entity exposed to clients, with its operations (read, create, join, leave).
 - **Entities (Doctrine)**: the tables described in the backend schema.
@@ -178,7 +178,7 @@ Entities: `User`, `Game`, `Category`, `GameCategory`, `Place`, `Meetup`, `Meetup
 
 ## Quality checks
 
-Every pull request to `develop` runs the checks for the parts it touches: PHP-CS-Fixer, PHPStan, PHPUnit, ESLint, Vitest, Jest. Renovate keeps dependencies up to date.
+Every pull request to `develop` runs the checks for the parts it touches: PHP-CS-Fixer, PHPStan, PHPUnit, TypeScript (`tsc`), oxlint (back office), Vitest, Jest. Renovate keeps dependencies up to date.
 
 ## Decisions made
 
