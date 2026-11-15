@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 #[ORM\Table(name: 'game')]
 #[ORM\Index(columns: ['name'], name: 'idx_game_name')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_game_created_at')]
 class Game
 {
     #[ORM\Id]
@@ -49,22 +50,26 @@ class Game
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['game:read', 'game:write'])]
+    #[Assert\Length(max: 5000)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Groups(['game:read', 'game:write'])]
     #[Assert\Positive]
+    #[Assert\LessThanOrEqual(32767)]
     private int $minPlayers = 1;
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Groups(['game:read', 'game:write'])]
     #[Assert\Positive]
     #[Assert\GreaterThanOrEqual(propertyPath: 'minPlayers')]
+    #[Assert\LessThanOrEqual(32767)]
     private int $maxPlayers = 1;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Groups(['game:read', 'game:write'])]
     #[Assert\Positive]
+    #[Assert\LessThanOrEqual(32767)]
     private ?int $durationMinutes = null;
 
     #[ORM\Column(length: 20, enumType: GameDifficulty::class)]
@@ -73,6 +78,7 @@ class Game
 
     #[ORM\Column(nullable: true)]
     #[Groups(['game:read', 'game:write'])]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(requireTld: false)]
     private ?string $imageUrl = null;
 

@@ -1,13 +1,17 @@
 # Configuration par défaut : chaque classe de src/ est un service
 # Default service configuration: every class in src/ is a service
 parameters:
-    # Accès à la doc de l'API (/api, /api/docs) : public en dev et test, ROLE_ADMIN en production
-    # Access to the API docs (/api, /api/docs): public in dev and test, ROLE_ADMIN in production
-    app.docs_access: PUBLIC_ACCESS
+    # Accès à la doc de l'API (/api, /api/docs) : ROLE_ADMIN par défaut (production, staging), public seulement en dev et test
+    # Access to the API docs (/api, /api/docs): ROLE_ADMIN by default (production, staging), public only in dev and test
+    app.docs_access: ROLE_ADMIN
 
-when@prod:
+when@dev:
     parameters:
-        app.docs_access: ROLE_ADMIN
+        app.docs_access: PUBLIC_ACCESS
+
+when@test:
+    parameters:
+        app.docs_access: PUBLIC_ACCESS
 
 services:
     _defaults:

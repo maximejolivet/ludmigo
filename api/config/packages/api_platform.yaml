@@ -14,6 +14,10 @@ api_platform:
         html: ['text/html']
     defaults:
         stateless: true
+        # Le back office choisit la taille de page (itemsPerPage), bornée à 50
+        # The back office chooses the page size (itemsPerPage), capped at 50
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 50
     # Bouton « Authorize » de Swagger UI : coller « Bearer <jeton> » (jeton obtenu via /api/auth/login)
     # Swagger UI "Authorize" button: paste "Bearer <token>" (token from /api/auth/login)
     swagger:
