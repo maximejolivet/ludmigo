@@ -1,0 +1,233 @@
+/* Documentation de l'API (Swagger UI) aux couleurs de Ludmigo : mêmes jetons que le back office (docs/07_UI_UX_DESIGN.md) */
+/* API documentation (Swagger UI) in Ludmigo's colours: same tokens as the back office (docs/07_UI_UX_DESIGN.md) */
+
+@font-face { font-family: 'Fira Sans'; font-weight: 400; font-style: normal; font-display: swap; src: url('fonts/fira-sans-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Fira Sans'; font-weight: 500; font-style: normal; font-display: swap; src: url('fonts/fira-sans-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Fira Sans'; font-weight: 700; font-style: normal; font-display: swap; src: url('fonts/fira-sans-latin-700-normal.woff2') format('woff2'); }
+
+:root {
+  --lm-ui-font: 'Fira Sans', system-ui, sans-serif;
+  --lm-canvas: #f4f4f4;
+  --lm-surface: #ffffff;
+  --lm-fg: #3e3e3e;
+  --lm-fg-soft: #5a5a5a;
+  --lm-edge: #3e3e3e;
+  --lm-line: #e4e4e4;
+  --lm-accent: #155767;
+  --lm-petrol-tint: #d9eaee;
+  --lm-primary: #f8a00d;
+  --lm-link: #006ca8;
+  --lm-success: #007a52;
+  --lm-warning: #8a4b00;
+  --lm-danger: #d70605;
+  --lm-danger-text: #d70605;
+}
+
+html.night {
+  --lm-canvas: #141c20;
+  --lm-surface: #1f2a2f;
+  --lm-fg: #eef2f3;
+  --lm-fg-soft: #b4c0c5;
+  --lm-edge: #eef2f3;
+  --lm-line: #35444b;
+  --lm-accent: #8fd3e3;
+  --lm-petrol-tint: #20414b;
+  --lm-danger-text: #ff8f8a;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0 !important;
+  background: var(--lm-canvas);
+  color: var(--lm-fg);
+  font-family: var(--lm-ui-font);
+}
+
+:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 2px; }
+
+/* En-tête : logo, titre, liens et mode soirée */
+.ludmigo-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 24px;
+  background: var(--lm-surface);
+  border-bottom: 1px solid var(--lm-line);
+}
+.ludmigo-logo { display: flex; align-items: center; min-height: 48px; }
+.ludmigo-logo img { height: 32px; width: auto; transform: translateY(2px); }
+.logo-night { display: none; }
+html.night .logo-light { display: none; }
+html.night .logo-night { display: block; }
+.ludmigo-title { margin: 0 auto 0 8px; font-size: 18px; font-weight: 700; color: var(--lm-fg); }
+.ludmigo-link { min-height: 44px; display: inline-flex; align-items: center; padding: 0 12px; color: var(--lm-fg-soft); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+.ludmigo-night { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: transparent; color: var(--lm-fg); cursor: pointer; }
+.icon-sun { display: none; }
+html.night .icon-moon { display: none; }
+html.night .icon-sun { display: block; }
+
+/* Sélecteurs préfixés par « #swagger-ui.api-platform » comme la feuille d'API Platform (sélecteur par identifiant) : même spécificité, et cette feuille vient après */
+/* Selectors prefixed with "#swagger-ui.api-platform" like the API Platform sheet (ID selector): same specificity, and this sheet comes after */
+/* Bouton de bascule sombre de Swagger UI : remplacé par le mode soirée de l'en-tête */
+html body #swagger-ui.api-platform .swagger-ui .dark-mode-toggle { display: none; }
+/* Swagger UI */
+html body #swagger-ui.api-platform .swagger-ui,
+html body #swagger-ui.api-platform .swagger-ui .opblock-tag,
+html body #swagger-ui.api-platform .swagger-ui .info .title,
+html body #swagger-ui.api-platform .swagger-ui .info p,
+html body #swagger-ui.api-platform .swagger-ui .info li,
+html body #swagger-ui.api-platform .swagger-ui .info a,
+html body #swagger-ui.api-platform .swagger-ui label,
+html body #swagger-ui.api-platform .swagger-ui table thead tr th,
+html body #swagger-ui.api-platform .swagger-ui table thead tr td,
+html body #swagger-ui.api-platform .swagger-ui .parameter__name,
+html body #swagger-ui.api-platform .swagger-ui .parameter__type,
+html body #swagger-ui.api-platform .swagger-ui .response-col_status,
+html body #swagger-ui.api-platform .swagger-ui .response-col_description,
+html body #swagger-ui.api-platform .swagger-ui .tab li,
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-section-header h4,
+html body #swagger-ui.api-platform .swagger-ui .opblock-description-wrapper p,
+html body #swagger-ui.api-platform .swagger-ui .opblock-external-docs-wrapper p,
+html body #swagger-ui.api-platform .swagger-ui .model-title,
+html body #swagger-ui.api-platform .swagger-ui .model,
+html body #swagger-ui.api-platform .swagger-ui section.models h4,
+html body #swagger-ui.api-platform .swagger-ui .responses-inner h4,
+html body #swagger-ui.api-platform .swagger-ui .responses-inner h5,
+html body #swagger-ui.api-platform .swagger-ui .btn,
+html body #swagger-ui.api-platform .swagger-ui select,
+html body #swagger-ui.api-platform .swagger-ui .scheme-container .schemes > label,
+html body #swagger-ui.api-platform .swagger-ui .servers > label,
+html body #swagger-ui.api-platform .swagger-ui .dialog-ux .modal-ux-header h3,
+html body #swagger-ui.api-platform .swagger-ui .dialog-ux .modal-ux-content h4,
+html body #swagger-ui.api-platform .swagger-ui .dialog-ux .modal-ux-content p,
+html body #swagger-ui.api-platform .swagger-ui .prop-type,
+html body #swagger-ui.api-platform .swagger-ui .prop-format {
+    font-family: var(--lm-ui-font);
+    color: var(--lm-fg);
+  }
+html body #swagger-ui.api-platform .swagger-ui .info .title small { background: var(--lm-accent); }
+html body #swagger-ui.api-platform .swagger-ui .info .title small pre { color: var(--lm-surface); }
+html body #swagger-ui.api-platform .swagger-ui .info a { color: var(--lm-accent); }
+html body #swagger-ui.api-platform .swagger-ui .wrapper { max-width: 1100px; }
+html body #swagger-ui.api-platform .swagger-ui .scheme-container { background: var(--lm-surface); box-shadow: none; border-bottom: 1px solid var(--lm-line); }
+/* Opérations : cartes à contour, couleur par méthode HTTP */
+html body #swagger-ui.api-platform .swagger-ui .opblock { background: var(--lm-surface); border: 2px solid var(--lm-edge) !important; border-radius: 16px; box-shadow: none; overflow: hidden; margin: 0 0 12px; }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary { border-bottom: 0; }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary-method { font-family: var(--lm-ui-font); font-weight: 700; border-radius: 8px; min-width: 76px; }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary-path,
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary-path__deprecated,
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary-description { font-family: var(--lm-ui-font); color: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-section-header { background: var(--lm-petrol-tint); box-shadow: none; }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-section-header h4 { color: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-get .opblock-summary-method { background: var(--lm-link); }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-post .opblock-summary-method { background: var(--lm-success); }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-put .opblock-summary-method { background: var(--lm-warning); }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-patch .opblock-summary-method { background: #155767; }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-delete .opblock-summary-method { background: var(--lm-danger); }
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-get,
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-post,
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-put,
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-patch,
+html body #swagger-ui.api-platform .swagger-ui .opblock.opblock-delete { background: var(--lm-surface); border-color: var(--lm-edge); }
+html body #swagger-ui.api-platform .swagger-ui .opblock-tag { border-bottom: 1px solid var(--lm-line); font-weight: 700; }
+html body #swagger-ui.api-platform .swagger-ui .opblock-tag:hover { background: transparent; }
+/* Boutons « jetons » : contour, ombre dure, ils s'enfoncent au clic */
+html body #swagger-ui.api-platform .swagger-ui .btn {
+    min-height: 40px;
+    border: 2px solid var(--lm-edge);
+    border-radius: 16px;
+    background: var(--lm-surface);
+    color: var(--lm-fg);
+    font-weight: 700;
+    box-shadow: 0 3px 0 var(--lm-edge);
+    transition: transform 100ms, box-shadow 100ms;
+  }
+html body #swagger-ui.api-platform .swagger-ui .btn:hover { box-shadow: 0 3px 0 var(--lm-edge); }
+html body #swagger-ui.api-platform .swagger-ui .btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--lm-edge); }
+html body #swagger-ui.api-platform .swagger-ui .btn.execute { background: var(--lm-primary); border-color: var(--lm-edge); color: #3e3e3e; }
+html body #swagger-ui.api-platform .swagger-ui .btn.authorize { background: var(--lm-surface); color: var(--lm-fg); border-color: var(--lm-edge); }
+html body #swagger-ui.api-platform .swagger-ui .btn.authorize svg { fill: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui .btn.cancel { color: var(--lm-danger-text); border-color: var(--lm-danger-text); box-shadow: 0 3px 0 var(--lm-danger-text); }
+html body #swagger-ui.api-platform .swagger-ui .btn.try-out__btn { border-color: var(--lm-edge); }
+html body #swagger-ui.api-platform .swagger-ui .btn.btn-clear { border-color: var(--lm-edge); }
+@media (prefers-reduced-motion: reduce) {
+  html body #swagger-ui.api-platform .swagger-ui .btn { transition: none; }
+}
+/* Champs */
+html body #swagger-ui.api-platform .swagger-ui input[type=text],
+html body #swagger-ui.api-platform .swagger-ui input[type=password],
+html body #swagger-ui.api-platform .swagger-ui input[type=search],
+html body #swagger-ui.api-platform .swagger-ui input[type=email],
+html body #swagger-ui.api-platform .swagger-ui textarea,
+html body #swagger-ui.api-platform .swagger-ui select {
+    background: var(--lm-surface);
+    color: var(--lm-fg);
+    border: 2px solid var(--lm-fg-soft);
+    border-radius: 12px;
+    font-family: var(--lm-ui-font);
+    min-height: 40px;
+  }
+html body #swagger-ui.api-platform .swagger-ui .select-wrapper,
+html body #swagger-ui.api-platform .swagger-ui .servers > label select { border-radius: 12px; }
+html body #swagger-ui.api-platform .swagger-ui .parameters-col_description input[type=text] { width: 100%; max-width: 340px; }
+html body #swagger-ui.api-platform .swagger-ui table tbody tr td { color: var(--lm-fg); border-bottom: 1px solid var(--lm-line); }
+html body #swagger-ui.api-platform .swagger-ui .tab li button.tablinks { color: var(--lm-fg); font-family: var(--lm-ui-font); }
+html body #swagger-ui.api-platform .swagger-ui .response-control-media-type__accept-message { color: var(--lm-success); }
+/* Schémas (modèles) */
+html body #swagger-ui.api-platform .swagger-ui section.models { border: 2px solid var(--lm-edge); border-radius: 16px; background: var(--lm-surface); }
+html body #swagger-ui.api-platform .swagger-ui section.models.is-open h4 { border-bottom: 1px solid var(--lm-line); }
+html body #swagger-ui.api-platform .swagger-ui section.models .model-container { background: var(--lm-canvas); border-radius: 12px; }
+html body #swagger-ui.api-platform .swagger-ui .model-box { background: transparent; }
+/* Fenêtre d'autorisation */
+html body #swagger-ui.api-platform .swagger-ui .dialog-ux .modal-ux { background: var(--lm-surface); border: 2px solid var(--lm-edge); border-radius: 16px; box-shadow: none; }
+html body #swagger-ui.api-platform .swagger-ui .dialog-ux .modal-ux-header { border-bottom: 1px solid var(--lm-line); }
+
+/* Bandeau d'information, descriptions et icônes lisibles dans les deux modes */
+html body #swagger-ui.api-platform .information-container.wrapper { background-color: var(--lm-surface); border-bottom: 1px solid var(--lm-line); max-width: 100%; }
+html body #swagger-ui.api-platform .swagger-ui .info .title { color: var(--lm-accent); }
+html body #swagger-ui.api-platform .swagger-ui .opblock-tag small, html body #swagger-ui.api-platform .swagger-ui .opblock-tag-section small { color: var(--lm-fg-soft); font-family: var(--lm-ui-font); }
+html body #swagger-ui.api-platform .swagger-ui .opblock-summary-operation-id, html body #swagger-ui.api-platform .swagger-ui .opblock-summary-path-description-wrapper { color: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui .authorization__btn svg, html body #swagger-ui.api-platform .swagger-ui .expand-operation svg, html body #swagger-ui.api-platform .swagger-ui .opblock-control-arrow svg,
+html body #swagger-ui.api-platform .swagger-ui .opblock-tag svg, html body #swagger-ui.api-platform .swagger-ui .model-toggle::after { fill: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary-method { border-radius: 8px; margin: 8px; padding: 6px 0; }
+html body #swagger-ui.api-platform .swagger-ui .opblock .opblock-summary { padding: 0 8px 0 0; }
+
+/* Schémas (modèles) : fonds transparents, texte lisible dans les deux modes */
+html body #swagger-ui.api-platform .swagger-ui section.models h4, html body #swagger-ui.api-platform .swagger-ui section.models h4 button, html body #swagger-ui.api-platform .swagger-ui section.models .models-control { color: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui section.models .model-container { background: transparent; border: 1px solid var(--lm-line); border-radius: 12px; margin: 8px 20px; }
+html body #swagger-ui.api-platform .swagger-ui section.models .model-container:hover { background: transparent; border-color: var(--lm-fg-soft); }
+html body #swagger-ui.api-platform .swagger-ui section.models button, html body #swagger-ui.api-platform .swagger-ui section.models button *, html body #swagger-ui.api-platform .swagger-ui section.models .model-box, html body #swagger-ui.api-platform .swagger-ui section.models .model-title, html body #swagger-ui.api-platform .swagger-ui section.models .model-title__text { background: transparent; }
+html body #swagger-ui.api-platform .swagger-ui section.models *:not(svg):not(path):not(.prop-type):not(.prop-format):not(.star):not(.renderedMarkdown a) { color: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui section.models .model-box-control span:not(.model-title) { color: var(--lm-fg-soft); }
+html body #swagger-ui.api-platform .swagger-ui section.models .prop-type, html body #swagger-ui.api-platform .swagger-ui section.models .prop-format { color: var(--lm-accent); font-weight: 700; }
+html body #swagger-ui.api-platform .swagger-ui section.models .star { color: var(--lm-danger-text); }
+html body #swagger-ui.api-platform .swagger-ui section.models svg, html body #swagger-ui.api-platform .swagger-ui section.models svg path { fill: var(--lm-fg); }
+html body #swagger-ui.api-platform .swagger-ui section.models table.model tbody tr td { border-bottom: 1px solid var(--lm-line); }
+html body #swagger-ui.api-platform .swagger-ui section.models .model-box-control:focus-visible, html body #swagger-ui.api-platform .swagger-ui section.models .models-control:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 2px; }
+
+/* Schémas rendus en JSON Schema 2020-12 (Swagger UI 5) : cartes à contour, fonds transparents */
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 { background-color: transparent; border: 1px solid var(--lm-line); border-radius: 12px; margin: 0 20px 12px; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12:hover { border-color: var(--lm-fg-soft); }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 button, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-accordion, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-expand-deep-button { background: transparent; font-family: var(--lm-ui-font); }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-expand-deep-button { color: var(--lm-fg-soft) !important; font-size: 12px; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12__title, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-keyword__name--primary, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-json-viewer__name--primary { font-family: var(--lm-ui-font); }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12__attribute--primary { color: var(--lm-accent) !important; font-weight: 700; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12__attribute--secondary, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-keyword__name--secondary, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-keyword__value--secondary { color: var(--lm-fg-soft) !important; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12__attribute--warning, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-json-viewer__value--warning { color: var(--lm-danger-text) !important; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-keyword--description, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12-keyword--description p { color: var(--lm-fg-soft) !important; }
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 code, html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 pre { background: var(--lm-canvas); color: var(--lm-fg); border-radius: 8px; }
+
+html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 [class*="__constraint"], html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 [class*="__attribute--constraint"], html body #swagger-ui.api-platform .swagger-ui section.models .json-schema-2020-12 [class*="__attribute--format"] { background: var(--lm-petrol-tint) !important; color: var(--lm-fg) !important; border: 1px solid var(--lm-accent); border-radius: 8px; font-weight: 700; }
+
+/* Bandeau du titre de l'API et de ses versions (0.1.0, OAS 3.2) : masqué, l'en-tête porte déjà le titre */
+/* API title and version band (0.1.0, OAS 3.2): hidden, the header already carries the title */
+html body #swagger-ui.api-platform .information-container.wrapper { display: none; }
+
+/* Pied « Available formats / Other API docs » : masqué / Footer "Available formats / Other API docs": hidden */
+#formats { display: none; }
+
+@media (max-width: 640px) {
+  .ludmigo-header { flex-wrap: wrap; padding: 8px 12px; }
+  .ludmigo-title { order: 3; width: 100%; margin: 0 0 4px; }
+}
