@@ -22,6 +22,9 @@ spec:
       labels:
         app: api
     spec:
+      # Aucun appel à l'API Kubernetes : pas de jeton de compte de service
+      # No call to the Kubernetes API: no service account token
+      automountServiceAccountToken: false
       # Sans root (www-data, uid 82 dans l'image) ; fsGroup donne accès en lecture aux clés JWT
       # Non-root (www-data, uid 82 in the image); fsGroup grants read access to the JWT keys
       securityContext:

@@ -17,6 +17,9 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      # Aucun appel à l'API Kubernetes : pas de jeton de compte de service
+      # No call to the Kubernetes API: no service account token
+      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 82
@@ -33,6 +36,13 @@ spec:
             capabilities:
               drop: ["ALL"]
           command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--env=prod"]
-          envFrom:
-            - secretRef:
-                name: ludmigo-api
+          # Seulement la connexion à la base : pas APP_SECRET ni JWT_PASSPHRASE
+          # Only the database connection: no APP_SECRET or JWT_PASSPHRASE
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ludmigo-api
+                  key: DATABASE_URL
+            - name: APP_SECRET
+              value: migration-only

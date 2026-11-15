@@ -18,6 +18,9 @@ spec:
       labels:
         app: web
     spec:
+      # Aucun appel à l'API Kubernetes : pas de jeton de compte de service
+      # No call to the Kubernetes API: no service account token
+      automountServiceAccountToken: false
       # Sans root (utilisateur nginx, uid 101 dans l'image nginx-unprivileged)
       # Non-root (nginx user, uid 101 in the nginx-unprivileged image)
       securityContext:
