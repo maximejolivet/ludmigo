@@ -35,8 +35,11 @@ RUN APP_SECRET=build-only php bin/console cache:warmup --env=prod \
 
 # Exécution sans root : FrankenPHP (Caddy) écrit dans /data/caddy et /config/caddy, le port 8080 n'est pas privilégié
 # Run without root: FrankenPHP (Caddy) writes to /data/caddy and /config/caddy, port 8080 is unprivileged
+# On retire aussi la capacité de fichier du binaire : sans elle, il démarre même avec « drop: ALL » (k8s)
+# The file capability is also removed from the binary: without it, it starts even with "drop: ALL" (k8s)
 RUN mkdir -p /data/caddy /config/caddy \
-    && chown -R www-data:www-data /data/caddy /config/caddy
+    && chown -R www-data:www-data /data/caddy /config/caddy \
+    && setcap -r /usr/local/bin/frankenphp
 USER www-data
 
 EXPOSE 8080
