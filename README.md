@@ -105,7 +105,7 @@ Principes :
 Démarrage rapide avec `make` : `make setup` (première fois : dépendances, `/etc/hosts`, base de données, migrations), puis `make dev` (base, proxy local, API, web et back office). `make urls` affiche les adresses et `make help` liste toutes les commandes.
 
 - Web : http://ludmigo.test
-- API : http://ludmigo.test/api (documentation : `/api/docs`, publique en dev, réservée à `ROLE_ADMIN` sinon)
+- API : http://ludmigo.test/api (documentation : `/api/docs`, publique en dev, interdite en production)
 - Back office : http://ludmigo.test/admin (accès direct : http://localhost:5174/admin/, compte `ROLE_ADMIN` requis, voir `app:user:promote` plus bas)
 
 Étapes détaillées :
@@ -286,7 +286,7 @@ Principles:
 Quick start with `make`: `make setup` (first time: dependencies, `/etc/hosts`, database, migrations), then `make dev` (database, local proxy, API, web app and back office). `make urls` shows the addresses and `make help` lists every command.
 
 - Web: http://ludmigo.test
-- API: http://ludmigo.test/api (documentation: `/api/docs`, public in dev, reserved for `ROLE_ADMIN` otherwise)
+- API: http://ludmigo.test/api (documentation: `/api/docs`, public in dev, forbidden in production)
 - Back office: http://ludmigo.test/admin (direct access: http://localhost:5174/admin/, `ROLE_ADMIN` account required, see `app:user:promote` below)
 
 Step by step:

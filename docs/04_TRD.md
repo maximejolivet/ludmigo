@@ -56,7 +56,7 @@
 - **Conservation** : suppression du compte sur demande, avec anonymisation des rencontres passées.
 - **Conformité** : RGPD (consentement, export et suppression des données).
 - **Transport** : HTTPS uniquement.
-- **Documentation de l'API** : `/api` et `/api/docs` sont réservés à `ROLE_ADMIN` par défaut (paramètre `app.docs_access`) ; publics seulement en dev et test. En production, l'interface Swagger UI est désactivée.
+- **Documentation de l'API** : la doc lisible par un humain (`/api/docs`, `.html`, `.jsonopenapi` : page Swagger et OpenAPI) est interdite en production, même aux administrateurs (paramètre `app.docs_ui_access`). Le point d'entrée `/api`, `/api/docs.jsonld` et les contextes Hydra, dont le back office a besoin, sont réservés à `ROLE_ADMIN` (paramètre `app.docs_access`). Tout est public seulement en dev et test.
 - **Conteneurs** : les images de l'API (FrankenPHP) et du web (nginx-unprivileged) tournent sans root sur le port 8080 et sont épinglées par digest ; les clés JWT sont montées depuis le Secret `ludmigo-jwt` (jamais dans l'image) ; système de fichiers en lecture seule, NetworkPolicy et jeton de compte de service désactivé (`docker/`, `k8s/`).
 
 ## Pages légales et cookies
@@ -162,7 +162,7 @@
 - **Retention**: account deletion on request, with anonymisation of past meetups.
 - **Compliance**: GDPR (consent, data export and deletion).
 - **Transport**: HTTPS only.
-- **API documentation**: `/api` and `/api/docs` are reserved for `ROLE_ADMIN` by default (`app.docs_access` parameter); public only in dev and test. In production the Swagger UI is disabled.
+- **API documentation**: the human-readable docs (`/api/docs`, `.html`, `.jsonopenapi`: Swagger page and OpenAPI) are forbidden in production, even to administrators (`app.docs_ui_access` parameter). The `/api` entrypoint, `/api/docs.jsonld` and the Hydra contexts, which the back office needs, are reserved for `ROLE_ADMIN` (`app.docs_access` parameter). Everything is public only in dev and test.
 - **Containers**: the API (FrankenPHP) and web (nginx-unprivileged) images run without root on port 8080 and are pinned by digest; the JWT keys are mounted from the `ludmigo-jwt` Secret (never in the image); read-only filesystem, NetworkPolicy and service account token disabled (`docker/`, `k8s/`).
 
 ## Legal pages and cookies
