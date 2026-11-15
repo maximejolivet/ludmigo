@@ -17,11 +17,21 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 82
+        runAsGroup: 82
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: migrate
           # Même tag que le Deployment "api" (api.yaml)
           # Same tag as the "api" Deployment (api.yaml)
           image: ghcr.io/ORG/ludmigo-api:0.1.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           command: ["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--env=prod"]
           envFrom:
             - secretRef:

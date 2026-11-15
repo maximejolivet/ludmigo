@@ -1,7 +1,9 @@
 # Backend Symfony (FrankenPHP).
 # Symfony backend (FrankenPHP).
-# Les secrets viennent du Secret "ludmigo-api" : APP_SECRET et DATABASE_URL.
-# Secrets come from the "ludmigo-api" Secret: APP_SECRET and DATABASE_URL.
+# Les secrets viennent du Secret "ludmigo-api" : APP_SECRET, DATABASE_URL et JWT_PASSPHRASE.
+# Les clés JWT viennent du Secret "ludmigo-jwt", monté en lecture seule (jamais dans l'image).
+# Secrets come from the "ludmigo-api" Secret: APP_SECRET, DATABASE_URL and JWT_PASSPHRASE.
+# The JWT keys come from the "ludmigo-jwt" Secret, mounted read-only (never in the image).
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,6 +22,15 @@ spec:
       labels:
         app: api
     spec:
+      # Sans root (www-data, uid 82 dans l'image) ; fsGroup donne accès en lecture aux clés JWT
+      # Non-root (www-data, uid 82 in the image); fsGroup grants read access to the JWT keys
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 82
+        runAsGroup: 82
+        fsGroup: 82
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: api
           # Remplacer par l'image publiée par la CI, avec un tag de version
@@ -29,9 +40,22 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           envFrom:
             - secretRef:
                 name: ludmigo-api
+          env:
+            - name: JWT_SECRET_KEY
+              value: /app/config/jwt/private.pem
+            - name: JWT_PUBLIC_KEY
+              value: /app/config/jwt/public.pem
+          volumeMounts:
+            - name: jwt-keys
+              mountPath: /app/config/jwt
+              readOnly: true
           readinessProbe:
             tcpSocket:
               port: http
@@ -48,6 +72,11 @@ spec:
               memory: 128Mi
             limits:
               memory: 512Mi
+      volumes:
+        - name: jwt-keys
+          secret:
+            secretName: ludmigo-jwt
+            defaultMode: 0440
 ---
 apiVersion: v1
 kind: Service

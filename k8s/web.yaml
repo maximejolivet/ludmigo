@@ -18,11 +18,22 @@ spec:
       labels:
         app: web
     spec:
+      # Sans root (utilisateur nginx, uid 101 dans l'image nginx-unprivileged)
+      # Non-root (nginx user, uid 101 in the nginx-unprivileged image)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: web
           # Remplacer par l'image publiée par la CI, avec un tag de version
           # Replace with the image published by CI, with a version tag
           image: ghcr.io/ORG/ludmigo-web:0.1.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           ports:
             - name: http
               containerPort: 8080
