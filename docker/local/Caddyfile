@@ -11,7 +11,7 @@
 http://ludmigo.test {
 	# /bundles/* : CSS et JS de Swagger UI (/api/docs), servis par l'API
 	# /bundles/*: Swagger UI CSS and JS (/api/docs), served by the API
-	@api path /api/* /bundles/*
+	@api path /api /api/* /bundles/*
 	handle @api {
 		reverse_proxy host.docker.internal:8000
 	}
