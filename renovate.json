@@ -3,7 +3,8 @@
   "extends": [
     "config:recommended",
     ":semanticCommits",
-    ":dependencyDashboard"
+    ":dependencyDashboard",
+    "docker:pinDigests"
   ],
   "timezone": "Europe/Paris",
   "schedule": ["before 6am on monday"],

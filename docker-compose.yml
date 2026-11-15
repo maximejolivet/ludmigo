@@ -4,7 +4,7 @@
 # The API, web and mobile apps run on the host machine (see the Makefile).
 services:
   db:
-    image: mariadb:10.11
+    image: mariadb:10.11@sha256:7d829180b5b2a9ba74f6242876ab401a0d7dd338a807e522ef92bc9698760f20
     container_name: ludmigo-db
     restart: unless-stopped
     environment:
@@ -27,7 +27,7 @@ services:
   # PostgreSQL, au choix à la place de MariaDB : `make db-up DB=postgres`
   # PostgreSQL, as an alternative to MariaDB: `make db-up DB=postgres`
   postgres:
-    image: postgres:17-alpine
+    image: postgres:17-alpine@sha256:a77aa70e641402a21411b92b721c58d10f23b50ae5fdd2333efd22d166e1e5f7
     container_name: ludmigo-postgres
     profiles: ["postgres"]
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
       retries: 20
 
   proxy:
-    image: caddy:2-alpine
+    image: caddy:2-alpine@sha256:003a97808e781aa9f7e75cc2f43d34d461099031faf5e20faefb9f61126836f0
     container_name: ludmigo-proxy
     restart: unless-stopped
     ports:

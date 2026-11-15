@@ -4,7 +4,7 @@
 
 # 1. Dépendances PHP de production
 # 1. Production PHP dependencies
-FROM composer:2 AS vendor
+FROM composer:2@sha256:ca11f643d7791ebdd90a34fc20caf11380d434007ae539a9ea75cd9212e13dca AS vendor
 WORKDIR /app
 COPY api/ ./
 # Les extensions intl et pdo_mysql sont installées dans l'étage runtime : on les ignore ici
@@ -14,7 +14,7 @@ RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --opt
 
 # 2. Runtime : FrankenPHP (serveur HTTP et PHP dans un seul conteneur)
 # 2. Runtime: FrankenPHP (HTTP server and PHP in a single container)
-FROM dunglas/frankenphp:1-php8.5-alpine AS runtime
+FROM dunglas/frankenphp:1-php8.5-alpine@sha256:a7a2edb7ae75b5be7c366ca2ab4bc23f3940bb5ac9f89f5d0e4296815f75f6de AS runtime
 
 RUN install-php-extensions pdo_mysql pdo_pgsql intl zip opcache
 
