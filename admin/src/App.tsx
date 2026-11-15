@@ -13,6 +13,7 @@ import { i18nProvider } from './i18n';
 import { Dashboard } from './layout/Dashboard';
 import { Layout } from './layout/Layout';
 import { LoginPage } from './layout/LoginPage';
+import { Toasts } from './ui/Toasts';
 import { UserList, UserShow } from './users/UserPages';
 
 // L'API n'a pas de hub Mercure : pas de temps réel
@@ -54,6 +55,9 @@ export default function App() {
       layout={Layout}
       loginPage={LoginPage}
       dashboard={Dashboard}
+      // Remplace la notification Material UI : sinon elle prend les messages avant nos notifications
+      // Replaces the Material UI notification: otherwise it takes the messages before ours
+      notification={Toasts}
       darkTheme={null}
     >
       <Resource name="games" list={GameList} create={GameCreate} edit={GameEdit} recordRepresentation="name" />

@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { LinkBase, useGetIdentity, useLocation, useLogout, useResourceDefinitions, useTranslate } from 'react-admin';
 import logoDark from '../assets/logo-ludmigo-noir.svg';
 import logoLight from '../assets/logo-ludmigo-blanc.svg';
-import { Toasts } from '../ui/Toasts';
 import { Icon, type IconName } from './Icon';
 import { useNight } from './useNight';
 
@@ -134,12 +133,12 @@ export function Layout({ children }: { children: ReactNode }) {
 
       <main id="contenu" tabIndex={-1} className="mx-auto max-w-6xl p-4 pb-28 focus:outline-none lg:p-8">
         {/* react-admin place ici le titre de la page / react-admin puts the page title here */}
+        {/* oxlint-disable-next-line jsx-a11y/heading-has-content -- le contenu est injecté par le portail Title de react-admin */}
         <h1 id="react-admin-title" className="m-0 mb-6 text-2xl font-bold" />
         {children}
       </main>
 
       <BottomNav tabs={tabs} current={current} onLogout={() => logout()} />
-      <Toasts />
     </div>
   );
 }

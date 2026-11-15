@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNotificationContext, useTranslate, type NotificationPayload } from 'react-admin';
+import { useEffect } from 'react';
+import { useNotificationContext, useTranslate } from 'react-admin';
 
 // Message court (toast) en pastille ; remplace les notifications de Material UI.
 // Deux régions permanentes (statut et alerte) pour que les lecteurs d'écran annoncent le message ;
@@ -12,20 +12,21 @@ const REGION = 'pointer-events-none fixed inset-x-4 bottom-24 z-30 flex justify-
 export function Toasts() {
   const { notifications, takeNotification } = useNotificationContext();
   const translate = useTranslate();
-  const [current, setCurrent] = useState<NotificationPayload | null>(null);
+  // Le message courant est le premier de la file : on le retire pour passer au suivant
+  // The current message is the first in the queue: we remove it to move on to the next
+  const current = notifications[0] ?? null;
   const isError = current?.type === 'error';
-
-  useEffect(() => {
-    if (notifications.length > 0 && !current) {
-      setCurrent(takeNotification() ?? null);
-    }
-  }, [notifications, current, takeNotification]);
+  const dismiss = () => {
+    takeNotification();
+  };
 
   useEffect(() => {
     if (!current || isError) return;
-    const timer = window.setTimeout(() => setCurrent(null), current.notificationOptions?.autoHideDuration ?? 5000);
+    const timer = window.setTimeout(() => {
+      takeNotification();
+    }, current.notificationOptions?.autoHideDuration ?? 5000);
     return () => window.clearTimeout(timer);
-  }, [current, isError]);
+  }, [current, isError, takeNotification]);
 
   const text =
     typeof current?.message === 'string'
@@ -41,7 +42,7 @@ export function Toasts() {
         {current && isError && (
           <p className="pointer-events-auto m-0 flex items-center gap-3 rounded-full bg-danger px-4 py-2 text-sm font-medium text-white shadow-lg">
             <span>{text}</span>
-            <button type="button" onClick={() => setCurrent(null)} className="min-h-11 cursor-pointer rounded-full border-2 border-white bg-transparent px-3 font-ui text-sm font-bold text-white">
+            <button type="button" onClick={dismiss} className="min-h-11 cursor-pointer rounded-full border-2 border-white bg-transparent px-3 font-ui text-sm font-bold text-white">
               Fermer
             </button>
           </p>
