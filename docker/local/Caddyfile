@@ -9,9 +9,9 @@
 #   http://ludmigo.test/admin -> back office React (Vite, port 5174) / React back office (Vite, port 5174)
 
 http://ludmigo.test {
-	# /bundles/* : CSS et JS de Swagger UI (/api/docs), servis par l'API
-	# /bundles/*: Swagger UI CSS and JS (/api/docs), served by the API
-	@api path /api /api/* /bundles/*
+	# /bundles/* et /ui/* : CSS, JS et polices de Swagger UI (/api/docs), servis par l'API
+	# /bundles/* and /ui/*: Swagger UI CSS, JS and fonts (/api/docs), served by the API
+	@api path /api /api/* /bundles/* /ui/*
 	handle @api {
 		reverse_proxy host.docker.internal:8000
 	}
