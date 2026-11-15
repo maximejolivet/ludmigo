@@ -1,30 +1,15 @@
 import { useInput, useTranslate, type InputProps } from 'react-admin';
+import { decodeError } from './decodeError';
 
 // Champs de formulaire : libellé au-dessus, aide puis message d'erreur sous le champ (docs/07_UI_UX_DESIGN.md)
 // Form fields: label above, hint then error message under the field
 
-const control = 'mt-1 block min-h-11 w-full rounded-xl border-2 border-edge/50 bg-surface px-3 py-2 font-ui text-base text-fg aria-[invalid=true]:border-danger-text focus-visible:border-edge';
+const control = 'mt-1 block min-h-11 w-full rounded-xl border-2 border-fg-soft bg-surface px-3 py-2 font-ui text-base text-fg aria-[invalid=true]:border-danger-text focus-visible:border-edge';
 
 interface FieldProps extends Pick<InputProps, 'source' | 'validate'> {
   label: string;
   hint?: string;
   className?: string;
-}
-
-// react-admin encode les messages de validation sous la forme `@@react-admin@@{...}` (texte ou {message, args})
-// react-admin encodes validation messages as `@@react-admin@@{...}` (text or {message, args})
-const PREFIX = '@@react-admin@@';
-function decodeError(raw: unknown, translate: (key: string, options?: object) => string): string {
-  let value: unknown = raw;
-  if (typeof raw === 'string' && raw.startsWith(PREFIX)) {
-    try {
-      value = JSON.parse(raw.slice(PREFIX.length));
-    } catch {
-      value = raw.slice(PREFIX.length);
-    }
-  }
-  const { message, args } = typeof value === 'object' && value !== null ? (value as { message: string; args?: object }) : { message: String(value), args: undefined };
-  return translate(message, { _: message, ...args });
 }
 
 function useField(props: FieldProps, extra: Partial<InputProps> = {}) {
@@ -58,7 +43,7 @@ function useField(props: FieldProps, extra: Partial<InputProps> = {}) {
     id,
     field,
     wrap,
-    aria: { 'aria-invalid': error ? true : undefined, 'aria-describedby': [hintId, errorId].filter(Boolean).join(' ') || undefined },
+    aria: { 'aria-required': isRequired || undefined, 'aria-invalid': error ? true : undefined, 'aria-describedby': [hintId, errorId].filter(Boolean).join(' ') || undefined },
   };
 }
 

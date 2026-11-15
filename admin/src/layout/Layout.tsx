@@ -104,7 +104,15 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-dvh bg-canvas font-ui text-base text-fg">
-      <a href="#contenu" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-ink">
+      {/* HashRouter : un lien #contenu changerait de route, on donne le focus au contenu à la place */}
+      {/* HashRouter: a #contenu link would change the route, so we focus the content instead */}
+      <a
+        href="#contenu"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('contenu')?.focus();
+        }}
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2 focus:text-ink">
         Aller au contenu
       </a>
 
@@ -124,7 +132,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main id="contenu" className="mx-auto max-w-6xl p-4 pb-28 lg:p-8">
+      <main id="contenu" tabIndex={-1} className="mx-auto max-w-6xl p-4 pb-28 focus:outline-none lg:p-8">
         {/* react-admin place ici le titre de la page / react-admin puts the page title here */}
         <h1 id="react-admin-title" className="m-0 mb-6 text-2xl font-bold" />
         {children}

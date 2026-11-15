@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
-import { LinkBase, ListBase, Title, useCreatePath, useListContext } from 'react-admin';
+import { useEffect, useRef, useState } from 'react';
+import { ListBase, useCreatePath, useListContext } from 'react-admin';
 import type { Game, GameDifficulty } from '@ludmigo/shared';
 import { Complexity } from '../layout/Complexity';
 import { Icon } from '../layout/Icon';
 import { Pawn } from '../layout/Pawn';
 import { Button, LinkButton } from '../ui/Button';
 import { CHOICE_OFF, CHOICE_ON, TAG, TAG_INFO, TAG_SUCCESS, TAG_WARNING, cardClass } from '../ui/classes';
+import { PageTitle } from '../ui/PageTitle';
 import { Pagination } from '../ui/Pagination';
 import { DeleteGameDialog } from './DeleteGameDialog';
 import { difficultyChoices, difficultyLabels, playersLabel } from './constants';
+import { safeImageUrl } from './gameRules';
 
 const DIFFICULTY_LEVEL: Record<GameDifficulty, number> = { beginner: 1, intermediate: 2, expert: 3 };
 const DIFFICULTY_TAG: Record<GameDifficulty, string> = { beginner: TAG_SUCCESS, intermediate: TAG_WARNING, expert: TAG_INFO };
@@ -17,16 +19,29 @@ const DIFFICULTY_TAG: Record<GameDifficulty, string> = { beginner: TAG_SUCCESS, 
 // Search by name (debounced), like the search field of the web app
 function SearchField() {
   const { filterValues, setFilters } = useListContext();
-  const [name, setName] = useState<string>(filterValues.name ?? '');
+  const urlName = (filterValues.name as string | undefined) ?? '';
+  const [name, setName] = useState(urlName);
+  // Dernière valeur appliquée par ce champ : si le filtre diffère, il a changé ailleurs
+  // Last value applied by this field: if the filter differs, it changed elsewhere
+  const applied = useRef(urlName);
+
+  useEffect(() => {
+    if (urlName !== applied.current) {
+      applied.current = urlName;
+      setName(urlName);
+    }
+  }, [urlName]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      if ((filterValues.name ?? '') !== name.trim()) {
-        setFilters({ ...filterValues, name: name.trim() || undefined }, {});
+      const next = name.trim();
+      if (next !== urlName) {
+        applied.current = next;
+        setFilters({ ...filterValues, name: next || undefined }, {});
       }
     }, 300);
     return () => window.clearTimeout(timer);
-  }, [name, filterValues, setFilters]);
+  }, [name, urlName, filterValues, setFilters]);
 
   return (
     <div role="search" className="relative min-w-0 flex-1">
@@ -40,7 +55,7 @@ function SearchField() {
         value={name}
         placeholder="Rechercher un jeu"
         onChange={(e) => setName(e.target.value)}
-        className="block min-h-12 w-full rounded-full border-2 border-line bg-surface pr-4 pl-12 font-ui text-base text-fg"
+        className="block min-h-12 w-full rounded-full border-2 border-fg-soft bg-surface pr-4 pl-12 font-ui text-base text-fg placeholder:text-fg-soft"
       />
     </div>
   );
@@ -83,10 +98,10 @@ function GameCard({ game, onDelete }: { game: Game; onDelete: (game: Game) => vo
     <article className={`${cardClass} flex flex-col gap-2.5 p-2.5`}>
       <div className="flex gap-3">
         <div className="flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-beige">
-          {game.imageUrl ? <img src={game.imageUrl} alt="" width={96} height={96} loading="lazy" referrerPolicy="no-referrer" className="size-24 object-cover" /> : <Pawn height={52} className="text-beige-tint" />}
+          {safeImageUrl(game.imageUrl) ? <img src={safeImageUrl(game.imageUrl) ?? undefined} alt="" width={96} height={96} loading="lazy" referrerPolicy="no-referrer" className="size-24 object-cover" /> : <Pawn height={52} className="text-beige-tint" />}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h3 className="m-0 text-base leading-tight font-bold">{game.name}</h3>
+          <h2 className="m-0 text-base leading-tight font-bold">{game.name}</h2>
           <span className="text-sm text-fg-soft">
             {playersLabel(game.minPlayers, game.maxPlayers)}
             {game.durationMinutes ? ` · ${game.durationMinutes} min` : ''}
@@ -99,7 +114,7 @@ function GameCard({ game, onDelete }: { game: Game; onDelete: (game: Game) => vo
         </div>
       </div>
       <div className="flex items-center gap-2.5 pb-[3px]">
-        <LinkButton to={edit} variant="secondary" className="flex-1">
+        <LinkButton to={edit} variant="secondary" className="flex-1" aria-label={`Modifier ${game.name}`}>
           Modifier
         </LinkButton>
         <button type="button" onClick={() => onDelete(game)} aria-label={`Supprimer ${game.name}`} className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent px-3 font-ui text-sm font-bold text-danger-text underline underline-offset-4">
@@ -111,11 +126,29 @@ function GameCard({ game, onDelete }: { game: Game; onDelete: (game: Game) => vo
 }
 
 function GameCards({ onDelete }: { onDelete: (game: Game) => void }) {
-  const { data, total, isPending, page, perPage, setPage, filterValues, setFilters } = useListContext<Game>();
+  const { data, total, isPending, error, refetch, page, perPage, setPage, filterValues, setFilters } = useListContext<Game>();
   const createPath = useCreatePath();
   const filtered = Object.values(filterValues).some(Boolean);
 
-  if (isPending) return <p className="text-fg-soft">Chargement des jeux…</p>;
+  if (isPending) {
+    return (
+      <p role="status" className="text-fg-soft">
+        Chargement des jeux…
+      </p>
+    );
+  }
+
+  // Une erreur n'est pas un catalogue vide / An error is not an empty catalogue
+  if (error) {
+    return (
+      <div role="alert" className={`${cardClass} p-5`}>
+        <p className="mt-0">Impossible de charger les jeux.</p>
+        <Button variant="secondary" onClick={() => refetch()}>
+          Réessayer
+        </Button>
+      </div>
+    );
+  }
 
   if (!data || data.length === 0) {
     return (
@@ -139,6 +172,9 @@ function GameCards({ onDelete }: { onDelete: (game: Game) => void }) {
 
   return (
     <>
+      <p role="status" className="sr-only">
+        {total ?? 0} {(total ?? 0) > 1 ? 'jeux trouvés' : 'jeu trouvé'}
+      </p>
       <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
         {data.map((game) => (
           <li key={game.id}>
@@ -157,7 +193,7 @@ export function GameList() {
 
   return (
     <ListBase resource="games" perPage={12} sort={{ field: 'createdAt', order: 'DESC' }}>
-      <Title title="Jeux" />
+      <PageTitle title="Jeux" />
       <div className="flex items-center gap-3">
         <SearchField />
         <LinkButton to={createPath({ resource: 'games', type: 'create' })} className="shrink-0">
@@ -168,7 +204,12 @@ export function GameList() {
       </div>
       <Chips />
       <GameCards onDelete={setToDelete} />
-      <DeleteGameDialog game={toDelete} onClose={() => setToDelete(null)} />
+      <DeleteGameDialog
+        game={toDelete}
+        onClose={() => setToDelete(null)}
+        // La carte supprimée disparaît : le focus revient au champ de recherche / The deleted card disappears: focus goes back to the search field
+        onDeleted={() => requestAnimationFrame(() => document.getElementById('filter-name')?.focus())}
+      />
     </ListBase>
   );
 }

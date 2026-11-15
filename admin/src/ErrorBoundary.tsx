@@ -16,7 +16,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { error: E
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <main role="alert" style={{ maxWidth: 560, margin: '4rem auto', padding: '0 1rem', fontFamily: "'Fira Sans', system-ui, sans-serif" }}>
+      <main role="alert" style={{ maxWidth: 560, margin: '4rem auto', padding: '0 1rem', fontFamily: "'Fira Sans', system-ui, sans-serif", color: 'var(--color-fg, #3e3e3e)' }}>
         <h1 style={{ fontSize: '1.5rem' }}>Le back office ne peut pas s'afficher</h1>
         <p>L'API est peut-être arrêtée ou injoignable. Vérifiez qu'elle tourne (make dev), puis rechargez la page.</p>
         <pre style={{ whiteSpace: 'pre-wrap', fontSize: '0.875rem' }}>{this.state.error.message}</pre>

@@ -21,6 +21,21 @@ export default defineConfig({
     // Direct address http://localhost:5174/admin/: /api is forwarded to the local API, as the ludmigo.test proxy does
     proxy: { '/api': 'http://127.0.0.1:8000' },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        // Bibliothèques stables à part : elles restent en cache navigateur entre deux versions de l'application
+        // Stable libraries on their own: they stay in the browser cache between two versions of the app
+        codeSplitting: {
+          groups: [
+            { name: 'react', test: /node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/ },
+            { name: 'mui', test: /node_modules[\\/]@mui[\\/]/ },
+            { name: 'react-admin', test: /node_modules[\\/](react-admin|ra-[^\\/]+|@api-platform)[\\/]/ },
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
   },

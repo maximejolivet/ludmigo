@@ -13,9 +13,9 @@ export function Button({
   return <button type={type} className={`${buttonClass[variant]} ${className}`} {...props} />;
 }
 
-export function LinkButton({ to, variant = 'primary', className = '', children }: { to: string; variant?: Variant; className?: string; children: ReactNode }) {
+export function LinkButton({ to, variant = 'primary', className = '', children, 'aria-label': ariaLabel }: { to: string; variant?: Variant; className?: string; children: ReactNode; 'aria-label'?: string }) {
   return (
-    <LinkBase to={to} className={`${buttonClass[variant]} ${className}`}>
+    <LinkBase to={to} aria-label={ariaLabel} className={`${buttonClass[variant]} ${className}`}>
       {children}
     </LinkBase>
   );

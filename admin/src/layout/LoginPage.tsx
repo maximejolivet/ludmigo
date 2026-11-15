@@ -16,7 +16,7 @@ const messages: Record<string, string> = {
 };
 
 const field =
-  'mt-1 block min-h-11 w-full rounded-xl border-2 border-edge/50 bg-surface px-3 py-2 font-ui text-base text-fg aria-[invalid=true]:border-danger-text focus-visible:border-edge';
+  'mt-1 block min-h-11 w-full rounded-xl border-2 border-fg-soft bg-surface px-3 py-2 font-ui text-base text-fg aria-[invalid=true]:border-danger-text focus-visible:border-edge';
 
 export function LoginPage() {
   const login = useLogin();

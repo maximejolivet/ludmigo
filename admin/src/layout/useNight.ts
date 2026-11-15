@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 // Mode soirée : thème sombre pour travailler le soir ; le choix est mémorisé, sinon on suit le système
 // Evening mode: dark theme for working at night; the choice is remembered, otherwise we follow the system
@@ -19,20 +19,20 @@ export function useNight() {
 
   // La classe va sur <html> : les boîtes de dialogue en héritent aussi
   // The class goes on <html>: dialogs inherit it too
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.classList.toggle('night', night);
   }, [night]);
 
   const toggle = useCallback(() => {
-    setNight((current) => {
-      try {
-        window.localStorage.setItem(NIGHT_KEY, current ? '0' : '1');
-      } catch {
-        // Le choix ne sera pas mémorisé, mais le thème change quand même / Not remembered, but the theme still changes
-      }
-      return !current;
-    });
-  }, []);
+    const next = !night;
+    setNight(next);
+    try {
+      window.localStorage.setItem(NIGHT_KEY, next ? '1' : '0');
+    } catch {
+      // Le choix ne sera pas mémorisé, mais le thème change quand même
+      // Not remembered, but the theme still changes
+    }
+  }, [night]);
 
   return { night, toggle };
 }

@@ -10,28 +10,42 @@ export function DeleteGameDialog({ game, onClose, onDeleted }: { game: Game | nu
   const notify = useNotify();
   const refresh = useRefresh();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const close = () => {
+    setError(null);
+    onClose();
+  };
 
   const confirm = async () => {
     if (!game) return;
     setBusy(true);
+    setError(null);
     try {
       await deleteOne('games', { id: game.id, previousData: game }, { returnPromise: true });
       notify(`« ${game.name} » est supprimé.`, { type: 'success' });
-      onClose();
+      close();
       refresh();
       onDeleted?.();
-    } catch (error) {
-      notify((error as Error).message || 'La suppression a échoué. Réessayez dans un instant.', { type: 'error' });
+    } catch (e) {
+      // L'erreur s'affiche dans la boîte : la page derrière est inerte tant qu'elle est ouverte
+      // The error shows inside the box: the page behind is inert while it is open
+      setError((e as Error).message || 'La suppression a échoué. Réessayez dans un instant.');
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <ConfirmDialog open={game !== null} title="Supprimer ce jeu ?" confirmLabel="Supprimer" busy={busy} onConfirm={confirm} onCancel={onClose}>
+    <ConfirmDialog open={game !== null} title="Supprimer ce jeu ?" confirmLabel="Supprimer" busy={busy} onConfirm={confirm} onCancel={close}>
       <p className="m-0">
         « {game?.name} » sera retiré du catalogue. Cette action est définitive.
       </p>
+      {error && (
+        <p role="alert" className="mt-3 mb-0 text-danger-text">
+          {error}
+        </p>
+      )}
     </ConfirmDialog>
   );
 }
