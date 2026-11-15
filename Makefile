@@ -180,7 +180,7 @@ test: api-deps ## Run the API, web, back office and mobile tests
 	npm run test -w $(ADMIN_DIR)
 	npm run test -w $(MOBILE_DIR)
 
-lint: api-deps ## Run the PHP linters (CS-Fixer, PHPStan) and TypeScript lint (web, mobile)
+lint: api-deps ## Run the PHP linters (CS-Fixer, PHPStan) and TypeScript lint (web, back office, mobile)
 	cd $(API_DIR) && composer cs:check
 	cd $(API_DIR) && composer phpstan
 	npm run lint
