@@ -27,6 +27,8 @@ final class DocsAccessRulesTest extends TestCase
         return null;
     }
 
+    // Ce que le back office lit : point d'entrée, doc Hydra et contextes
+    // What the back office reads: entrypoint, Hydra docs and contexts
     #[DataProvider('docsPaths')]
     public function testDocsPathsFollowTheDocsAccessParameter(string $path): void
     {
@@ -36,7 +38,23 @@ final class DocsAccessRulesTest extends TestCase
     /** @return iterable<string, array{string}> */
     public static function docsPaths(): iterable
     {
-        foreach (['/api', '/api/', '/api/docs', '/api/docs.jsonld', '/api/docs.json', '/api/contexts/Entrypoint', '/api/contexts/Game', '/api/contexts/Game.jsonld'] as $path) {
+        foreach (['/api', '/api/', '/api/docs.jsonld', '/api/contexts/Entrypoint', '/api/contexts/Game', '/api/contexts/Game.jsonld'] as $path) {
+            yield $path => [$path];
+        }
+    }
+
+    // La page Swagger et les formats OpenAPI suivent un paramètre à part, fermé à tous en production
+    // The Swagger page and the OpenAPI formats follow a separate parameter, closed to everyone in production
+    #[DataProvider('humanDocsPaths')]
+    public function testHumanReadableDocsFollowTheDocsUiParameter(string $path): void
+    {
+        $this->assertSame('%app.docs_ui_access%', self::rolesFor($path));
+    }
+
+    /** @return iterable<string, array{string}> */
+    public static function humanDocsPaths(): iterable
+    {
+        foreach (['/api/docs', '/api/docs/', '/api/docs.html', '/api/docs.jsonopenapi'] as $path) {
             yield $path => [$path];
         }
     }
@@ -71,6 +89,11 @@ final class DocsAccessRulesTest extends TestCase
         $this->assertSame('ROLE_ADMIN', $services['parameters']['app.docs_access']);
         $this->assertSame('PUBLIC_ACCESS', $services['when@dev']['parameters']['app.docs_access']);
         $this->assertSame('PUBLIC_ACCESS', $services['when@test']['parameters']['app.docs_access']);
+        // Page Swagger et OpenAPI : un rôle que personne n'a, sauf en dev et test
+        // Swagger page and OpenAPI: a role nobody has, except in dev and test
+        $this->assertSame('ROLE_NOBODY', $services['parameters']['app.docs_ui_access']);
+        $this->assertSame('PUBLIC_ACCESS', $services['when@dev']['parameters']['app.docs_ui_access']);
+        $this->assertSame('PUBLIC_ACCESS', $services['when@test']['parameters']['app.docs_ui_access']);
         $this->assertArrayNotHasKey('when@prod', $services);
     }
 }

@@ -4,14 +4,21 @@ parameters:
     # Accès à la doc de l'API (/api, /api/docs) : ROLE_ADMIN par défaut (production, staging), public seulement en dev et test
     # Access to the API docs (/api, /api/docs): ROLE_ADMIN by default (production, staging), public only in dev and test
     app.docs_access: ROLE_ADMIN
+    # Doc lisible par un humain (/api/docs, .html, .jsonopenapi : page Swagger et OpenAPI) : interdite à tous, même aux admins,
+    # sauf en dev et test. Le back office n'a besoin que de /api, /api/docs.jsonld et des contextes (app.docs_access).
+    # Human-readable docs (/api/docs, .html, .jsonopenapi: Swagger page and OpenAPI): forbidden to everyone, admins included,
+    # except in dev and test. The back office only needs /api, /api/docs.jsonld and the contexts (app.docs_access).
+    app.docs_ui_access: ROLE_NOBODY
 
 when@dev:
     parameters:
         app.docs_access: PUBLIC_ACCESS
+        app.docs_ui_access: PUBLIC_ACCESS
 
 when@test:
     parameters:
         app.docs_access: PUBLIC_ACCESS
+        app.docs_ui_access: PUBLIC_ACCESS
 
 services:
     _defaults:

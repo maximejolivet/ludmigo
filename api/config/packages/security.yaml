@@ -58,6 +58,9 @@ security:
     access_control:
         - { path: ^/api/(health|auth/(register|login|refresh|logout))$, roles: PUBLIC_ACCESS }
         - { path: ^/api/?$, roles: '%app.docs_access%' }
+        # Page Swagger et formats OpenAPI : voir app.docs_ui_access (interdits en production, même aux admins)
+        # Swagger page and OpenAPI formats: see app.docs_ui_access (forbidden in production, admins included)
+        - { path: '^/api/docs(/|\.html|\.jsonopenapi)?$', roles: '%app.docs_ui_access%' }
         - { path: ^/api/(docs|contexts)(\.|/|$), roles: '%app.docs_access%' }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
