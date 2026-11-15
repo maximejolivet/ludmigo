@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // Charge l'environnement de test avant d'exécuter la suite
 // Loads the test environment before running the suite
 use Symfony\Component\Dotenv\Dotenv;

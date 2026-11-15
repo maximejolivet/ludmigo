@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enum;
 
 // Niveau de difficulté d'un jeu / Difficulty level of a game
