@@ -4,7 +4,7 @@
 
 # 1. Build Vite de l'application React
 # 1. Vite build of the React app
-FROM node:24.22.2-alpine AS build
+FROM node:24.22.3-alpine AS build
 WORKDIR /app
 
 # Manifestes des workspaces d'abord, pour mettre en cache l'installation
