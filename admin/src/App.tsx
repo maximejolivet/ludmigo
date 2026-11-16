@@ -7,6 +7,7 @@ import { Resource } from 'react-admin';
 import { parseHydraDocumentation } from '@api-platform/api-doc-parser';
 import { API_URL, authHeaders, refresh } from './auth';
 import { authProvider } from './authProvider';
+import { ChangelogPage } from './changelog/ChangelogPage';
 import { GameCreate, GameEdit } from './games/GamePages';
 import { GameList } from './games/GameList';
 import { i18nProvider } from './i18n';
@@ -62,6 +63,8 @@ export default function App() {
     >
       <Resource name="games" list={GameList} create={GameCreate} edit={GameEdit} recordRepresentation="name" />
       <Resource name="users" list={UserList} show={UserShow} recordRepresentation="pseudo" />
+      {/* Page sans données de l'API : le journal des modifications / Page with no API data: the changelog */}
+      <Resource name="nouveautes" list={ChangelogPage} />
     </HydraAdmin>
   );
 }

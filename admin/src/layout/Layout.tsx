@@ -12,7 +12,7 @@ interface Tab {
   icon: IconName;
 }
 
-const RESOURCE_ICONS: Record<string, IconName> = { games: 'dice', users: 'users' };
+const RESOURCE_ICONS: Record<string, IconName> = { games: 'dice', users: 'users', nouveautes: 'news' };
 
 // Onglets : accueil, puis une entrée par ressource (jeux en premier)
 // Tabs: home, then one entry per resource (games first)

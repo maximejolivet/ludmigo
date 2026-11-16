@@ -19,6 +19,7 @@ const messages = {
         createdAt: 'Ajouté le',
       },
     },
+    nouveautes: { name: 'Nouveautés' },
     users: {
       name: 'Utilisateur |||| Utilisateurs',
       fields: {

@@ -38,6 +38,7 @@ const PATHS = {
       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
     </>
   ),
+  news: <path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4zM9 9h6M9 13h6M9 17h3" />,
   logout: <path d="M10 5H5v14h5M15 8l4 4-4 4M19 12H9" />,
 } satisfies Record<string, ReactNode>;
 

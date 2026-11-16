@@ -200,6 +200,7 @@ make test
 3. Vérifiez que les tests et les linters passent avant d'ouvrir une Pull Request vers `develop`.
 4. Une modification d'API doit être accompagnée de la mise à jour des types partagés dans `packages/`.
 5. Les commentaires et la documentation s'écrivent en français, suivis de leur traduction anglaise.
+6. Notez tout changement visible dans `CHANGELOG.md` (section « Non publié ») : la page « Nouveautés » du back office l'affiche.
 
 ## Licence
 
@@ -380,6 +381,7 @@ make test
 3. Make sure the tests and linters pass before opening a Pull Request to `develop`.
 4. An API change must come with an update of the shared types in `packages/`.
 5. Comments and documentation are written in French, followed by their English translation.
+6. Record any visible change in `CHANGELOG.md` ("Unreleased" section): the back office "Nouveautés" page shows it.
 
 ## License
 
