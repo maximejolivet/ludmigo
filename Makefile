@@ -45,7 +45,7 @@ DOMAIN_FR := https://ludmigo.fr
 DOMAIN_WORLD := https://ludmigo.com
 DOMAIN_LOCAL := http://ludmigo.test
 
-.PHONY: overview help setup dev stop urls info outdated install hosts proxy-up db-up db-down db-logs db-shell db-reset api-env api-deps migrate api-serve web-dev admin-dev mobile-start test lint build docker-build
+.PHONY: overview help setup dev stop urls info outdated install hosts colima-up proxy-up db-up db-down db-logs db-shell db-reset api-env api-deps migrate api-serve web-dev admin-dev mobile-start test lint build docker-build
 
 # Cible par défaut (`make` seul) : infos du projet, dépendances obsolètes, puis la liste des commandes
 # Default target (plain `make`): project info, outdated dependencies, then the command list
@@ -114,13 +114,21 @@ hosts: ## Add ludmigo.test to /etc/hosts (asks for the sudo password once)
 	@grep -q 'ludmigo.test' /etc/hosts || echo '127.0.0.1 ludmigo.test' | sudo tee -a /etc/hosts >/dev/null
 	@echo "ludmigo.test -> 127.0.0.1 OK"
 
-proxy-up: ## Start the local proxy on http://ludmigo.test
+# Démarre Colima s'il est installé et que Docker ne répond pas
+# Start Colima if it is installed and Docker is not responding
+colima-up:
+	@if ! docker info >/dev/null 2>&1 && command -v colima >/dev/null 2>&1; then \
+		echo "Docker is not running, starting Colima..."; \
+		colima start; \
+	fi
+
+proxy-up: colima-up ## Start the local proxy on http://ludmigo.test
 	$(COMPOSE) up -d proxy
 
 # --- Base de données ---
 # --- Database ---
 
-db-up: ## Start the database and wait until it is ready (DB=mariadb|postgres, default mariadb)
+db-up: colima-up ## Start the database and wait until it is ready (DB=mariadb|postgres, default mariadb)
 	$(COMPOSE) --profile $(DB) up -d --wait $(DB_SERVICE)
 
 db-down: ## Stop the database (data is kept)

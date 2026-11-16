@@ -93,7 +93,7 @@ Principes :
 
 - [PHP](https://www.php.net) 8.5 avec les extensions requises par Symfony
 - [Composer](https://getcomposer.org) 2
-- [Docker](https://www.docker.com) (Docker Desktop ou Docker Engine avec Compose) pour MariaDB ou PostgreSQL
+- [Docker](https://www.docker.com) (Docker Desktop ou Docker Engine avec Compose) pour MariaDB ou PostgreSQL (avec [Colima](https://github.com/abiosoft/colima), `make` le démarre s'il est arrêté)
 - [Node.js](https://nodejs.org) 24 LTS et npm
 - Pour le mobile :
   - macOS avec [Xcode](https://developer.apple.com/xcode/) (simulateur iOS)
@@ -274,7 +274,7 @@ Principles:
 
 - [PHP](https://www.php.net) 8.5 with the extensions required by Symfony
 - [Composer](https://getcomposer.org) 2
-- [Docker](https://www.docker.com) (Docker Desktop or Docker Engine with Compose) for MariaDB or PostgreSQL
+- [Docker](https://www.docker.com) (Docker Desktop or Docker Engine with Compose) for MariaDB or PostgreSQL (with [Colima](https://github.com/abiosoft/colima), `make` starts it if it is stopped)
 - [Node.js](https://nodejs.org) 24 LTS and npm
 - For mobile:
   - macOS with [Xcode](https://developer.apple.com/xcode/) (iOS simulator)
